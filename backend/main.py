@@ -20,7 +20,8 @@ app.add_middleware(
 def check_telegram_auth(data: dict, bot_token: str) -> bool:
     print('test')
     auth_data = data.copy()
-    hash_to_check = auth_data.pop("hash")
+    # hash_to_check = auth_data.pop("hash")
+    hash_to_check = auth_data
     print(hash_to_check)
 
     data_check_string = '\n'.join(
@@ -46,7 +47,6 @@ class TelegramAuthData(BaseModel):
 
 @app.post("/auth/telegram")
 async def auth_telegram(data: TelegramAuthData):
-    print('test2')
     if not check_telegram_auth(data.dict(), BOT_TOKEN):
         raise HTTPException(status_code=403, detail="Invalid Telegram data")
 
