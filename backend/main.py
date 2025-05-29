@@ -21,8 +21,7 @@ def check_telegram_auth(data: dict, bot_token: str) -> bool:
     print('test')
     auth_data = data.copy()
     hash_to_check = auth_data.pop("hash")
-    if hash_to_check:
-        raise Exception(hash_to_check)
+    print(hash_to_check)
 
     data_check_string = '\n'.join(
         f"{k}={v}" for k, v in sorted(auth_data.items())
@@ -30,9 +29,9 @@ def check_telegram_auth(data: dict, bot_token: str) -> bool:
 
     secret_key = hashlib.sha256(bot_token.encode()).digest()
     calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-    if calculated_hash:
-        raise Exception(calculated_hash)
+    print(calculated_hash)
 
+    print(hmac.compare_digest(calculated_hash, hash_to_check))
     return hmac.compare_digest(calculated_hash, hash_to_check)
 
 
