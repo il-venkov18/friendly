@@ -56,7 +56,7 @@
 #
 #
 
-from fastapi import APIRouter, HTTPException
+from fastapi import HTTPException, FastAPI
 from pydantic import BaseModel
 from urllib.parse import parse_qsl
 import hmac
@@ -64,14 +64,14 @@ import hashlib
 
 TELEGRAM_BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"  # из BotFather
 
-router = APIRouter()
+app = FastAPI()
 
 
 class InitData(BaseModel):
     initData: str
 
 
-@router.post("/auth/verify")
+@app.post("/auth/verify")
 def verify(data: InitData):
     init_data = data.initData
     parsed = dict(parse_qsl(init_data, keep_blank_values=True))
