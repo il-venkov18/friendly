@@ -56,39 +56,21 @@
 #
 #
 
-from fastapi import HTTPException, FastAPI
-from pydantic import BaseModel
-from urllib.parse import parse_qsl
-import hmac
-import hashlib
+from fastapi import FastAPI
+from init_data_py import InitData
 
 TELEGRAM_BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"  # из BotFather
 
 app = FastAPI()
 
 
-class InitData(BaseModel):
-    initData: str
-
-
 @app.post("/auth/verify")
-def verify(data: InitData):
-    init_data = data.initData
-    parsed = dict(parse_qsl(init_data, keep_blank_values=True))
+def verify(data):
+    init_data = InitData.parse(data)
 
-    received_hash = parsed.pop("hash", None)
-    if not received_hash:
-        raise HTTPException(status_code=400, detail="No hash provided")
-
-    data_check_string = "\n".join(
-        f"{k}={v}" for k, v in sorted(parsed.items())
+    is_valid = init_data.validate(
+        bot_token=TELEGRAM_BOT_TOKEN,
+        lifetime=3600,
     )
-
-    secret_key = hashlib.sha256(TELEGRAM_BOT_TOKEN.encode()).digest()
-    h = hmac.new(secret_key, msg=data_check_string.encode(), digestmod=hashlib.sha256)
-    calculated_hash = h.hexdigest()
-
-    if calculated_hash != received_hash:
-        raise HTTPException(status_code=401, detail="Invalid auth data")
-
-    return {"status": "ok", "user": parsed.get("user")}
+    print(is_valid)
+    return is_valid
