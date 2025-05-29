@@ -40,12 +40,13 @@ def check_telegram_auth(init_data: str) -> dict | None:
     if hmac_hash != hash_:
         return None
 
+    print(f"Raw init_data: {init_data}")
+    print(f"Parsed: {parsed}")
+    print(f"Expected hash: {hmac_hash}")
+    print(f"Actual hash:   {hash_}")
+
     try:
         user_data = json.loads(parsed.get("user", "{}"))
-        print(f"Raw init_data: {init_data}")
-        print(f"Parsed: {parsed}")
-        print(f"Expected hash: {hmac_hash}")
-        print(f"Actual hash:   {hash_}")
         return user_data
     except:
         return None
