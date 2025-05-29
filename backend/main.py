@@ -1,10 +1,20 @@
-import hmac
 import hashlib
-from fastapi import HTTPException, FastAPI
+import hmac
+
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 app = FastAPI()
 BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"
+
+app.add_middleware(
+       CORSMiddleware,
+       allow_origins=["*"],  # Укажите разрешенные источники
+       allow_credentials=True,
+       allow_methods=["*"],
+       allow_headers=["*"],
+   )
 
 
 def check_telegram_auth(data: dict, bot_token: str) -> bool:
@@ -41,3 +51,5 @@ async def auth_telegram(data: TelegramAuthData):
     # и вернуть токен/куки сессии.
 
     return {"status": "ok", "user_id": data.id}
+
+
