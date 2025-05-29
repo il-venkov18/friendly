@@ -66,6 +66,7 @@ app = FastAPI()
 
 @app.post("/auth/verify")
 def verify(data):
+    print('Данные пользователя: ', data)
     init_data = InitData.parse(data)
 
     is_valid = init_data.validate(
