@@ -51,6 +51,7 @@ class TelegramAuthPayload(BaseModel):
 
 @app.post("/auth/telegram")
 def telegram_login(payload: TelegramAuthPayload):
+    print('payload: ', payload)
     data = {
         "id": payload.user.id,
         "first_name": payload.user.first_name,
