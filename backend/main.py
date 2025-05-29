@@ -3,9 +3,20 @@ import hmac
 from fastapi import FastAPI, HTTPException
 from typing import Dict
 
+from starlette.middleware.cors import CORSMiddleware
+
 TELEGRAM_BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 
 def check_telegram_auth(data: Dict[str, str], bot_token: str) -> bool:
