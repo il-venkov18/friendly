@@ -1,63 +1,43 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
-from urllib.parse import parse_qsl
-import hashlib
 import hmac
-import json
+import hashlib
+from fastapi import HTTPException, FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"
 
-# Фейковая БД пользователей
-users_db = {}
+
+def check_telegram_auth(data: dict, bot_token: str) -> bool:
+    print('test')
+    auth_data = data.copy()
+    hash_to_check = auth_data.pop("hash")
+
+    data_check_string = '\n'.join(
+        f"{k}={v}" for k, v in sorted(auth_data.items())
+    )
+
+    secret_key = hashlib.sha256(bot_token.encode()).digest()
+    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+
+    return hmac.compare_digest(calculated_hash, hash_to_check)
 
 
-class AuthPayload(BaseModel):
-    initData: str
+class TelegramAuthData(BaseModel):
+    id: int
+    first_name: str
+    username: str | None
+    photo_url: str | None
+    auth_date: int
+    hash: str
 
 
-def check_telegram_auth(init_data: str) -> dict | None:
-    parsed = dict(parse_qsl(init_data, strict_parsing=True))
-    hash_ = parsed.pop("hash", None)
+@app.post("/auth/telegram")
+async def auth_telegram(data: TelegramAuthData):
+    print('test2')
+    if not check_telegram_auth(data.dict(), BOT_TOKEN):
+        raise HTTPException(status_code=403, detail="Invalid Telegram data")
 
-    if not hash_:
-        return None
+    # Тут можно создать/найти пользователя в БД по `id`
+    # и вернуть токен/куки сессии.
 
-    data_check_string = "\n".join(f"{k}={v}" for k, v in sorted(parsed.items()))
-    secret_key = hashlib.sha256(BOT_TOKEN.encode()).digest()
-    hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
-
-    if hmac_hash != hash_:
-        return None
-
-    print(f"Raw init_data: {init_data}")
-    print(f"Parsed: {parsed}")
-    print(f"Expected hash: {hmac_hash}")
-    print(f"Actual hash:   {hash_}")
-
-    try:
-        user_data = json.loads(parsed.get("user", "{}"))
-        return user_data
-    except:
-        return None
-
-
-@app.post("/auth/verify")
-def verify_user(payload: AuthPayload):
-    user = check_telegram_auth(payload.initData)
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid auth data")
-
-    user_id = user["id"]
-    users_db[user_id] = user  # Сохраняем пользователя в фейковую БД
-    return {"user": user}
+    return {"status": "ok", "user_id": data.id}
