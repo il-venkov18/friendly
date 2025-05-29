@@ -103,17 +103,6 @@ files = [
 all = ["flake8 (>=7.1.1)", "mypy (>=1.11.2)", "pytest (>=8.3.2)", "ruff (>=0.6.2)"]
 
 [[package]]
-name = "init-data-py"
-version = "0.2.6"
-description = "A Python library that provides tools for using and validating Telegram web app init data."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "init_data_py-0.2.6-py3-none-any.whl", hash = "sha256:dc5920f809aa2e79ea169e2e981222ff6c0f0e2a87cd73fed11980e82d58dbd7"},
-    {file = "init_data_py-0.2.6.tar.gz", hash = "sha256:fbba0a20213e8a394ee96cea3df7a638990708ba4f11cfc0a2bb6a79a5be5ae0"},
-]
-
-[[package]]
 name = "isort"
 version = "6.0.1"
 description = "A Python utility / library to sort Python imports."
@@ -334,4 +323,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.6.3)", "python-dotenv (>=0.13)",
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "335fc2bbab76fa0232258be78f7fb679616cd047318a137ebaa3199888ae7d8d"
+content-hash = "257f97c857050bf92ea959b7577aed8c86709547a440183ae8e2f3e08024dd3c"
