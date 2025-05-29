@@ -42,11 +42,13 @@ class TelegramUser(BaseModel):
 
 
 class TelegramAuthPayload(BaseModel):
-    query_id: str
-    user: TelegramUser
+    id: int
+    first_name: str
+    last_name: Optional[str] = None
+    username: Optional[str] = None
+    photo_url: Optional[str] = None
     auth_date: str
     hash: str
-    signature: Optional[str] = None  # Необязательный параметр
 
 
 @app.post("/auth/telegram")
