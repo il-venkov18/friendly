@@ -1,45 +1,37 @@
 import hashlib
 import hmac
-
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from typing import Dict
+
+TELEGRAM_BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"
 
 app = FastAPI()
-BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"
-
-app.add_middleware(
-       CORSMiddleware,
-       allow_origins=["*"],  # Укажите разрешенные источники
-       allow_credentials=True,
-       allow_methods=["*"],
-       allow_headers=["*"],
-   )
 
 
-def check_telegram_auth(data: dict, bot_token: str) -> bool:
-    print('Данные пользователя: ', data)
+def check_telegram_auth(data: Dict[str, str], bot_token: str) -> bool:
     auth_data = data.copy()
-    hash_to_check = auth_data.pop("hash")
-    print(hash_to_check)
+    hash_to_check = auth_data.pop("hash", None)
+    if not hash_to_check:
+        return False
 
-    data_check_string = '\n'.join(
-        f"{k}={v}" for k, v in sorted(auth_data.items())
+    # Сортируем данные по ключу
+    data_check_string = "\n".join(
+        [f"{k}={auth_data[k]}" for k in sorted(auth_data)]
     )
 
     secret_key = hashlib.sha256(bot_token.encode()).digest()
-    calculated_hash = hmac.new(secret_key, data_check_string.encode('utf-8'), hashlib.sha256).hexdigest()
-    print(calculated_hash)
+    hmac_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
 
-    print(hmac.compare_digest(calculated_hash, hash_to_check))
-    return hmac.compare_digest(calculated_hash, hash_to_check)
+    return hmac_hash == hash_to_check
 
 
 @app.post("/auth/telegram")
-async def auth_telegram(data):
-    if not check_telegram_auth(data.dict(), BOT_TOKEN):
-        raise HTTPException(status_code=403, detail="Invalid Telegram data")
+def telegram_login(payload: Dict[str, str]):
+    if not check_telegram_auth(payload, TELEGRAM_BOT_TOKEN):
+        raise HTTPException(status_code=403, detail="Invalid Telegram auth")
 
-    # Тут можно создать/найти пользователя в БД по `id`
-    # и вернуть токен/куки сессии.
+    # Здесь можно выдать свой токен, создать пользователя и т.д.
+    user_id = payload["id"]
+    username = payload.get("username")
 
-    return {"status": "ok", "user_id": data.id}
+    return {"message": "Authorized", "user_id": user_id, "username": username}
