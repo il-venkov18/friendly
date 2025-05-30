@@ -1,17 +1,24 @@
+import asyncio
 import hashlib
 import hmac
-import time
 import urllib.parse
-from typing import AsyncGenerator
 
-from fastapi import FastAPI, HTTPException, Security
-from fastapi.security import APIKeyHeader
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from starlette.middleware.cors import CORSMiddleware
+from sqlalchemy.future import select
+from models import Base, TelegramUser
 
 app = FastAPI()
+db_url = 'postgresql://retool:npg_fCki8oGYTxR6@ep-wispy-dew-a6w1vna0.us-west-2.retooldb.com/retool?sslmode=require'
+DATABASE_URL = db_url
+engine = create_async_engine(DATABASE_URL, echo=True)
+AsyncSessionLocal = async_sessionmaker(bind=engine, expire_on_commit=False)
+
 
 BOT_TOKEN = "7531358236:AAEslLEWRJKwklbcFA-hB1qc4Uw2NVAX7AQ"  # Установи в .env или переменных окружения
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -22,75 +29,54 @@ app.add_middleware(
 )
 
 
+def validate(auth: str, bot_token: str = BOT_TOKEN) -> dict:
+    tg = dict(urllib.parse.parse_qsl(urllib.parse.unquote(auth)))
+    if not tg.get("hash"):
+        raise Exception("hash not found")
+    hash_ = tg.pop('hash')
+    params = "\n".join([f"{k}={v}" for k, v in sorted(tg.items(), key=lambda x: x[0])])
+    truth_hash = hmac.new(
+        hmac.new("WebAppData".encode(), bot_token.encode(), hashlib.sha256).digest(),
+        params.encode(),
+        hashlib.sha256
+    ).hexdigest()
+    if hash_ != truth_hash:
+        raise Exception("hash not equal")
+    return tg  # Возвращаем разобранные данные
+
+
 class TelegramAuthPayload(BaseModel):
     initData: str  # передаём initData как одну строку
 
 
-# def parse_init_data(init_data: str) -> dict:
-#     parsed = urllib.parse.parse_qs(init_data, strict_parsing=True)
-#     return {k: v[0] for k, v in parsed.items()}
-tg_auth = APIKeyHeader(name="Tg-Authorization", description="Telegram Init Data")
-
-
-def get_userdata(auth: str = Security(tg_auth)) -> bool:
-    tg = dict(urllib.parse.parse_qsl(urllib.parse.unquote(auth)))
-    if not tg.get("hash"):
-        raise Exception("hash not found")
-    hash = tg.pop('hash')
-    params = "\n".join([f"{k}={v}" for k, v in sorted(tg.items(), key=lambda x: x[0])])
-    truth_hash = hmac.new(
-        hmac.new("WebAppData".encode(), BOT_TOKEN.encode(), hashlib.sha256).digest(),
-        params.encode(),
-        hashlib.sha256
-    ).hexdigest()
-    if hash != truth_hash:
-        raise Exception("hash not equal")
-    else:
-        return True
-
-
-# def verify_telegram_auth(init_data: str, bot_token: str) -> dict:
-#     data = parse_init_data(init_data)
-#
-#     if 'hash' not in data:
-#         raise ValueError("Missing 'hash' field")
-#
-#     received_hash = data.pop("hash")
-#
-#     data_check_string = '\n'.join(
-#         f"{k}={data[k]}" for k in sorted(data.keys())
-#     )
-#
-#     secret_key = hmac.new(
-#         key=bot_token.encode(),
-#         msg=b"WebAppData",
-#         digestmod=hashlib.sha256
-#     ).digest()
-#
-#     calculated_hash = hmac.new(
-#         key=secret_key,
-#         msg=data_check_string.encode(),
-#         digestmod=hashlib.sha256
-#     ).hexdigest()
-#
-#     if calculated_hash != received_hash:
-#         raise ValueError("Invalid hash")
-
-    # # проверка на устаревание
-    # auth_date = int(data.get("auth_date", "0"))
-    # if time.time() - auth_date > 86400:  # 24 часа
-    #     raise ValueError("Auth date is too old")
-
-    # return data  # validated
-
-
 @app.post("/auth/telegram")
-def telegram_auth(payload: TelegramAuthPayload):
+async def telegram_auth(payload: TelegramAuthPayload):
     try:
-        validated_data = get_userdata(payload.initData)
-        return {
-            "status": "ok",
-            "data": validated_data
-        }
-    except ValueError as e:
+        tg_data = validate(payload.initData)
+        user_id = int(tg_data.get("id"))
+        async with AsyncSessionLocal() as session:
+            result = await session.execute(
+                select(TelegramUser).where(TelegramUser.id == user_id)
+            )
+            user = result.scalars().first()
+            if not user:
+                user = TelegramUser(
+                    id=user_id,
+                    first_name=tg_data.get("first_name"),
+                    last_name=tg_data.get("last_name"),
+                    username=tg_data.get("username"),
+                    photo_url=tg_data.get("photo_url"),
+                    auth_date=int(tg_data.get("auth_date")),
+                )
+                session.add(user)
+                await session.commit()
+        return {"status": "ok"}
+    except Exception as e:
         raise HTTPException(status_code=403, detail=str(e))
+
+
+async def init_models():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+asyncio.run(init_models())
