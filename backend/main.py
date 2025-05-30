@@ -87,7 +87,7 @@ async def get_userdata(auth: str = Security(tg_auth)) -> bool:
 @app.post("/auth/telegram")
 def telegram_auth(payload: TelegramAuthPayload):
     try:
-        validated_data = get_userdata(payload.initData)
+        validated_data = await get_userdata(payload.initData)
         return {
             "status": "ok",
             "data": validated_data
