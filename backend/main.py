@@ -11,8 +11,7 @@ from sqlalchemy.future import select
 from models import Base, TelegramUser
 
 app = FastAPI()
-db_url = 'postgresql://retool:npg_fCki8oGYTxR6@ep-wispy-dew-a6w1vna0.us-west-2.retooldb.com/retool?sslmode=require'
-DATABASE_URL = db_url
+DATABASE_URL = 'postgresql+asyncpg://retool:npg_fCki8oGYTxR6@ep-wispy-dew-a6w1vna0.us-west-2.retooldb.com/retool?sslmode=require'
 engine = create_async_engine(DATABASE_URL, echo=True)
 AsyncSessionLocal = async_sessionmaker(bind=engine, expire_on_commit=False)
 
