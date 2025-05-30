@@ -74,8 +74,13 @@ async def telegram_auth(payload: TelegramAuthPayload):
         raise HTTPException(status_code=403, detail=str(e))
 
 
-async def init_models():
+# async def init_models():
+#     async with engine.begin() as conn:
+#         await conn.run_sync(Base.metadata.create_all)
+#
+# asyncio.run(init_models())
+
+@app.on_event("startup")
+async def on_startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
-
-asyncio.run(init_models())
