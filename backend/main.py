@@ -32,7 +32,7 @@ class TelegramAuthPayload(BaseModel):
 tg_auth = APIKeyHeader(name="Tg-Authorization", description="Telegram Init Data")
 
 
-async def get_userdata(auth: str = Security(tg_auth)) -> bool:
+def get_userdata(auth: str = Security(tg_auth)) -> bool:
     tg = dict(urllib.parse.parse_qsl(urllib.parse.unquote(auth)))
     if not tg.get("hash"):
         raise Exception("hash not found")
@@ -87,7 +87,7 @@ async def get_userdata(auth: str = Security(tg_auth)) -> bool:
 @app.post("/auth/telegram")
 def telegram_auth(payload: TelegramAuthPayload):
     try:
-        validated_data = await get_userdata(payload.initData)
+        validated_data = get_userdata(payload.initData)
         return {
             "status": "ok",
             "data": validated_data
