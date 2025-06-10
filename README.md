@@ -3,10 +3,16 @@
 docker compose up -d --build
 ```
 
-Остановить контейнеры и удалить их вместе с волюмами:
+- Чтобы таблицы в БД создавались, нужно в /migrations/env.py импортировать все новые модели!
 
+Подготовить миграции:
 ```
-docker compose down -v
+sudo docker exec -it backend alembic revision --autogenerate
+```
+
+Применить миграции:
+```
+sudo docker exec -it backend alembic upgrade head
 ```
 
 Пример заполнения .env файла (поместить его в директорию /infra/.env):
@@ -19,4 +25,10 @@ POSTGRES_HOST=db
 POSTGRES_PORT=5432
 
 BOT_TOKEN=<токен телеграм Бота>
+```
+
+Остановить контейнеры и удалить их вместе с волюмами:
+
+```
+docker compose down -v
 ```

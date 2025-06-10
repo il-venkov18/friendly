@@ -6,8 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from ..core.db import get_session
 from ..core.constants import BOT_TOKEN
+from ..core.db import get_session
 from ..models.user import User
 from ..schemas.auth import TelegramAuthPayload
 
