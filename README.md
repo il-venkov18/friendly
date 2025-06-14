@@ -15,6 +15,11 @@ sudo docker exec -it backend alembic revision --autogenerate
 sudo docker exec -it backend alembic upgrade head
 ```
 
+Зайти в консоль БД:
+```
+docker exec -it postgres_db psql -U postgres
+```
+
 Пример заполнения .env файла (поместить его в директорию /infra/.env):
 
 ```
