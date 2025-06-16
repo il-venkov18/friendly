@@ -19,3 +19,7 @@ class UserServiceMeta(ABC):
     @abstractmethod
     async def setLikeAsync(self, user_id_1: int, user_id_2: int) -> bool:
         pass
+
+    @abstractmethod
+    async def setDislikeAsync(self, user_id_1: int, user_id_2: int) -> bool:
+        pass
