@@ -7,7 +7,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 
-from app.models.user import User  # noqa
+from app.models.user import User
+from app.models.likes_association_table import likes_association_table
 from app.core.db import Base
 from app.core.db import DATABASE_URL
 
