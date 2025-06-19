@@ -5,61 +5,74 @@ import urllib.parse
 
 from fastapi import APIRouter, HTTPException
 from sqlalchemy.future import select
+from sqlalchemy.exc import SQLAlchemyError
+from starlette import status
 
 from app.core.constants import BOT_TOKEN
 from app.core.db import async_session
 from app.models.user import User
 from app.schemas.auth import TelegramAuthPayload
 
-router = APIRouter(prefix='/auth', tags=['Auth'])
+router = APIRouter(tags=['Auth'])
 
 
-def validate(auth: str, bot_token: str = BOT_TOKEN) -> dict:
-    tg = dict(urllib.parse.parse_qsl(urllib.parse.unquote(auth)))
-    if not tg.get("hash"):
-        raise Exception("hash not found")
-    hash_ = tg.pop('hash')
-    params = "\n".join([f"{k}={v}" for k, v in sorted(tg.items(), key=lambda x: x[0])])
-    truth_hash = hmac.new(
-        hmac.new("WebAppData".encode(), bot_token.encode(), hashlib.sha256).digest(),
-        params.encode(),
-        hashlib.sha256
-    ).hexdigest()
-    if hash_ != truth_hash:
-        raise Exception("hash not equal")
-    return tg  # Возвращаем разобранные данные
-
-
-@router.post("/auth/telegram")
-async def telegram_auth(payload: TelegramAuthPayload):
+def parse_telegram_init_data(auth_data: str) -> dict:
+    """Парсинг и валидация initData из Telegram WebApp."""
     try:
-        tg_data = validate(payload.initData)
+        data = dict(urllib.parse.parse_qsl(urllib.parse.unquote(auth_data)))
+        if 'hash' not in data:
+            raise ValueError('Missing hash in data')
 
-        user_data = json.loads(tg_data.get("user"))
-        user_id = int(user_data["id"])
+        hash_received = data.pop('hash')
+        data_check_string = '\n'.join(f'{k}={v}' for k, v in sorted(data.items()))
 
-        # Fallback на случай, если auth_date не входит в user_data
-        auth_date = int(user_data.get("auth_date") or tg_data.get("auth_date"))
+        secret_key = hmac.new('WebAppData'.encode(), BOT_TOKEN.encode(), hashlib.sha256).digest()
+        hash_calculated = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
 
-        async with async_session() as session:
-            result = await session.execute(
-                select(User).where(User.tg_id == user_id)
-            )
+        if not hmac.compare_digest(hash_received, hash_calculated):
+            raise ValueError('Hash mismatch')
+
+        return data
+    except Exception as exc:
+        raise ValueError(f'Invalid initData: {exc}')
+
+
+async def get_or_create_user(tg_data: dict) -> User:
+    """Получить пользователя из БД или создать нового."""
+    user_info = json.loads(tg_data.get("user"))
+    tg_id = int(user_info['id'])
+    auth_date = int(user_info.get('auth_date') or tg_data.get('auth_date'))
+
+    async with async_session() as session:
+        try:
+            result = await session.execute(select(User).where(User.tg_id == tg_id))
             user = result.scalars().first()
 
             if not user:
                 user = User(
-                    tg_id=user_id,
-                    first_name=user_data.get("first_name", "NoName"),
-                    last_name=user_data.get("last_name"),
-                    username=user_data.get("username"),
-                    photo_url=user_data.get("photo_url"),
+                    tg_id=tg_id,
+                    first_name=user_info.get('first_name', 'NoName'),
+                    last_name=user_info.get('last_name'),
+                    username=user_info.get('username'),
+                    photo_url=user_info.get('photo_url'),
                     auth_date=auth_date,
                 )
                 session.add(user)
                 await session.commit()
 
-        return {"status": "ok", "user_id": user.id}
+            return user
+        except SQLAlchemyError as db_err:
+            raise RuntimeError(f'Database error: {db_err}')
 
-    except Exception as e:
-        raise HTTPException(status_code=403, detail=str(e))
+
+@router.post('/auth_telegram')
+async def auth_telegram(payload: TelegramAuthPayload):
+    """Авторизация пользователя через Telegram Mini App."""
+    try:
+        tg_data = parse_telegram_init_data(payload.initData)
+        user = await get_or_create_user(tg_data)
+        return user
+    except ValueError as ve:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalid Telegram data')
+    except RuntimeError as re:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Internal server error')
