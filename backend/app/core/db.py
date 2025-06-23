@@ -2,8 +2,9 @@ from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
                                     create_async_engine)
 from sqlalchemy.orm import DeclarativeBase
 
-from .constants import (POSTGRES_DB, POSTGRES_HOST, POSTGRES_PASSWORD,
-                        POSTGRES_PORT, POSTGRES_USER)
+from .environment_variables import (POSTGRES_DB, POSTGRES_HOST,
+                                    POSTGRES_PASSWORD, POSTGRES_PORT,
+                                    POSTGRES_USER)
 
 DATABASE_URL = f'postgresql+asyncpg://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}'
 

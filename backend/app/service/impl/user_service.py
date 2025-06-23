@@ -1,8 +1,11 @@
 from logging import Logger
+
 from app.core.meta.user_repository_meta import UserRepositoryMeta
 from app.exceptions.user_not_found_exception import UserNotFoundException
-from ..meta.user_service_meta import UserServiceMeta
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from ..meta.user_service_meta import UserServiceMeta
+
 
 class UserService(UserServiceMeta):
 

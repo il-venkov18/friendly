@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-from sqlalchemy import Column
-from sqlalchemy import Table
-from sqlalchemy import ForeignKey
-
 from app.core.db import Base
+from sqlalchemy import Column, ForeignKey, Table
 
 likes_association_table = Table(
     "likes",

@@ -7,12 +7,12 @@ docker compose up -d --build
 
 Подготовить миграции:
 ```
-sudo docker exec -it backend alembic revision --autogenerate
+docker exec -it backend alembic revision --autogenerate
 ```
 
 Применить миграции:
 ```
-sudo docker exec -it backend alembic upgrade head
+docker exec -it backend alembic upgrade head
 ```
 
 Зайти в консоль БД:
@@ -28,6 +28,11 @@ POSTGRES_USER=<юзер постгрес>
 POSTGRES_PASSWORD=<пароль юзера Постгрес>
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
+
+JWT_SECRET=<секретный ключ>
+JWT_ALGORITHM=<алгоритм шифрования> (обычно HS256)
+ACCESS_TOKEN_EXPIRE=<время жизни аксесс токена в минутах>
+REFRESH_TOKEN_EXPIRE=<время жизни рефреш токена в днях>
 
 BOT_TOKEN=<токен телеграм Бота>
 ```

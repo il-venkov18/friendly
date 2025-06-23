@@ -1,9 +1,9 @@
-from sqlalchemy import BigInteger, String, Integer
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
-from app.models.likes_association_table import likes_association_table
 
 from app.core.db import Base
+from app.models.likes_association_table import likes_association_table
+from sqlalchemy import BigInteger, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class User(Base):
