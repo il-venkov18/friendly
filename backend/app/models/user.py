@@ -1,9 +1,12 @@
 from typing import List
+from app.models.likes_association_table import likes_association_table
+from app.models.dislikes_association_table import dislikes_association_table
 
 from app.core.db import Base
 from app.models.likes_association_table import likes_association_table
 from sqlalchemy import BigInteger, Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from app.models.matches_association_table import matches_association_table
 
 
 class User(Base):
@@ -18,15 +21,17 @@ class User(Base):
     auth_date: Mapped[int] = mapped_column(Integer, nullable=False)
     liked_users: Mapped[List["User"]] = relationship(
         secondary=likes_association_table,
-        primaryjoin=id == likes_association_table.c.user_id_from,
-        secondaryjoin=id == likes_association_table.c.user_id_to,
+        primaryjoin=id == likes_association_table.c.user_id_to,
+        secondaryjoin=id == likes_association_table.c.user_id_from,
     )
-    # dislikes: Mapped[List["User"]] = relationship(
-    #     primaryjoin=id == likes_association_table.c.user_id_from,
-    #     secondaryjoin=id == likes_association_table.c.user_id_to,
-    # )
-    # matches: Mapped[List["User"]] = relationship(
-    #     primaryjoin=id == matches_association_table.c.user_id_from,
-    #     secondaryjoin=id == matches_association_table.c.user_id_to,
-    #     back_populates="matches"
-    # )
+    disliked_users: Mapped[List["User"]] = relationship(
+        secondary=dislikes_association_table,
+        primaryjoin=id == dislikes_association_table.c.user_id_to,
+        secondaryjoin=id == dislikes_association_table.c.user_id_from,
+    )
+    matches: Mapped[List["User"]] = relationship(
+        secondary=matches_association_table,
+        primaryjoin=id == matches_association_table.c.user_id_to,
+        secondaryjoin=id == matches_association_table.c.user_id_from,
+        back_populates="matches"
+    )

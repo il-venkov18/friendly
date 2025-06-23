@@ -12,7 +12,7 @@ class UserRepositoryMeta(ABC):
         self._session = session
     
     @abstractmethod
-    async def findUserAsync(self, user_id: int) -> User | None:
+    async def findAsync(self, user_id: int, options: list = []) -> User | None:
         pass
 
     @abstractmethod
