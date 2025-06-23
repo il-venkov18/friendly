@@ -18,7 +18,7 @@ router = APIRouter(prefix="/users", tags=["User"])
 
 
 @router.get("/")
-async def get(session: AsyncSession = Depends(get_session)):
+async def get_users(session: AsyncSession = Depends(get_session)):
     result = await session.execute(select(User))
     users = result.scalars().all()
     return users

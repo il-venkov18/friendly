@@ -1,10 +1,8 @@
 from app.core.meta.user_repository_meta import UserRepositoryMeta
 from app.models.user import User
-from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import with_loader_criteria
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload, with_loader_criteria
 
 
 class UserRepository(UserRepositoryMeta):
