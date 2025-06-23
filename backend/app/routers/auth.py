@@ -10,7 +10,10 @@ from starlette import status
 router = APIRouter(tags=['Auth'])
 
 
-@router.post('/auth_telegram')
+@router.post(
+    '/auth_telegram',
+    status_code=status.HTTP_201_CREATED
+)
 async def auth_telegram(payload: TelegramAuthPayload):
     """Авторизация пользователя через Telegram Mini App."""
     try:
@@ -32,8 +35,13 @@ async def auth_telegram(payload: TelegramAuthPayload):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Internal server error')
 
 
-@router.post("/refresh", description='refresh_access_token')
+@router.post(
+    "/refresh",
+    description='refresh_access_token',
+    status_code=status.HTTP_201_CREATED
+)
 async def refresh(refresh_token: str = Body(..., embed=True)):
+    """Обновление access токена с помощью refresh токена."""
     try:
         payload = decode_token(refresh_token)
         if payload.get("type") != "refresh":

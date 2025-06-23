@@ -4,10 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Сергей Коновалов <SokiZNosoK68rus@yandex.ru>"]
 readme = "README.md"
-packages = [{include = "friendly_backend"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.13"
 fastapi = "^0.115.12"
 uvicorn = "^0.34.2"
 isort = "^6.0.1"
@@ -15,7 +14,6 @@ sqlalchemy = "^2.0.41"
 asyncpg = "^0.30.0"
 databases = "^0.9.0"
 psycopg2-binary = "^2.9.10"
-aiosqlite = "^0.21.0"
 dotenv = "^0.9.9"
 pyjwt = "^2.10.1"
 
