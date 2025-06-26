@@ -3,6 +3,6 @@ from fastapi import APIRouter
 router = APIRouter()
 
 
-@router.get("/")
+@router.get('/')
 async def home():
-    return {"data": "ok"}
+    return {'data': 'ok'}

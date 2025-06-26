@@ -1,67 +1,52 @@
-import hashlib
-import hmac
-import urllib.parse
+import jwt
+from app.core.jwt import (create_access_token, create_refresh_token,
+                          decode_token)
+from app.schemas.auth import TelegramAuthPayload
+from app.service.auth_service import (get_or_create_user,
+                                      parse_telegram_init_data)
+from fastapi import APIRouter, Body, HTTPException
+from starlette import status
 
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
-
-from ..core.db import get_session
-from ..core.constants import BOT_TOKEN
-from ..models.user import User
-from ..schemas.auth import TelegramAuthPayload
-
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(tags=['Auth'])
 
 
-def validate(init_data: str, bot_token: str = BOT_TOKEN, skip_check: bool = False) -> dict:
-    """Осторожно! Параметр skip_check в проде НУЖНО УБРАТЬ!"""
-
-    tg = dict(urllib.parse.parse_qsl(urllib.parse.unquote(init_data)))
-    if skip_check:
-        return tg
-    if "hash" not in tg:
-        raise Exception("Missing hash")
-    hash_ = tg.pop("hash")
-    params = "\n".join([f"{k}={v}" for k, v in sorted(tg.items())])
-    secret_key = hmac.new(
-        key="WebAppData".encode(),
-        msg=bot_token.encode(),
-        digestmod=hashlib.sha256
-    ).digest()
-    computed_hash = hmac.new(secret_key, params.encode(), hashlib.sha256).hexdigest()
-    if hash_ != computed_hash:
-        raise Exception("Invalid hash")
-    return tg
-
-
-@router.post("")
-async def telegram_auth(
-    payload: TelegramAuthPayload,
-    session: AsyncSession = Depends(get_session),
-):
+@router.post('/auth_telegram')
+async def auth_telegram(payload: TelegramAuthPayload):
+    """Авторизация пользователя через Telegram Mini App."""
     try:
-        tg_data = validate(payload.initData, skip_check=True)  # skip_check УБРАТЬ!!!
-        user_id = int(tg_data.get("id"))
+        tg_data = parse_telegram_init_data(payload.initData)
+        user = await get_or_create_user(tg_data)
 
-        # Проверка, есть ли пользователь
-        result = await session.execute(
-            select(User).where(User.id == user_id)
-        )
-        user = result.scalars().first()
+        token_data = {'sub': str(user.id), 'tg_id': user.tg_id}
+        access_token = create_access_token(token_data)
+        refresh_token = create_refresh_token(token_data)
 
-        if not user:
-            user = User(
-                id=user_id,
-                first_name=tg_data.get("first_name"),
-                last_name=tg_data.get("last_name"),
-                username=tg_data.get("username"),
-                photo_url=tg_data.get("photo_url"),
-                auth_date=int(tg_data.get("auth_date")),
-            )
-            session.add(user)
-            await session.commit()
+        return {
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'token_type': 'bearer'
+        }
+    except ValueError as ve:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalid Telegram data')
+    except RuntimeError as re:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail='Internal server error')
 
-        return {"status": "ok"}
-    except Exception as e:
-        raise HTTPException(status_code=403, detail=str(e))
+
+@router.post("/refresh", description='refresh_access_token')
+async def refresh(refresh_token: str = Body(..., embed=True)):
+    try:
+        payload = decode_token(refresh_token)
+        if payload.get("type") != "refresh":
+            raise HTTPException(status_code=401, detail="Invalid token type")
+
+        user_id = int(payload.get("sub"))
+        tg_id = int(payload.get("tg_id"))
+
+        # можно проверить наличие юзера, если нужно
+        new_access_token = create_access_token({"sub": str(user_id), "tg_id": tg_id})
+        return {"access_token": new_access_token, "token_type": "bearer"}
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Refresh token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid refresh token")
