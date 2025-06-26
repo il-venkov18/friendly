@@ -2,12 +2,14 @@ import asyncio
 from logging.config import fileConfig
 
 from alembic import context
-from app.core.db import DATABASE_URL, Base
-from app.models.likes_association_table import likes_association_table
-from app.models.user import User
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+
+from app.core.db import DATABASE_URL, Base
+from app.models.likes_association_table import likes_association_table
+from app.models.user import User
+from app.models.refresh_token import RefreshToken
 
 config = context.config
 

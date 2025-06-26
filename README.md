@@ -67,3 +67,10 @@ http://127.0.0.1:8000/docs
 ```
 http://127.0.0.1:8000/redoc
 ```
+
+Для быстрого композа и миграций:
+```
+docker compose up -d --build &&
+docker exec -it backend alembic revision --autogenerate &&
+docker exec -it backend alembic upgrade head
+```

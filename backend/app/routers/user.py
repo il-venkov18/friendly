@@ -1,24 +1,23 @@
 from logging import Logger
 from typing import Annotated
 
-from app.core.dependencies import get_user_service
-from app.exceptions.user_not_found_exception import UserNotFoundException
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
 
-from ..core.db import get_session
-from ..core.logger import get_logger
-from ..dependencies.auth import get_current_user
-from ..models.user import User
-from ..service.meta.user_service_meta import UserServiceMeta
+from app.core.db import get_async_session
+from app.core.dependencies import get_user_service
+from app.core.logger import get_logger
+from app.dependencies.auth import get_current_user
+from app.exceptions.user_not_found_exception import UserNotFoundException
+from app.models.user import User
+from app.service.meta.user_service_meta import UserServiceMeta
 
 router = APIRouter(prefix="/users", tags=["User"])
 
 
 @router.get("/")
-async def get_users(session: AsyncSession = Depends(get_session)):
+async def get_users(session: AsyncSession = Depends(get_async_session)):
     result = await session.execute(select(User))
     users = result.scalars().all()
     return users

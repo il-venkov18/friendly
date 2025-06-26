@@ -1,17 +1,18 @@
-from app.core.db import async_session
-from app.core.jwt import decode_token
-from app.models.user import User
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.future import select
 from starlette import status
+
+from app.core.db import async_session
+from app.core.jwt import decode_access_token
+from app.models.user import User
 
 security = HTTPBearer()
 
 
 async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> User:
     try:
-        payload = decode_token(credentials.credentials)
+        payload = decode_access_token(credentials.credentials)
         user_id = int(payload.get("sub"))
 
         async with async_session() as session:

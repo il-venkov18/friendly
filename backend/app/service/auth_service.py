@@ -3,11 +3,12 @@ import hmac
 import json
 import urllib.parse
 
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.future import select
+
 from app.core.db import async_session
 from app.core.environment_variables import BOT_TOKEN
 from app.models.user import User
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.future import select
 
 
 def parse_telegram_init_data(auth_data: str) -> dict:
@@ -32,8 +33,8 @@ def parse_telegram_init_data(auth_data: str) -> dict:
 
 
 async def get_or_create_user(tg_data: dict) -> User:
-    """Получить пользователя из БД или создать нового."""
-    user_info = json.loads(tg_data.get("user"))
+    """Получение пользователя из БД или создание нового."""
+    user_info = json.loads(tg_data.get('user'))
     tg_id = int(user_info['id'])
     auth_date = int(user_info.get('auth_date') or tg_data.get('auth_date'))
 
