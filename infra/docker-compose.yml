@@ -10,6 +10,14 @@ services:
       - "5432:5432"
     restart: always
 
+  frontend:
+    build: ../frontend/
+    image: friendly_frontend:latest
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    restart: always
+
   backend:
     build: ../backend/
     image: friendly_backend:latest
