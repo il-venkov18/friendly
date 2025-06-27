@@ -11,9 +11,9 @@ from app.core.logger import get_logger
 from app.dependencies.auth import get_current_user
 from app.exceptions.user_not_found_exception import UserNotFoundException
 from app.models.user import User
-from app.service.meta.user_service_meta import UserServiceMeta
+from app.services.meta.user_service_meta import UserServiceMeta
 
-router = APIRouter(prefix="/users", tags=["User"])
+router = APIRouter()
 
 
 @router.get("/")

@@ -8,8 +8,8 @@ from app.core.db import get_async_session
 from app.core.impl.user_repository import UserRepository
 from app.core.logger import get_logger
 from app.core.meta.user_repository_meta import UserRepositoryMeta
-from app.service.impl.user_service import UserService
-from app.service.meta.user_service_meta import UserServiceMeta
+from app.services.impl.user_service import UserService
+from app.services.meta.user_service_meta import UserServiceMeta
 
 
 def get_user_repository(session: Annotated[AsyncSession, Depends(get_async_session)]) -> UserRepositoryMeta:

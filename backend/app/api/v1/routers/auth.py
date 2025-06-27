@@ -6,14 +6,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 from starlette import status
 
+from app.api.v1.schemas.auth import TelegramAuthPayload
 from app.core.db import get_async_session
 from app.core.jwt import (create_access_token, create_and_store_refresh_token, hash_token)
 from app.models.refresh_token import RefreshToken
-from app.schemas.auth import TelegramAuthPayload
-from app.service.auth_service import (get_or_create_user,
-                                      parse_telegram_init_data)
+from app.services.auth_service import (get_or_create_user,
+                                       parse_telegram_init_data)
 
-router = APIRouter(tags=['Auth'])
+router = APIRouter()
 
 
 @router.post(
