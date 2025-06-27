@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime
 
 from fastapi import APIRouter, Body, Depends, HTTPException
 from sqlalchemy import select
@@ -67,7 +67,7 @@ async def refresh(
     if not db_token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid refresh token')
 
-    if db_token.expires_at < datetime.now(timezone.utc):
+    if db_token.expires_at < datetime.utcnow():
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Refresh token expired')
 
     user_id = db_token.user_id
