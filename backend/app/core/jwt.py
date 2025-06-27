@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import hashlib
 import secrets
 
@@ -20,7 +20,7 @@ async def create_access_token(
     expires_delta: timedelta = timedelta(minutes=ACCESS_TOKEN_EXPIRE)
 ) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + expires_delta
+    expire = datetime.now(timezone.utc) + expires_delta
     to_encode.update({'exp': expire, 'type': 'access'})
     return jwt.encode(to_encode, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
@@ -31,7 +31,7 @@ async def create_and_store_refresh_token(
 ) -> str:
     token = secrets.token_urlsafe(SIXTY_FOUR)
     hashed_token = hash_token(token)
-    expires_at = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE)
+    expires_at = datetime.now(timezone.utc) + timedelta(days=REFRESH_TOKEN_EXPIRE)
 
     refresh_token = RefreshToken(
         token=hashed_token,
