@@ -1,21 +1,19 @@
 import { useState } from "react"
 import React from "react"
-
-import { BasicInfoForm } from "@/widgets/auth/basic-info-form"
-import { BioForm } from "@/widgets/auth/bio-form"
-import { InterestSelection } from "@/widgets/auth/interest-selection"
-import { Welcome } from "@/widgets/auth/welcome"
-import { ProgressBar } from "@/widgets/progress-bar"
-
-import { QuestionsLayout } from "@/shared/ui/questions-layout"
+import { BasicInfoStep } from "@/features/onboarding/ui/basic-info-step/basic-info-step"
+import { BioStep } from "@/features/onboarding/ui/bio-step/bio-step"
+import { InterestStep } from "@/features/onboarding/ui/interest-step/interest-step"
+import { WelcomeStep } from "@/features/onboarding/ui/welcome-step/welcome-step"
+import { ProgressBar } from "@/widgets/progress/ui/progress-bar"
+import QuestionsLayout from "@/shared/ui/layouts/questions-layout/questions-layout"
 
 type StepComponent = (onNext: () => void) => React.ReactElement
 
 const WELCOME_STEPS: StepComponent[] = [
-  (onNext) => <Welcome onNext={onNext} />,
-  (onNext) => <BasicInfoForm onNext={onNext} />,
-  (onNext) => <BioForm onNext={onNext} />,
-  (onNext) => <InterestSelection onNext={onNext} />,
+  (onNext) => <WelcomeStep onNext={onNext} />,
+  (onNext) => <BasicInfoStep onNext={onNext} />,
+  (onNext) => <BioStep onNext={onNext} />,
+  (onNext) => <InterestStep onNext={onNext} />,
 ]
 
 const WelcomeScreen = () => {

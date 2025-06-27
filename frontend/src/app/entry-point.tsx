@@ -10,10 +10,10 @@ import { PersistGate } from "redux-persist/integration/react"
 import {
   initTelegramWebApp,
   isTelegramWebApp,
-} from "@/shared/config/telegram-config"
-import store, { persistor } from "@/shared/store/redux-store"
+} from "@/shared/lib/config/telegram"
+import store, { persistor } from "@/app/providers/store/redux-store"
 
-import { router } from "./router"
+import { AppRouter } from "./router/router"
 
 if (isTelegramWebApp()) {
   initTelegramWebApp()
@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <RouterProvider router={router} />
+        <RouterProvider router={AppRouter} />
       </PersistGate>
     </Provider>
   </StrictMode>
