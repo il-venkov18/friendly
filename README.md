@@ -53,19 +53,19 @@ docker compose down -v
 Ссылки:
 - Сайт:
 ```
-http://127.0.0.1:8000/
+http://localhost:8000/api/
 ```
 - pgAdmin:
 ```
-http://127.0.0.1:5050/
+http://localhost:5050/
 ```
 - Документация Swagger:
 ```
-http://127.0.0.1:8000/docs
+http://localhost:8000/docs
 ```
 - Документация ReDoc:
 ```
-http://127.0.0.1:8000/redoc
+http://localhost:8000/redoc
 ```
 
 Для быстрого композа и миграций:

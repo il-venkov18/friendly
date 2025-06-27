@@ -5,7 +5,7 @@ from .routers.auth import router as auth_router
 from .routers.home import router as home_router
 from .routers.user import router as user_router
 
-app = FastAPI()
+app = FastAPI(root_path='/api')
 
 allow_origins = (
     'http://localhost:8000',
