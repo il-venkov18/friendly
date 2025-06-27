@@ -7,6 +7,7 @@ app = FastAPI()
 
 allow_origins = (
     'http://localhost:8000',
+    'http://localhost:5050',
 )
 
 app.add_middleware(
