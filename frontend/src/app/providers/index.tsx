@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { StoreProvider } from './store-provider';
 import { AuthProvider } from './auth-provider';
 import { TelegramProvider } from './telegram-provider';
 import { StyleProvider } from './style-provider';
 
-export const AppProviders = ({ children }: { children: ReactNode }) => (
+const AppProviders: React.FC<{ children: ReactNode }> = ({ children }) => (
   <StoreProvider>
     <AuthProvider>
       <TelegramProvider>
@@ -15,3 +15,5 @@ export const AppProviders = ({ children }: { children: ReactNode }) => (
     </AuthProvider>
   </StoreProvider>
 );
+
+export default AppProviders;

@@ -1,5 +1,5 @@
 // shared/api/index.ts
-import { axiosInstance } from '../lib/config/axios-instance';
+import { axiosInstance } from '../config/axios-instance';
 
 export const handleApiError = (error: unknown) => {
   console.error('API Error:', error);

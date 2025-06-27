@@ -1,6 +1,6 @@
 import WebApp from '@twa-dev/sdk';
 
-export const initTelegramWebApp = (): WebApp => {
+export const initTelegramWebApp = () => {
   WebApp.ready();
   const { bg_color } = WebApp.themeParams;
   

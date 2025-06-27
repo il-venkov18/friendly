@@ -3,7 +3,7 @@ import { RootLayout } from '../layouts/root-layout';
 import { WelcomePage } from '@/pages/welcome/ui/welcome-page';
 import { ProfilePage } from '@/pages/profile/ui/profile-page';
 
-export const AppRouter = createBrowserRouter([
+export const router = createBrowserRouter([
   {
     element: <RootLayout />,
     children: [
