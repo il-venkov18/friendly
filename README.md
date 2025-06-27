@@ -53,7 +53,7 @@ docker compose down -v
 Ссылки:
 - Сайт:
 ```
-http://localhost:8000/api/
+http://localhost:8000/api/v1/home/
 ```
 - pgAdmin:
 ```
