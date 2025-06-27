@@ -6,7 +6,10 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#007bff', // Соответствует вашему $primary-color
+        primary: '#2563eb', // Синий цвет для кнопки
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
       },
     },
   },

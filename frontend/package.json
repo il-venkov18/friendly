@@ -67,5 +67,10 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  }
+  },
+  "description": "- React + Vite\r - TypeScript\r - Redux Toolkit + Persist\r - React Hook Form\r - Sass\r - [И другие]",
+  "main": "eslint.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

@@ -1,26 +1,42 @@
 import { useOnboarding } from '@/features/onboarding/lib/hooks/use-onboarding';
+import { Button } from '@/shared/ui/button/button';
 
 export const WelcomePage = () => {
-  const { currentStep, CurrentComponent, next, totalSteps } = useOnboarding();
-
-  if (currentStep >= totalSteps) {
-    return (
-      <div className="p-6 text-center">
-        <h2 className="text-2xl font-bold">Спасибо! 🎉</h2>
-        <p className="mt-2">Вы завершили приветствие.</p>
-      </div>
-    );
-  }
+  const { next } = useOnboarding();
 
   return (
-    <div className="space-y-4">
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
-        <div 
-          className="bg-blue-600 h-2.5 rounded-full" 
-          style={{ width: `${(currentStep / totalSteps) * 100}%` }}
-        ></div>
+    <div className="flex flex-col min-h-screen p-6 bg-[#1C1C1C]">
+      {/* Основной контент */}
+      <div className="flex-grow flex flex-col items-center justify-center text-center">
+        {/* Заголовок */}
+        <h1 className="text-3xl font-bold text-white mb-4">
+          Добро пожаловать!
+        </h1>
+        
+        {/* Описание - теперь белый текст */}
+        <p className="text-white mb-8 max-w-md">
+          Текст-заполнитель — это текст, который имеет некоторые характеристики 
+          реального письменного текста, но является случайным набором слов
+        </p>
+        
+        {/* Аватар */}
+        <div className="w-24 h-24 bg-gray-700 rounded-full mb-6"></div>
       </div>
-      <CurrentComponent onNext={next} />
+
+      {/* Футер с кнопкой и текстом */}
+      <div className="space-y-4">
+        {/* Текст остается серым (#787878) как в variables.scss */}
+        <p className="text-xs text-[#787878] text-center px-4">
+          Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
+        </p>
+        
+        <Button 
+          onClick={next}
+          className="w-full py-4"
+        >
+          Создать анкету
+        </Button>
+      </div>
     </div>
   );
 };
