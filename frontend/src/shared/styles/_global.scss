@@ -1,22 +1,32 @@
-// global.scss - Base styles for project
-
+// global.scss
 @use "./variables" as vars;
 @use "./reset";
 
-// Base styles for tags
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
 body {
   min-width: 100dvw;
   min-height: 100dvh;
   width: 100dvw;
   height: 100dvh;
-  background-color: vars.$background-color;
-  color: vars.$text-color;
+  background-color: vars.$background-color; // #1C1C1C
+  color: vars.$text-color; // #FFFFFF
   font-family: vars.$main-font;
   font-size: 16px;
   font-weight: 300;
   overflow: hidden;
   will-change: transform;
 }
+
+// Остальные стили остаются без изменений
 
 h1,
 h2,

@@ -6,14 +6,9 @@ import { Provider } from "react-redux"
 import { RouterProvider } from "react-router-dom"
 import { scan } from "react-scan"
 import { PersistGate } from "redux-persist/integration/react"
-
-import {
-  initTelegramWebApp,
-  isTelegramWebApp,
-} from "@/shared/config/telegram-config"
-import store, { persistor } from "@/shared/store/redux-store"
-
-import { router } from "./router"
+import { initTelegramWebApp, isTelegramWebApp, } from "@/shared/lib/config/telegram"
+import store, { persistor } from "@/app/providers/store/redux-store"
+import { router } from "./router/router"
 
 if (isTelegramWebApp()) {
   initTelegramWebApp()
