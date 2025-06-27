@@ -1,4 +1,4 @@
-import { useProfileData } from '../hooks/use-profile-data';
+import { useProfileData } from './hooks/use-profile-data';
 import css from './profile-page.module.scss';
 
 export const ProfilePage = () => {

@@ -1,15 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '../layouts/root-layout';
-import { publicRoutes } from './routes/public-routes';
-//import { privateRoutes } from './routes/private-routes';
+import { WelcomePage } from '@/pages/welcome/ui/welcome-page';
+import { ProfilePage } from '@/pages/profile/ui/profile-page';
 
 export const AppRouter = createBrowserRouter([
   {
     element: <RootLayout />,
-//  errorElement: <ErrorPage />,
     children: [
-      ...publicRoutes,
-//      ...privateRoutes,
-    ],
-  },
+      {
+        path: '/',
+        element: <WelcomePage />
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />
+      }
+    ]
+  }
 ]);

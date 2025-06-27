@@ -1,5 +1,5 @@
-import { OnboardingStepProps } from '@/features/onboarding/lib/types';
-import { QuestionsLayout } from '@/shared/ui/questions-layout';
+import { OnboardingStepProps } from '@/features/onboarding/lib/models/types';
+import QuestionsLayout from '@/shared/ui/layouts/questions-layout/questions-layout';
 
 export const BasicInfoStep = ({ onNext }: OnboardingStepProps) => {
   return (

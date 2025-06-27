@@ -1,7 +1,7 @@
-import { OnboardingStepProps } from '@/features/onboarding/lib/types';
-import { QuestionsLayout } from '@/shared/ui/questions-layout';
+import { OnboardingStepProps } from '@/features/onboarding/lib/models/types';
+import QuestionsLayout from '@/shared/ui/layouts/questions-layout/questions-layout';
 import { EditableText } from '@/widgets/editable-text';
-import { useOnboardingData } from '@/features/onboarding/lib/hooks';
+import { useOnboardingData } from '@/features/onboarding/lib/hooks/use-onboarding-data';
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const { userName, userPhoto } = useOnboardingData();
