@@ -1,10 +1,11 @@
 from logging import Logger
 
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
+
 from app.core.meta.user_repository_meta import UserRepositoryMeta
 from app.exceptions.user_not_found_exception import UserNotFoundException
 from app.models.user import User
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from ..meta.user_service_meta import UserServiceMeta
 

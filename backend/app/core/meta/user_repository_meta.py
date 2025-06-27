@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 
-from app.models.user import User
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.models.user import User
 
 
 class UserRepositoryMeta(ABC):

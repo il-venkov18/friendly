@@ -1,11 +1,12 @@
 from typing import List
 
+from sqlalchemy import BigInteger, Integer, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from app.core.db import Base
 from app.models.dislikes_association_table import dislikes_association_table
 from app.models.likes_association_table import likes_association_table
 from app.models.matches_association_table import matches_association_table
-from sqlalchemy import BigInteger, Integer, String
-from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class User(Base):

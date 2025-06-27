@@ -1,13 +1,17 @@
+from datetime import datetime, timedelta
 import hashlib
 import secrets
-from datetime import datetime, timedelta
 
 import jwt
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.constants import SIXTY_FOUR
-from app.core.environment_variables import (ACCESS_TOKEN_EXPIRE, JWT_ALGORITHM,
-                                            JWT_SECRET, REFRESH_TOKEN_EXPIRE)
+from app.core.environment_variables import (
+    ACCESS_TOKEN_EXPIRE,
+    JWT_ALGORITHM,
+    JWT_SECRET,
+    REFRESH_TOKEN_EXPIRE,
+)
 from app.models.refresh_token import RefreshToken
 
 

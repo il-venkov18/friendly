@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from app.core.db import Base
 from sqlalchemy import Column, ForeignKey, Table
+
+from app.core.db import Base
 
 dislikes_association_table = Table(
     "dislikes",

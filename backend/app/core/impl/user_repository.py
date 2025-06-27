@@ -1,8 +1,9 @@
-from app.core.meta.user_repository_meta import UserRepositoryMeta
-from app.models.user import User
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload, selectinload, with_loader_criteria
+
+from app.core.meta.user_repository_meta import UserRepositoryMeta
+from app.models.user import User
 
 
 class UserRepository(UserRepositoryMeta):

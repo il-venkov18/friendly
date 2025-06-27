@@ -8,10 +8,9 @@ from starlette import status
 
 from app.api.v1.schemas.auth import TelegramAuthPayload
 from app.core.db import get_async_session
-from app.core.jwt import (create_access_token, create_and_store_refresh_token, hash_token)
+from app.core.jwt import create_access_token, create_and_store_refresh_token, hash_token
 from app.models.refresh_token import RefreshToken
-from app.services.auth_service import (get_or_create_user,
-                                       parse_telegram_init_data)
+from app.services.auth_service import get_or_create_user, parse_telegram_init_data
 
 router = APIRouter()
 
@@ -36,7 +35,7 @@ async def auth_telegram(
         return {
             'access_token': access_token,
             'refresh_token': refresh_token,
-            'token_type': 'bearer'
+            'access_token_type': 'bearer'
         }
     except ValueError:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail='Invalid Telegram data')
@@ -78,5 +77,5 @@ async def refresh(
 
     return {
         'access_token': new_access_token,
-        'token_type': 'bearer'
+        'access_token_type': 'bearer'
     }

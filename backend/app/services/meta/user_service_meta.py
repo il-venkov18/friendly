@@ -1,8 +1,9 @@
 from abc import ABC, abstractmethod
 from logging import Logger
 
-from app.core.meta.user_repository_meta import UserRepositoryMeta
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.core.meta.user_repository_meta import UserRepositoryMeta
 
 
 class UserServiceMeta(ABC):
