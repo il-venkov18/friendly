@@ -1,4 +1,4 @@
-import { OnboardingStepProps } from '@/features/onboarding/lib/';
+import { OnboardingStepProps } from '@/features/onboarding/lib/models/types';
 import QuestionsLayout from '@/shared/ui/layouts/questions-layout/questions-layout';
 
 export const BioStep = ({ onNext, onBack }: OnboardingStepProps) => {
