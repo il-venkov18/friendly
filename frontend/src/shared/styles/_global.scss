@@ -3,6 +3,10 @@
 @use "./variables" as vars;
 @use "./reset";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 // Base styles for tags
 body {
   min-width: 100dvw;
