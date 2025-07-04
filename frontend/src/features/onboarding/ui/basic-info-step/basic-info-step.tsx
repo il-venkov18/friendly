@@ -1,29 +1,42 @@
+// src/features/onboarding/ui/basic-info-step.tsx
 import { OnboardingStepProps } from '@/features/onboarding/lib/models/types';
+import { useOnboardingData } from '../../lib/hooks/use-onboarding-data';
 import QuestionsLayout from '@/shared/ui/layouts/questions-layout/questions-layout';
 
 export const BasicInfoStep = ({ onNext }: OnboardingStepProps) => {
+  const { tgUser, profileData, updateProfileData } = useOnboardingData();
+
   return (
     <QuestionsLayout
       header={<h2>Основная информация</h2>}
-      footer={
-        <button 
-          onClick={onNext}
-          className="bg-primary text-white px-4 py-2 rounded"
-        >
-          Далее
-        </button>
-      }
+      footer={<button onClick={onNext}>Далее</button>}
     >
-      <form className="space-y-4">
+      <div className="space-y-4">
         <div>
           <label>Имя</label>
-          <input type="text" className="border p-2 w-full" />
+          <input 
+            type="text" 
+            defaultValue={tgUser.firstName}
+            disabled
+          />
         </div>
         <div>
           <label>Фамилия</label>
-          <input type="text" className="border p-2 w-full" />
+          <input 
+            type="text" 
+            defaultValue={tgUser.lastName}
+            disabled
+          />
         </div>
-      </form>
+        <div>
+          <label>Дата рождения</label>
+          <input 
+            type="date" 
+            value={profileData.birthDate}
+            onChange={(e) => updateProfileData({ birthDate: e.target.value })}
+          />
+        </div>
+      </div>
     </QuestionsLayout>
   );
 };
