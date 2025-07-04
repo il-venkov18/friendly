@@ -1,0 +1,169 @@
+.onboardingForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px; // Общий отступ между секциями формы, можно настроить
+  max-width: 382px; // Если форма имеет фиксированную ширину
+  margin: 0 auto; // Центрирование формы
+  padding: 20px; // Внутренний отступ формы, если нужно
+  box-sizing: border-box; // Учитываем padding в ширине
+}
+
+.formHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // Центрируем ProgressBar
+  gap: 16px; // Отступ между заголовком и ProgressBar, если заголовок есть
+  font-size: 20px; // Пример стилей для заголовка
+  font-weight: 600;
+  color: white; // Цвет текста заголовка
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; // Отступ между заголовком секции и содержимым
+}
+
+.sectionTitle {
+  font-size: 24px;
+  font-style: bold;
+  font-weight: 700;
+  color: #ffffff; // Цвет текста заголовка секции
+  text-transform: uppercase;
+  margin-bottom: 8px; // Отступ от заголовка до первого поля
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // **Отступ 8px между полями инпутов и селектов**
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // Отступ 8px между label и input/select
+}
+
+.formLabel {
+  font-size: 14px;
+  color: #a0a0a0;
+}
+
+// **Стили для инпутов и селектов**
+.formInput,
+.formSelect {
+  width: 350px; // Ширина 350px
+  height: 48px; // Высота 48px
+  padding: 0 16px; // Внутренний отступ
+  border: none;
+  border-radius: 12px; // Радиус 12px
+  background-color: rgba(33, 33, 33, 1); // Цвет фона rgba(33, 33, 33, 1)
+  color: white; // Цвет текста
+  font-size: 16px;
+  box-sizing: border-box; // Учитываем padding и border в ширине/высоте
+
+  &:focus {
+    outline: none;
+    // Можно добавить border: 1px solid rgba(153, 236, 255, 1); для фокуса
+  }
+
+  // Стили для placeholder
+  &::placeholder {
+    color: #888;
+  }
+}
+
+// Отдельные стили для select, если необходимо переопределить стрелку или другие особенности
+.formSelect {
+  // Возможно, здесь вам захочется добавить `appearance: none;` и кастомную стрелку,
+  // чтобы она выглядела одинаково во всех браузерах.
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7%2010L12%2015L17%2010H7Z%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E'); /* Белая стрелка вниз */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px; // Увеличиваем padding справа, чтобы стрелка не перекрывала текст
+}
+
+
+// Стили для опций (если нужны кастомные)
+.formOption {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: rgba(33, 33, 33, 1);
+  color: white;
+  cursor: pointer;
+  margin-right: 8px; // Отступ между опциями
+  margin-bottom: 8px; // Отступ, если они переносятся на новую строку
+}
+
+.formHint {
+  font-size: 12px;
+  color: #888;
+  margin-top: -4px; // Поднять текст поближе к опциям
+  margin-bottom: 8px;
+}
+
+.formSubtitle {
+  font-size: 14px;
+  font-weight: 500;
+  color: #a0a0a0;
+  text-transform: uppercase;
+  margin-top: 16px; // Отступ перед подзаголовком
+  margin-bottom: 8px;
+}
+
+.formCheckboxGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // Отступ между чекбоксами
+}
+
+.formCheckbox {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+
+  input[type="checkbox"] {
+    width: 20px; // Размер чекбокса
+    height: 20px;
+    margin-right: 8px; // Отступ от чекбокса до текста
+    border-radius: 4px; // Закругление углов чекбокса
+    background-color: rgba(33, 33, 33, 1);
+    appearance: none; // Скрываем дефолтный чекбокс
+    -webkit-appearance: none;
+    border: 1px solid rgba(153, 236, 255, 1); // Цвет границы чекбокса
+
+    &:checked {
+      background-color: rgba(153, 236, 255, 1); // Цвет фона при активации
+      border-color: rgba(153, 236, 255, 1); // Цвет границы при активации
+      position: relative;
+
+      // Иконка галочки SVG
+      &::after {
+        content: '';
+        position: absolute;
+        top: 3px;
+        left: 5px;
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}
+
+
+.nextFooter {
+  margin-top: 24px; // Отступ от последней секции до кнопки
+  .formButton { // Это класс для вашей кнопки "Далее", если он там есть
+    width: 100%; // Кнопка на всю ширину
+  }
+}

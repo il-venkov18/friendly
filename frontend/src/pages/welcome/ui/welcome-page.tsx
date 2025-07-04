@@ -15,7 +15,7 @@ export const WelcomePage = () => {
       <div className={styles.skeletonTop}></div>
       <div className={styles.skeletonLarge}></div>
       
-      <div className={styles.content}>
+      <div className={styles.contant}>
         <p className={styles.text}>
           Текст-заполнитель — это текст, который имеет некоторые характеристики 
           реального письменного текста, но является случайным набором слов

@@ -2,6 +2,7 @@
 
 body {
   margin: 0;
+  background-color: rgb(28, 28, 28);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

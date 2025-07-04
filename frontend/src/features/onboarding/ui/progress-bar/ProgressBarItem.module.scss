@@ -1,0 +1,11 @@
+.progressBarItem {
+  width: 65.25px;
+  height: 3px;
+  border-radius: 1.5px; /* Для скругленных углов, как на изображении */
+  background-color: rgba(42, 42, 42, 1); /* Неактивный цвет */
+  transition: background-color 0.3s ease-in-out; /* Плавный переход цвета */
+}
+
+.active {
+  background-color: rgba(153, 236, 255, 1); /* Активный цвет */
+}
