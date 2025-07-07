@@ -1,21 +1,68 @@
+// src/features/onboarding/ui/welcome-step.module.scss
+
+// =====================================
+// FONTS
+// =====================================
+
+// Soyuz Grotesk w-700 Bold
+@font-face {
+  font-family: "Soyuz Grotesk";
+  src:
+    url("/fonts/SoyuzGrotesk-w-700-Bold.woff2") format("woff2"),
+    url("/fonts/SoyuzGrotesk-w-700-Bold.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// San Francisco / SF Pro Text Regular (для всех остальных элементов)
+@font-face {
+  font-family: "SF Pro Text";
+  src:
+    url("/fonts/SF-Pro-Text-Regular.woff2") format("woff2"),
+    url("/fonts/SF-Pro-Text-Regular.woff") format("woff");
+  font-weight: 400; // Regular
+  font-style: normal;
+  font-display: swap;
+}
+
+// =====================================
+// FORM STYLES
+// =====================================
+
 .onboardingForm {
   display: flex;
   flex-direction: column;
-  gap: 24px; // Общий отступ между секциями формы, можно настроить
-  max-width: 382px; // Если форма имеет фиксированную ширину
+  gap: 24px; // Общий отступ между секциями формы
+  max-width: 382px; // Фиксированная ширина формы
   margin: 0 auto; // Центрирование формы
-  padding: 20px; // Внутренний отступ формы, если нужно
+  padding: 20px; // Внутренний отступ формы
   box-sizing: border-box; // Учитываем padding в ширине
+
+  // --- Основная типографика для всей формы (SF Pro Text Regular) ---
+  font-family:
+    "SF Pro Text",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  font-weight: 400; /* Regular */
+  font-size: 17px;
+  line-height: 22px;
+  letter-spacing: -0.4px;
+  color: white; // Основной цвет текста
+  // -----------------------------------------------------------------
 }
 
 .formHeader {
   display: flex;
   flex-direction: column;
   align-items: center; // Центрируем ProgressBar
-  gap: 16px; // Отступ между заголовком и ProgressBar, если заголовок есть
-  font-size: 20px; // Пример стилей для заголовка
-  font-weight: 600;
-  color: white; // Цвет текста заголовка
+  gap: 16px; // Отступ между заголовком и ProgressBar (если заголовок есть)
+  // font-size, font-weight, color будут унаследованы от .onboardingForm, если не переопределены
 }
 
 .formSection {
@@ -25,9 +72,12 @@
 }
 
 .sectionTitle {
+  // --- Типографика для заголовка "профиль" (Soyuz Grotesk Bold) ---
+  font-family: "Soyuz Grotesk", sans-serif;
+  font-weight: 700; /* Bold */
   font-size: 24px;
-  font-style: bold;
-  font-weight: 700;
+  line-height: 28px;
+  letter-spacing: 0.07px;
   color: #ffffff; // Цвет текста заголовка секции
   text-transform: uppercase;
   margin-bottom: 8px; // Отступ от заголовка до первого поля
@@ -36,7 +86,7 @@
 .sectionContent {
   display: flex;
   flex-direction: column;
-  gap: 8px; // **Отступ 8px между полями инпутов и селектов**
+  gap: 8px; // Отступ 8px между полями инпутов и селектов
 }
 
 .formField {
@@ -46,21 +96,32 @@
 }
 
 .formLabel {
+  // Унаследует SF Pro Text, можно переопределить только font-size или color
   font-size: 14px;
   color: #a0a0a0;
 }
 
-// **Стили для инпутов и селектов**
+// =====================================
+// INPUTS & SELECTS
+// =====================================
+
+// Wrapper для селекта с кастомной стрелкой
+.selectWrapper {
+  position: relative; // Контекст позиционирования для абсолютного позиционирования иконки
+  width: 350px; // Ширина обертки, равная ширине селекта
+  height: 48px; // Высота обертки, равная высоте селекта
+}
+
 .formInput,
 .formSelect {
-  width: 350px; // Ширина 350px
+  width: 100%; // Ширина 100% от родителя (.selectWrapper или .onboardingForm)
   height: 48px; // Высота 48px
   padding: 0 16px; // Внутренний отступ
   border: none;
   border-radius: 12px; // Радиус 12px
-  background-color: rgba(33, 33, 33, 1); // Цвет фона rgba(33, 33, 33, 1)
+  background-color: rgba(33, 33, 33, 1); // Цвет фона
   color: white; // Цвет текста
-  font-size: 16px;
+  font-size: 16px; // Отдельный размер шрифта для инпутов/селектов, переопределяет 17px из родителя
   box-sizing: border-box; // Учитываем padding и border в ширине/высоте
 
   &:focus {
@@ -68,27 +129,38 @@
     // Можно добавить border: 1px solid rgba(153, 236, 255, 1); для фокуса
   }
 
-  // Стили для placeholder
   &::placeholder {
     color: #888;
+    // Унаследует SF Pro Text
   }
 }
 
-// Отдельные стили для select, если необходимо переопределить стрелку или другие особенности
 .formSelect {
-  // Возможно, здесь вам захочется добавить `appearance: none;` и кастомную стрелку,
-  // чтобы она выглядела одинаково во всех браузерах.
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7%2010L12%2015L17%2010H7Z%22%20fill%3D%22%23FFFFFF%22%2F%3E%3C%2Fsvg%3E'); /* Белая стрелка вниз */
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 40px; // Увеличиваем padding справа, чтобы стрелка не перекрывала текст
+  padding-right: 40px;
+
+  color: #888; // Default gray color for placeholder "Пол"
+
+  &:not([value="Пол"]) {
+    color: white; // Change to white when a value is selected (i.e., not empty string)
+  }
 }
 
+.selectArrowIcon {
+  position: absolute;
+  right: 14px; /* Позиционируем иконку от правого края обертки */
+  top: 50%; /* Выравниваем по центру по вертикали */
+  transform: translateY(-50%); /* Точная центровка по вертикали */
+  pointer-events: none; /* Игнорировать клики по иконке, чтобы они передавались на select */
+  fill: #78797e; /* Цвет заливки иконки, если он не 'currentColor' */
+}
 
-// Стили для опций (если нужны кастомные)
+// =====================================
+// OTHER FORM ELEMENTS
+// =====================================
+
 .formOption {
   display: inline-block;
   padding: 8px 16px;
@@ -97,10 +169,12 @@
   color: white;
   cursor: pointer;
   margin-right: 8px; // Отступ между опциями
-  margin-bottom: 8px; // Отступ, если они переносятся на новую строку
+  margin-bottom: 8px; // Отступ, если они переносятся
+  // Унаследует SF Pro Text
 }
 
 .formHint {
+  // Унаследует SF Pro Text
   font-size: 12px;
   color: #888;
   margin-top: -4px; // Поднять текст поближе к опциям
@@ -108,8 +182,9 @@
 }
 
 .formSubtitle {
+  // Унаследует SF Pro Text
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 500; // Более жирный, чем обычный, но не bold
   color: #a0a0a0;
   text-transform: uppercase;
   margin-top: 16px; // Отступ перед подзаголовком
@@ -126,8 +201,9 @@
   display: flex;
   align-items: center;
   color: white;
-  font-size: 16px;
+  font-size: 16px; // Отдельный размер шрифта для чекбоксов
   cursor: pointer;
+  // Унаследует SF Pro Text
 
   input[type="checkbox"] {
     width: 20px; // Размер чекбокса
@@ -144,9 +220,8 @@
       border-color: rgba(153, 236, 255, 1); // Цвет границы при активации
       position: relative;
 
-      // Иконка галочки SVG
       &::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 3px;
         left: 5px;
@@ -160,10 +235,16 @@
   }
 }
 
-
 .nextFooter {
   margin-top: 24px; // Отступ от последней секции до кнопки
-  .formButton { // Это класс для вашей кнопки "Далее", если он там есть
+  .formButton {
+    // Этот класс будет применяться к вашей Button компоненте
     width: 100%; // Кнопка на всю ширину
+    // Унаследует SF Pro Text
   }
+}
+
+.cities{
+  color: white;
+  background-color: #78797e;
 }
