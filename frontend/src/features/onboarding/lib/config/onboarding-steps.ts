@@ -5,7 +5,7 @@ import { InterestStep } from '@/features/onboarding/ui/interest-step';
 
 export const ONBOARDING_STEPS = [
   { id: 'welcome', component: WelcomeStep },
+  { id: 'interests', component: InterestStep },
   { id: 'basic-info', component: BasicInfoStep },
   { id: 'bio', component: BioStep },
-  { id: 'interests', component: InterestStep },
 ] as const;
