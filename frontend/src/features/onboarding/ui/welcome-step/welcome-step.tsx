@@ -5,7 +5,9 @@ import { useState } from "react"
 
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
-import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon"
+import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon" // Эту иконку используем для поворота
+
+import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon" // Эту иконку используем для поворота
 
 import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
 
@@ -52,11 +54,14 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [universityInput, setUniversityInput] = useState<string>("")
   const [genderPreference, setGenderPreference] = useState<string[]>([]);
 
-  // НОВОЕ состояние для поля "Пол"
   const [selectedGender, setSelectedGender] = useState<string>("");
 
   const [courseInput, setCourseInput] = useState<string>("");
   const [degreeInput, setDegreeInput] = useState<string>("");
+
+  // НОВОЕ состояние для даты рождения
+  // Инициализируем с датой "20.02.2002" для соответствия Figma
+  const [dateOfBirth] = useState<Date | null>(new Date(2002, 1, 20)); // Месяцы в JS 0-индексированы: Февраль = 1
 
   const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([]);
   const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false);
@@ -76,6 +81,15 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     setSelectedDatingGoals((prev) =>
       prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
     );
+  };
+
+  // НОВАЯ функция для форматирования даты
+  const formatDate = (date: Date | null): string => {
+    if (!date) return "дд . мм . гггг"; // Placeholder, если дата не выбрана
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы 0-индексированы, поэтому +1
+    const year = date.getFullYear();
+    return `${day}.${month}.${year}`;
   };
 
 
@@ -99,8 +113,8 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
           <div className={styles.selectWrapper}>
             <select
               className={styles.formSelect}
-              value={selectedGender} // Привязываем значение к состоянию
-              onChange={(e) => setSelectedGender(e.target.value)} // Обновляем состояние при выборе
+              value={selectedGender}
+              onChange={(e) => setSelectedGender(e.target.value)}
             >
               <option value="">Пол</option>
               <option value="male">Мужской</option>
@@ -109,8 +123,13 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             <ArrowDownIcon className={styles.selectArrowIcon} />
           </div>
 
+          {/* НОВЫЙ БЛОК: Дата рождения */}
           <div className={styles.formField}>
-            <input type="date" className={styles.formInput} />
+            <div className={`${styles.formInput} ${styles.dateInputWrapper}`}>
+              <span className={styles.dateLabel}>Дата рождения</span>
+              <span className={styles.dateValue}>{formatDate(dateOfBirth)}</span>
+              <ArrowRightIcon className={styles.dateArrowIcon} /> {/* Используем ArrowDownIcon и повернем ее */}
+            </div>
           </div>
 
           <input

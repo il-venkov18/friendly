@@ -1,5 +1,3 @@
-// src/features/onboarding/ui/welcome-step.module.scss
-
 // =====================================
 // FONTS
 // =====================================
@@ -62,7 +60,6 @@
   flex-direction: column;
   align-items: center; // Центрируем ProgressBar
   gap: 16px; // Отступ между заголовком и ProgressBar (если заголовок есть)
-  // font-size, font-weight, color будут унаследованы от .onboardingForm, если не переопределены
 }
 
 .formSection {
@@ -96,7 +93,6 @@
 }
 
 .formLabel {
-  // Унаследует SF Pro Text, можно переопределить только font-size или color
   font-size: 14px;
   color: #a0a0a0;
 }
@@ -107,31 +103,29 @@
 
 // Wrapper для селекта с кастомной стрелкой
 .selectWrapper {
-  position: relative; // Контекст позиционирования для абсолютного позиционирования иконки
-  width: 350px; // Ширина обертки, равная ширине селекта
-  height: 48px; // Высота обертки, равная высоте селекта
+  position: relative;
+  width: 350px;
+  height: 48px;
 }
 
 .formInput,
 .formSelect {
-  width: 100%; // Ширина 100% от родителя (.selectWrapper или .onboardingForm)
-  height: 48px; // Высота 48px
-  padding: 0 16px; // Внутренний отступ
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
   border: none;
-  border-radius: 12px; // Радиус 12px
-  background-color: rgba(33, 33, 33, 1); // Цвет фона
-  color: white; // Цвет текста
-  font-size: 16px; // Отдельный размер шрифта для инпутов/селектов, переопределяет 17px из родителя
-  box-sizing: border-box; // Учитываем padding и border в ширине/высоте
+  border-radius: 12px;
+  background-color: rgba(33, 33, 33, 1);
+  color: white;
+  font-size: 16px;
+  box-sizing: border-box;
 
   &:focus {
     outline: none;
-    // Можно добавить border: 1px solid rgba(153, 236, 255, 1); для фокуса
   }
 
   &::placeholder {
     color: #888;
-    // Унаследует SF Pro Text
   }
 }
 
@@ -139,75 +133,108 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding-right: 40px; // Отступ для иконки
+  padding-right: 40px;
 
-  color: #888; // Дефолтный серый цвет
+  color: #888; // Default gray color for placeholder
 
-  // Это правило должно менять цвет, когда значение select НЕ пустое
   &:not([value=""]) {
-    color: white; // Цвет текста становится белым
+    color: white; // Change to white when a value is selected
   }
 
-  // Дополнительно: убедитесь, что опции внутри select не переопределяют цвет
-  // Это может быть причиной, по которой не работает
+  // Стилизация опций внутри select.
+  // Это может работать не во всех браузерах для отображаемого значения,
+  // но будет влиять на выпадающий список.
   option {
-    color: white; // Попробуйте явно установить белый для всех опций
-    background-color: rgba(33, 33, 33, 1); // Убедитесь, что фон опций совпадает с фоном select
+    color: white;
+    background-color: rgba(33, 33, 33, 1);
   }
 }
 
 .selectArrowIcon {
   position: absolute;
-  right: 14px; /* Позиционируем иконку от правого края обертки */
-  top: 50%; /* Выравниваем по центру по вертикали */
-  transform: translateY(-50%); /* Точная центровка по вертикали */
-  pointer-events: none; /* Игнорировать клики по иконке, чтобы они передавались на select */
-  fill: #78797e; /* Цвет заливки иконки, если он не 'currentColor' */
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  fill: #78797e;
 }
 
 // =====================================
-// OTHER FORM ELEMENTS
+// CUSTOM DATE INPUT
 // =====================================
 
-// Styles for the Dating Goals "input" wrapper and chips
+.dateInputWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: rgba(33, 33, 33, 1);
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.dateLabel {
+  color: white;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.dateValue {
+  color: rgba(0, 122, 255, 1); // Blue color as per Figma
+  font-size: 17px;
+  margin-left: auto; // Pushes the date value to the right
+  margin-right: 8px; // Space between value and arrow
+}
+
+.dateArrowIcon {
+  color: rgba(0, 122, 255, 1); // Gray color for the arrow
+  flex-shrink: 0;
+}
+
+
+// =====================================
+// DATING GOALS
+// =====================================
+
 .goalsInputWrapper {
   display: flex;
-  flex-wrap: wrap; // Allows chips to wrap to next line
+  flex-wrap: wrap;
   align-items: center;
-  gap: 8px; // Gap between chips
-  padding: 8px 16px; // Adjust padding to allow for chips and the dropdown icon
-  height: auto; // Allow height to adjust based on content
-  min-height: 48px; // Ensure minimum height like other inputs
+  gap: 8px;
+  padding: 8px 16px;
+  height: auto;
+  min-height: 48px;
   cursor: pointer;
-  position: relative; // For positioning the dropdown arrow inside it and placeholder
+  position: relative;
 }
 
 .goalsPlaceholder {
-  color: #888; // Placeholder color, matching input placeholders
+  color: #888;
   position: absolute;
   left: 16px;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; // Ensure clicks go through to the wrapper
-  font-size: 16px; // Match input font size
+  pointer-events: none;
+  font-size: 16px;
 }
-
 
 .selectedGoalChip {
   display: flex;
   align-items: center;
-  gap: 4px; // Gap between text and 'x' icon
-  padding: 6px 10px; // Padding inside the chip
-  border-radius: 8px; // Rounded corners for the chip
-  background-color: rgba(60, 60, 67, 0.6); // Slightly lighter background for selected chips (from Figma visual)
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background-color: rgba(60, 60, 67, 0.6);
   color: white;
-  font-size: 15px; // Slightly smaller font size for chips
-  line-height: 20px; // Adjusted line-height for better chip appearance
-  flex-shrink: 0; // Prevent shrinking when space is tight
+  font-size: 15px;
+  line-height: 20px;
+  flex-shrink: 0;
 
   .chipCloseIcon {
     cursor: pointer;
-    color: #888; // Color for the 'x' icon, matching other disabled/hint elements
+    color: #888;
   }
 }
 
@@ -216,20 +243,19 @@
   right: 14px;
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; // Clicks go to the wrapper div
+  pointer-events: none;
   fill: #78797E;
 }
 
 .goalsDropdown {
-  background-color: rgba(33, 33, 33, 1); // Same background as inputs
+  background-color: rgba(33, 33, 33, 1);
   border-radius: 12px;
-  overflow: hidden; // Ensures rounded corners work
-  margin-top: 8px; // Space between input wrapper and dropdown list
-  // No absolute positioning as per Figma, it flows within the form
+  overflow: hidden;
+  margin-top: 8px;
 }
 
 .goalsDropdownItem {
-  padding: 12px 16px; // Padding for each item
+  padding: 12px 16px;
   color: white;
   font-size: 16px;
   cursor: pointer;
@@ -238,11 +264,7 @@
   align-items: center;
 
   &:hover {
-    background-color: rgba(45, 45, 45, 1); // Slightly different background on hover
-  }
-
-  &.selected {
-    // No specific background change, relies on checkmark
+    background-color: rgba(45, 45, 45, 1);
   }
 
   .dropdownCheckmarkIcon {
@@ -250,72 +272,76 @@
   }
 }
 
+// =====================================
+// HINTS & SUBTITLES
+// =====================================
 
 .formHint {
-  // Унаследует SF Pro Text
   font-size: 12px;
   color: #888;
-  margin-top: 8px; // Adjust spacing if needed after the new goals block
+  margin-top: 8px;
   margin-bottom: 8px;
 }
 
 .errorHint {
-  color: #FF3B30; // Красный цвет для текста ошибки
+  color: #FF3B30; // Red color for error message
 }
 
 .formSubtitle {
-  // Унаследует SF Pro Text
   font-size: 14px;
-  font-weight: 500; // Более жирный, чем обычный, но не bold
+  font-weight: 500;
   color: #a0a0a0;
   text-transform: uppercase;
-  margin-top: 16px; // Отступ перед подзаголовком
+  margin-top: 16px;
   margin-bottom: 8px;
 }
+
+// =====================================
+// CHECKBOX GROUP
+// =====================================
 
 .formCheckboxGroup {
   display: flex;
   flex-direction: column;
-  gap: 0; // Отступ между чекбоксами (изменено на 0)
+  gap: 0;
 }
 
 .formCheckbox {
   display: flex;
-  justify-content: space-between; // Pushes content to ends
+  justify-content: space-between;
   align-items: center;
-  padding: 14px 16px; // Adjusted padding to match 48px height from Figma
-  border-radius: 12px; // Match input/select border-radius
+  padding: 14px 16px;
+  border-radius: 12px;
   background-color: rgba(33, 33, 33, 1);
   color: white;
-  font-size: 16px; // Same as inputs/selects
+  font-size: 16px;
   cursor: pointer;
 
   input[type="checkbox"] {
-    // Visually hide the native checkbox input but keep it accessible
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
-    pointer-events: none; // Ensures clicks go to the label
+    pointer-events: none;
   }
 
   span {
-    // Styles for the text "Парни" / "Девушки"
-    flex-grow: 1; // Allows the text to take up available space
+    flex-grow: 1;
   }
 
   .checkmarkIcon {
-    flex-shrink: 0; // Prevents the icon from shrinking
-    // The fill color is defined in the SVG itself, so no need to set here unless overriding
+    flex-shrink: 0;
   }
 }
 
+// =====================================
+// FOOTER
+// =====================================
+
 .nextFooter {
-  margin-top: 24px; // Отступ от последней секции до кнопки
+  margin-top: 24px;
   .formButton {
-    // Этот класс будет применяться к вашей Button компоненте
-    width: 100%; // Кнопка на всю ширину
-    // Унаследует SF Pro Text
+    width: 100%;
   }
 }
 
