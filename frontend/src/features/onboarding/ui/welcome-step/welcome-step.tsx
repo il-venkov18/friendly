@@ -10,38 +10,19 @@ import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon"
 import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
 
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
-
 import { CloseIcon } from "@/shared/assets/icons/CloseIcon"
 
 import { Button } from "@/shared/ui/button/button"
 
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
-// Adjust path if necessary
-
 const currentOnboardingStep = 1
 
 const availableCities = [
-  "Москва",
-  "Санкт-Петербург",
-  "Новосибирск",
-  "Екатеринбург",
-  "Казань",
-  "Нижний Новгород",
-  "Челябинск",
-  "Самара",
-  "Омск",
-  "Ростов-на-Дону",
-  "Уфа",
-  "Красноярск",
-  "Воронеж",
-  "Пермь",
-  "Волгоград",
-  "Минск",
-  "Нур-Султан (Астана)",
-  "Бишкек",
-  "Ташкент",
-  // Добавьте больше городов по необходимости
+  "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань",
+  "Нижний Новгород", "Челябинск", "Самара", "Омск", "Ростов-на-Дону",
+  "Уфа", "Красноярск", "Воронеж", "Пермь", "Волгоград",
+  "Минск", "Нур-Султан (Астана)", "Бишкек", "Ташкент",
 ]
 
 const availableUniversities = [
@@ -61,20 +42,22 @@ const availableUniversities = [
   "Первый Московский государственный медицинский университет имени И.М. Сеченова",
   "Белорусский государственный университет (БГУ)",
   "Казахский национальный университет имени аль-Фараби (КазНУ)",
-  // Add more universities as needed
 ]
 
-// NEW: Available Dating Goals
 const allDatingGoals = ["Дружба", "Отношения", "Серьезные отношения", "Поиск партнера", "Общение", "Совместный досуг"];
 
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
-  const [cityInput, setCityInput] = useState<string>("Москва") // Начальное значение по умолчанию
+  const [cityInput, setCityInput] = useState<string>("Москва")
   const [universityInput, setUniversityInput] = useState<string>("")
-  const [genderPreference, setGenderPreference] = useState<string[]>([]); // State for "Кого ищу" checkboxes
+  const [genderPreference, setGenderPreference] = useState<string[]>([]);
 
-  // NEW states for Dating Goals
-  // Изначально пусто, чтобы показать "Цели" и красную подсказку
+  // НОВОЕ состояние для поля "Пол"
+  const [selectedGender, setSelectedGender] = useState<string>("");
+
+  const [courseInput, setCourseInput] = useState<string>("");
+  const [degreeInput, setDegreeInput] = useState<string>("");
+
   const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([]);
   const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false);
 
@@ -85,7 +68,6 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     );
   };
 
-  // NEW: Functions for Dating Goals
   const handleRemoveGoal = (goalToRemove: string) => {
     setSelectedDatingGoals((prev) => prev.filter((goal) => goal !== goalToRemove));
   };
@@ -94,8 +76,6 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     setSelectedDatingGoals((prev) =>
       prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
     );
-    // You can choose to close the dropdown immediately after selection, or allow multiple selections
-    // setIsGoalsDropdownOpen(false);
   };
 
 
@@ -109,7 +89,6 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
         <div className={styles.sectionTitle}>профиль</div>
 
         <div className={styles.sectionContent}>
-          {/* Имя и пол */}
           <input
             type="text"
             className={styles.formInput}
@@ -117,9 +96,12 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             defaultValue="Илья"
           />
 
-          {/* Wrapper for the select and the custom arrow icon */}
           <div className={styles.selectWrapper}>
-            <select className={styles.formSelect}>
+            <select
+              className={styles.formSelect}
+              value={selectedGender} // Привязываем значение к состоянию
+              onChange={(e) => setSelectedGender(e.target.value)} // Обновляем состояние при выборе
+            >
               <option value="">Пол</option>
               <option value="male">Мужской</option>
               <option value="female">Женский</option>
@@ -127,21 +109,18 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             <ArrowDownIcon className={styles.selectArrowIcon} />
           </div>
 
-          {/* Дата рождения */}
           <div className={styles.formField}>
             <input type="date" className={styles.formInput} />
           </div>
 
-          {/* Местоположение и образование */}
           <input
             type="text"
             className={styles.formInput}
             placeholder="Город"
-            value={cityInput} // Связываем с состоянием
-            onChange={(e) => setCityInput(e.target.value)} // Обновляем состояние при вводе
-            list="city-suggestions" // Связываем с datalist по ID
+            value={cityInput}
+            onChange={(e) => setCityInput(e.target.value)}
+            list="city-suggestions"
           />
-          {/* Datalist для предложений городов */}
           <datalist id="city-suggestions" className={styles.cities}>
             {availableCities.map((city) => (
               <option key={city} value={city} />
@@ -167,10 +146,14 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
           <input type="text" className={styles.formInput} placeholder="Факультет" />
 
           <div className={styles.selectWrapper}>
-            <select className={styles.formSelect}>
+            <select
+              className={styles.formSelect}
+              value={courseInput}
+              onChange={(e) => setCourseInput(e.target.value)}
+            >
               <option value="">Курс</option>
               {[1, 2, 3, 4, 5].map((num) => (
-                <option key={num} value={num}>
+                <option key={num} value={String(num)}>
                   {num} курс
                 </option>
               ))}
@@ -179,7 +162,11 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
           </div>
 
           <div className={styles.selectWrapper}>
-            <select className={styles.formSelect}>
+            <select
+              className={styles.formSelect}
+              value={degreeInput}
+              onChange={(e) => setDegreeInput(e.target.value)}
+            >
               <option value="">Степень</option>
               <option value="bachelor">Бакалавр</option>
               <option value="master">Магистр</option>
@@ -188,7 +175,7 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
           </div>
 
 
-          {/* NEW: Цели знакомства block */}
+          {/* Цели знакомства block */}
           <div className={styles.formField}>
             <div
               className={`${styles.formInput} ${styles.goalsInputWrapper}`}
@@ -201,16 +188,15 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
                     <CloseIcon
                       className={styles.chipCloseIcon}
                       onClick={(e) => {
-                        e.stopPropagation(); // Prevent toggling dropdown when removing chip
+                        e.stopPropagation();
                         handleRemoveGoal(goal);
                       }}
                     />
                   </div>
                 ))
               ) : (
-                <span className={styles.goalsPlaceholder}>Цели</span> // Отображаем "Цели" когда поле пустое
+                <span className={styles.goalsPlaceholder}>Цели</span>
               )}
-              {/* The colorful icons from Figma are omitted as assets were not provided. */}
               <SortUpDownIcon className={styles.goalsDropdownArrowIcon} fill="#78797E" />
             </div>
 
@@ -229,7 +215,6 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
               </div>
             )}
 
-            {/* Отображаем красную подсказку только когда selectedDatingGoals пуст */}
             {selectedDatingGoals.length === 0 && (
               <p className={`${styles.formHint} ${styles.errorHint}`}>
                 Выберите минимум одно значение

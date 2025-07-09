@@ -139,12 +139,20 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  padding-right: 40px;
+  padding-right: 40px; // Отступ для иконки
 
-  color: #888; // Default gray color for placeholder "Пол"
+  color: #888; // Дефолтный серый цвет
 
-  &:not([value=""]) { // Updated to check for empty string instead of "Пол"
-    color: white; // Change to white when a value is selected (i.e., not empty string)
+  // Это правило должно менять цвет, когда значение select НЕ пустое
+  &:not([value=""]) {
+    color: white; // Цвет текста становится белым
+  }
+
+  // Дополнительно: убедитесь, что опции внутри select не переопределяют цвет
+  // Это может быть причиной, по которой не работает
+  option {
+    color: white; // Попробуйте явно установить белый для всех опций
+    background-color: rgba(33, 33, 33, 1); // Убедитесь, что фон опций совпадает с фоном select
   }
 }
 
