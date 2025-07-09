@@ -113,37 +113,45 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             ))}
           </datalist>
 
-          <input
-            type="text"
-            className={styles.formInput}
-            placeholder="ВУЗ" // Placeholder for University
-            value={universityInput}
-            onChange={(e) => setUniversityInput(e.target.value)}
-            list="university-suggestions" // Link to university datalist
-          />
-          {/* Datalist для предложений университетов (NEW) */}
-          <datalist id="university-suggestions">
-            {availableUniversities.map((university) => (
-              <option key={university} value={university} />
-            ))}
-          </datalist>
+          <div className={styles.selectWrapper}>
+            <select
+              className={styles.formSelect}
+              value={universityInput}
+              onChange={(e) => setUniversityInput(e.target.value)}
+            >
+              <option value="">ВУЗ</option>
+              {availableUniversities.map((university) => (
+                <option key={university} value={university}>
+                  {university}
+                </option>
+              ))}
+            </select>
+            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
+          </div>
 
           <input type="text" className={styles.formInput} placeholder="Факультет" />
 
-          <select className={styles.formSelect}>
-            <option value="">Курс</option>
-            {[1, 2, 3, 4, 5].map((num) => (
-              <option key={num} value={num}>
-                {num} курс
-              </option>
-            ))}
-          </select>
+          <div className={styles.selectWrapper}>
+            <select className={styles.formSelect}>
+              <option value="">Курс</option>
+              {[1, 2, 3, 4, 5].map((num) => (
+                <option key={num} value={num}>
+                  {num} курс
+                </option>
+              ))}
+            </select>
+            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
+          </div>
 
-          <select className={styles.formSelect}>
-            <option value="">Степень</option>
-            <option value="bachelor">Бакалавр</option>
-            <option value="master">Магистр</option>
-          </select>
+          <div className={styles.selectWrapper}>
+            <select className={styles.formSelect}>
+              <option value="">Степень</option>
+              <option value="bachelor">Бакалавр</option>
+              <option value="master">Магистр</option>
+            </select>
+            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
+          </div>
+
 
           {/* Цели знакомства */}
           <div className={styles.formField}>
