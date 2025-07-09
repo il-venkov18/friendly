@@ -19,7 +19,7 @@
   src:
     url("/fonts/SF-Pro-Text-Regular.woff2") format("woff2"),
     url("/fonts/SF-Pro-Text-Regular.woff") format("woff");
-  font-weight: 400; // Regular
+  font-weight: 400; /* Regular */
   font-style: normal;
   font-display: swap;
 }
@@ -141,9 +141,6 @@
     color: white; // Change to white when a value is selected
   }
 
-  // Стилизация опций внутри select.
-  // Это может работать не во всех браузерах для отображаемого значения,
-  // но будет влиять на выпадающий список.
   option {
     color: white;
     background-color: rgba(33, 33, 33, 1);
@@ -177,19 +174,23 @@
 
 .dateLabel {
   color: white;
-  font-size: 17px;
+  font-size: 16px;
   flex-shrink: 0;
 }
 
 .dateValue {
-  color: rgba(0, 122, 255, 1); // Blue color as per Figma
-  font-size: 17px;
-  margin-left: auto; // Pushes the date value to the right
-  margin-right: 8px; // Space between value and arrow
+  color: #007AFF; // Blue color as per Figma
+  font-size: 16px;
+  margin-left: auto;
+  margin-right: 8px;
 }
 
 .dateArrowIcon {
-  color: rgba(0, 122, 255, 1); // Gray color for the arrow
+  // `RightArrowIcon` уже имеет синий цвет в SVG,
+  // Если нужна серая стрелка, раскомментируйте stroke.
+  // stroke: #888;
+  width: 7px;
+  height: 12px;
   flex-shrink: 0;
 }
 
@@ -331,6 +332,9 @@
 
   .checkmarkIcon {
     flex-shrink: 0;
+    color: #007AFF; // Синий цвет для галки в чекбоксах
+    width: 24px;
+    height: 24px;
   }
 }
 
@@ -348,4 +352,155 @@
 .cities{
   color: white;
   background-color: #78797e;
+}
+
+
+// =====================================
+// REACT-DATEPICKER CUSTOM STYLES (ОСНОВНАЯ КАСТОМИЗАЦИЯ)
+// =====================================
+
+// Основной контейнер календаря
+.react-datepicker {
+  font-family: "SF Pro Text", sans-serif;
+  background-color: #212121; // Темный фон, как у инпутов
+  border: none; // Убираем стандартную рамку
+  border-radius: 12px; // Скругление углов, как у ваших элементов
+  color: white; // Общий цвет текста календаря
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); // Усиленная тень
+  padding: 10px; // Внутренний отступ календаря
+  font-size: 16px; // Общий размер шрифта для календаря
+  top: 8px !important; // Позиционирование - немного ниже инпута
+  left: 0 !important; // Выравнивание по левому краю
+  width: 100%; // Ширина календаря
+  max-width: 350px; // Ограничиваем ширину, если форма уже
+  box-sizing: border-box; // Учитываем padding
+}
+
+// Шапка календаря (месяц, год, кнопки навигации)
+.react-datepicker__header {
+  background-color: #212121; // Фон шапки
+  border-bottom: none; // Убираем разделитель
+  padding-top: 8px;
+  color: white;
+}
+
+// Кнопки навигации (стрелки)
+.react-datepicker__navigation {
+  top: 10px; // Регулируем позицию стрелок
+  &--previous {
+    left: 10px;
+  }
+  &--next {
+    right: 10px;
+  }
+  &-icon {
+    &::before {
+      border-color: #78797E; // Серый цвет стрелок
+      border-width: 1px 1px 0 0; // Толщина стрелок
+      height: 9px; // Размер стрелок
+      width: 9px;
+    }
+  }
+}
+
+// Текущий месяц/год в шапке
+.react-datepicker__current-month {
+  color: white;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+// Дни недели (Пн, Вт, Ср...)
+.react-datepicker__day-names {
+  margin-top: 10px;
+}
+.react-datepicker__day-name {
+  color: #a0a0a0; // Серый цвет для названий дней недели
+  font-size: 14px;
+  width: 2.2rem; // Ширина ячейки дня
+  margin: 0.166rem; // Отступы между ячейками
+}
+
+// Контейнер с днями
+.react-datepicker__month {
+  margin: 0.4rem 0;
+}
+.react-datepicker__week {
+  display: flex;
+  justify-content: center;
+}
+
+// Отдельные дни
+.react-datepicker__day {
+  color: white;
+  width: 2.2rem;
+  height: 2.2rem;
+  line-height: 2.2rem;
+  margin: 0.166rem;
+  border-radius: 50%; // Круглая форма
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: rgba(60, 60, 67, 0.6); // Фон при наведении
+    color: white;
+  }
+}
+
+// Выбранный день
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background-color: #007AFF; // Синий цвет для выбранного дня
+  color: white;
+  font-weight: bold;
+}
+
+// Сегодняшний день (если не выбран)
+.react-datepicker__day--today {
+  font-weight: bold;
+  // border: 1px solid #007AFF; // Можно добавить рамку для сегодняшнего дня
+  // color: #007AFF;
+}
+
+// Дни в другом месяце (неактивные)
+.react-datepicker__day--outside-month {
+  color: #666; // Более темный серый
+}
+
+// Месяцы/Годы в DatePicker (если включен выбор месяцев/лет)
+.react-datepicker__month-text,
+.react-datepicker__year-text,
+.react-datepicker__quarter-text {
+  color: white;
+  &:hover {
+    background-color: rgba(60, 60, 67, 0.6);
+  }
+  &--selected {
+    background-color: #007AFF;
+  }
+}
+
+// Выпадающий список годов/месяцев (если используется select)
+.react-datepicker__month-dropdown-container,
+.react-datepicker__year-dropdown-container {
+  color: white;
+  select {
+    background-color: #212121;
+    color: white;
+    border: 1px solid rgba(60, 60, 67, 0.6);
+    border-radius: 8px;
+    padding: 4px;
+  }
+}
+
+
+// Стиль для popper (контейнер, в котором рендерится календарь)
+// Важно, если вы используете `withPortal`
+.react-datepicker-popper {
+  z-index: 1000; // Убедитесь, что календарь поверх других элементов
+  .react-datepicker__triangle {
+    // Стиль для стрелки, если showPopperArrow=true
+    display: none; // Скрываем стрелку, если showPopperArrow: false
+  }
 }

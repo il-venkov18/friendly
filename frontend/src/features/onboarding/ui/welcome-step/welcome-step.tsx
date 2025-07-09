@@ -3,16 +3,17 @@ import styles from "./welcome-step.module.scss"
 
 import { useState } from "react"
 
+// Импорты для react-datepicker
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css'; // Обязательно импортировать стили
+
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
-import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon" // Эту иконку используем для поворота
-
-import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon" // Эту иконку используем для поворота
-
+import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon"
 import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
-
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { CloseIcon } from "@/shared/assets/icons/CloseIcon"
+import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon"; // Импортируем новую иконку
 
 import { Button } from "@/shared/ui/button/button"
 
@@ -59,12 +60,13 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [courseInput, setCourseInput] = useState<string>("");
   const [degreeInput, setDegreeInput] = useState<string>("");
 
-  // НОВОЕ состояние для даты рождения
-  // Инициализируем с датой "20.02.2002" для соответствия Figma
-  const [dateOfBirth] = useState<Date | null>(new Date(2002, 1, 20)); // Месяцы в JS 0-индексированы: Февраль = 1
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(new Date(2002, 2, 20)); // Месяцы в JS 0-индексированы: Февраль = 1
 
   const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([]);
   const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false);
+
+  // НОВОЕ состояние для управления видимостью календаря
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
 
   const handleGenderPreferenceChange = (gender: string) => {
@@ -83,13 +85,18 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     );
   };
 
-  // НОВАЯ функция для форматирования даты
   const formatDate = (date: Date | null): string => {
-    if (!date) return "дд . мм . гггг"; // Placeholder, если дата не выбрана
+    if (!date) return "дд . мм . гггг";
     const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Месяцы 0-индексированы, поэтому +1
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
+  };
+
+  // Обработчик изменения даты в DatePicker
+  const handleDateChange = (date: Date | null) => {
+    setDateOfBirth(date);
+    setIsDatePickerOpen(false); // Закрываем календарь после выбора даты
   };
 
 
@@ -123,13 +130,34 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             <ArrowDownIcon className={styles.selectArrowIcon} />
           </div>
 
-          {/* НОВЫЙ БЛОК: Дата рождения */}
+          {/* БЛОК: Дата рождения с DatePicker */}
           <div className={styles.formField}>
-            <div className={`${styles.formInput} ${styles.dateInputWrapper}`}>
-              <span className={styles.dateLabel}>Дата рождения</span>
-              <span className={styles.dateValue}>{formatDate(dateOfBirth)}</span>
-              <ArrowRightIcon className={styles.dateArrowIcon} /> {/* Используем ArrowDownIcon и повернем ее */}
-            </div>
+            {/* CustomInput для DatePicker, имитирующий ваш дизайн */}
+            <DatePicker
+              selected={dateOfBirth}
+              onChange={handleDateChange}
+              dateFormat="dd.MM.yyyy"
+              showPopperArrow={false} // Скрываем стрелку попапа
+              // isOpen={isDatePickerOpen} // Управляем видимостью вручную, если это нужно
+              // onClickOutside={() => setIsDatePickerOpen(false)} // Закрываем при клике вне
+              // withPortal // Используем портал для рендеринга вне DOM дерева, чтобы избежать проблем со стилями
+
+              // Кастомный инпут для DatePicker, который будет выглядеть как ваш дизайн
+              customInput={
+                <div
+                  className={`${styles.formInput} ${styles.dateInputWrapper}`}
+                  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} // Переключаем видимость при клике
+                >
+                  <span className={styles.dateLabel}>Дата рождения</span>
+                  <span className={styles.dateValue}>{formatDate(dateOfBirth)}</span>
+                  <ArrowRightIcon className={styles.dateArrowIcon} />
+                </div>
+              }
+              // Дополнительные пропсы для DatePicker, чтобы он закрывался при выборе даты
+              onSelect={() => setIsDatePickerOpen(false)} // Закрыть при выборе даты
+              onCalendarClose={() => setIsDatePickerOpen(false)} // Закрыть, если календарь закрылся
+              onCalendarOpen={() => setIsDatePickerOpen(true)} // Открыть, если календарь открылся
+            />
           </div>
 
           <input
