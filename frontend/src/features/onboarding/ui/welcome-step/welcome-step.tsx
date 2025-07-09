@@ -9,11 +9,13 @@ import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon"
 
 import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
 
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
+
+import { CloseIcon } from "@/shared/assets/icons/CloseIcon"
+
 import { Button } from "@/shared/ui/button/button"
 
 import { ProgressBar } from "../progress-bar/ProgressBar"
-
-import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon" // Import CheckmarkIcon
 
 // Adjust path if necessary
 
@@ -62,16 +64,40 @@ const availableUniversities = [
   // Add more universities as needed
 ]
 
+// NEW: Available Dating Goals
+const allDatingGoals = ["Дружба", "Отношения", "Серьезные отношения", "Поиск партнера", "Общение", "Совместный досуг"];
+
+
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [cityInput, setCityInput] = useState<string>("Москва") // Начальное значение по умолчанию
   const [universityInput, setUniversityInput] = useState<string>("")
   const [genderPreference, setGenderPreference] = useState<string[]>([]); // State for "Кого ищу" checkboxes
+
+  // NEW states for Dating Goals
+  // Изначально пусто, чтобы показать "Цели" и красную подсказку
+  const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([]);
+  const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false);
+
 
   const handleGenderPreferenceChange = (gender: string) => {
     setGenderPreference((prev) =>
       prev.includes(gender) ? prev.filter((g) => g !== gender) : [...prev, gender]
     );
   };
+
+  // NEW: Functions for Dating Goals
+  const handleRemoveGoal = (goalToRemove: string) => {
+    setSelectedDatingGoals((prev) => prev.filter((goal) => goal !== goalToRemove));
+  };
+
+  const handleToggleGoalInDropdown = (goal: string) => {
+    setSelectedDatingGoals((prev) =>
+      prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
+    );
+    // You can choose to close the dropdown immediately after selection, or allow multiple selections
+    // setIsGoalsDropdownOpen(false);
+  };
+
 
   return (
     <div className={styles.onboardingForm}>
@@ -162,13 +188,53 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
           </div>
 
 
-          {/* Цели знакомства */}
+          {/* NEW: Цели знакомства block */}
           <div className={styles.formField}>
-            <div className={styles.formRow}>
-              <span className={styles.formOption}>Дружба</span>
-              <span className={styles.formOption}>Отношения</span>
+            <div
+              className={`${styles.formInput} ${styles.goalsInputWrapper}`}
+              onClick={() => setIsGoalsDropdownOpen(!isGoalsDropdownOpen)}
+            >
+              {selectedDatingGoals.length > 0 ? (
+                selectedDatingGoals.map((goal) => (
+                  <div key={goal} className={styles.selectedGoalChip}>
+                    <span>{goal}</span>
+                    <CloseIcon
+                      className={styles.chipCloseIcon}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent toggling dropdown when removing chip
+                        handleRemoveGoal(goal);
+                      }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <span className={styles.goalsPlaceholder}>Цели</span> // Отображаем "Цели" когда поле пустое
+              )}
+              {/* The colorful icons from Figma are omitted as assets were not provided. */}
+              <SortUpDownIcon className={styles.goalsDropdownArrowIcon} fill="#78797E" />
             </div>
-            <p className={styles.formHint}>Выберите минимум одно значение</p>
+
+            {isGoalsDropdownOpen && (
+              <div className={styles.goalsDropdown}>
+                {allDatingGoals.map((goal) => (
+                  <div
+                    key={goal}
+                    className={`${styles.goalsDropdownItem} ${selectedDatingGoals.includes(goal) ? styles.selected : ''}`}
+                    onClick={() => handleToggleGoalInDropdown(goal)}
+                  >
+                    <span>{goal}</span>
+                    {selectedDatingGoals.includes(goal) && <CheckmarkIcon className={styles.dropdownCheckmarkIcon} />}
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Отображаем красную подсказку только когда selectedDatingGoals пуст */}
+            {selectedDatingGoals.length === 0 && (
+              <p className={`${styles.formHint} ${styles.errorHint}`}>
+                Выберите минимум одно значение
+              </p>
+            )}
 
             <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
             <div className={styles.formCheckboxGroup}>

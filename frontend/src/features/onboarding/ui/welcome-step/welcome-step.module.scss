@@ -161,24 +161,98 @@
 // OTHER FORM ELEMENTS
 // =====================================
 
-.formOption {
-  display: inline-block;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background-color: rgba(33, 33, 33, 1);
-  color: white;
+// Styles for the Dating Goals "input" wrapper and chips
+.goalsInputWrapper {
+  display: flex;
+  flex-wrap: wrap; // Allows chips to wrap to next line
+  align-items: center;
+  gap: 8px; // Gap between chips
+  padding: 8px 16px; // Adjust padding to allow for chips and the dropdown icon
+  height: auto; // Allow height to adjust based on content
+  min-height: 48px; // Ensure minimum height like other inputs
   cursor: pointer;
-  margin-right: 8px; // Отступ между опциями
-  margin-bottom: 8px; // Отступ, если они переносятся
-  // Унаследует SF Pro Text
+  position: relative; // For positioning the dropdown arrow inside it and placeholder
 }
+
+.goalsPlaceholder {
+  color: #888; // Placeholder color, matching input placeholders
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; // Ensure clicks go through to the wrapper
+  font-size: 16px; // Match input font size
+}
+
+
+.selectedGoalChip {
+  display: flex;
+  align-items: center;
+  gap: 4px; // Gap between text and 'x' icon
+  padding: 6px 10px; // Padding inside the chip
+  border-radius: 8px; // Rounded corners for the chip
+  background-color: rgba(60, 60, 67, 0.6); // Slightly lighter background for selected chips (from Figma visual)
+  color: white;
+  font-size: 15px; // Slightly smaller font size for chips
+  line-height: 20px; // Adjusted line-height for better chip appearance
+  flex-shrink: 0; // Prevent shrinking when space is tight
+
+  .chipCloseIcon {
+    cursor: pointer;
+    color: #888; // Color for the 'x' icon, matching other disabled/hint elements
+  }
+}
+
+.goalsDropdownArrowIcon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; // Clicks go to the wrapper div
+  fill: #78797E;
+}
+
+.goalsDropdown {
+  background-color: rgba(33, 33, 33, 1); // Same background as inputs
+  border-radius: 12px;
+  overflow: hidden; // Ensures rounded corners work
+  margin-top: 8px; // Space between input wrapper and dropdown list
+  // No absolute positioning as per Figma, it flows within the form
+}
+
+.goalsDropdownItem {
+  padding: 12px 16px; // Padding for each item
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(45, 45, 45, 1); // Slightly different background on hover
+  }
+
+  &.selected {
+    // No specific background change, relies on checkmark
+  }
+
+  .dropdownCheckmarkIcon {
+    // Fill color is already in the SVG.
+  }
+}
+
 
 .formHint {
   // Унаследует SF Pro Text
   font-size: 12px;
   color: #888;
-  margin-top: -4px; // Поднять текст поближе к опциям
+  margin-top: 8px; // Adjust spacing if needed after the new goals block
   margin-bottom: 8px;
+}
+
+.errorHint {
+  color: #FF3B30; // Красный цвет для текста ошибки
 }
 
 .formSubtitle {
@@ -194,9 +268,7 @@
 .formCheckboxGroup {
   display: flex;
   flex-direction: column;
-  background-color: rgba(33, 33, 33, 1);
-  border-radius: 12px; // Match input/select border-radius
-
+  gap: 0; // Отступ между чекбоксами (изменено на 0)
 }
 
 .formCheckbox {
@@ -228,9 +300,6 @@
     flex-shrink: 0; // Prevents the icon from shrinking
     // The fill color is defined in the SVG itself, so no need to set here unless overriding
   }
-
-  // Remove the old CSS checkmark styles since we are using SVG
-  // No background color change on checked state as per Figma
 }
 
 .nextFooter {
