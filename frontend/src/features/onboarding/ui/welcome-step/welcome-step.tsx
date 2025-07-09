@@ -9,15 +9,15 @@ import 'react-datepicker/dist/react-datepicker.css'; // Обязательно �
 
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
-import { ArrowDownIcon } from "@/shared/assets/icons/ArrowDownIcon"
+// Общие иконки, которые теперь будут использоваться в CustomSelect
 import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { CloseIcon } from "@/shared/assets/icons/CloseIcon"
-import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon"; // Импортируем новую иконку
+import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon"; 
 
 import { Button } from "@/shared/ui/button/button"
-
 import { ProgressBar } from "../progress-bar/ProgressBar"
+import { CustomSelect } from "@/shared/ui/custom-select/CustomSelect"; // Импортируем новый компонент
 
 const currentOnboardingStep = 1
 
@@ -48,6 +48,29 @@ const availableUniversities = [
 ]
 
 const allDatingGoals = ["Дружба", "Отношения", "Серьезные отношения", "Поиск партнера", "Общение", "Совместный досуг"];
+
+// Опции для CustomSelect
+const genderOptions = [
+  { value: "", label: "Пол" },
+  { value: "male", label: "Мужской" },
+  { value: "female", label: "Женский" },
+];
+
+const universityOptions = [
+  { value: "", label: "ВУЗ" },
+  ...availableUniversities.map(uni => ({ value: uni, label: uni }))
+];
+
+const courseOptions = [
+  { value: "", label: "Курс" },
+  ...[1, 2, 3, 4, 5].map(num => ({ value: String(num), label: `${num} курс` }))
+];
+
+const degreeOptions = [
+  { value: "", label: "Степень" },
+  { value: "bachelor", label: "Бакалавр" },
+  { value: "master", label: "Магистр" },
+];
 
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
@@ -117,46 +140,35 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             defaultValue="Илья"
           />
 
-          <div className={styles.selectWrapper}>
-            <select
-              className={styles.formSelect}
-              value={selectedGender}
-              onChange={(e) => setSelectedGender(e.target.value)}
-            >
-              <option value="">Пол</option>
-              <option value="male">Мужской</option>
-              <option value="female">Женский</option>
-            </select>
-            <ArrowDownIcon className={styles.selectArrowIcon} />
-          </div>
+          {/* Заменяем нативный select для Пола на CustomSelect */}
+          <CustomSelect
+            options={genderOptions}
+            value={selectedGender}
+            onChange={setSelectedGender}
+            placeholder="Пол"
+            arrowIcon="arrowDown" // Для пола используем ArrowDownIcon
+          />
 
-          {/* БЛОК: Дата рождения с DatePicker */}
+          {/* БЛОК: Дата рождения с DatePicker (остается без изменений) */}
           <div className={styles.formField}>
-            {/* CustomInput для DatePicker, имитирующий ваш дизайн */}
             <DatePicker
               selected={dateOfBirth}
               onChange={handleDateChange}
               dateFormat="dd.MM.yyyy"
-              showPopperArrow={false} // Скрываем стрелку попапа
-              // isOpen={isDatePickerOpen} // Управляем видимостью вручную, если это нужно
-              // onClickOutside={() => setIsDatePickerOpen(false)} // Закрываем при клике вне
-              // withPortal // Используем портал для рендеринга вне DOM дерева, чтобы избежать проблем со стилями
-
-              // Кастомный инпут для DatePicker, который будет выглядеть как ваш дизайн
+              showPopperArrow={false}
               customInput={
                 <div
                   className={`${styles.formInput} ${styles.dateInputWrapper}`}
-                  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)} // Переключаем видимость при клике
+                  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
                 >
                   <span className={styles.dateLabel}>Дата рождения</span>
                   <span className={styles.dateValue}>{formatDate(dateOfBirth)}</span>
                   <ArrowRightIcon className={styles.dateArrowIcon} />
                 </div>
               }
-              // Дополнительные пропсы для DatePicker, чтобы он закрывался при выборе даты
-              onSelect={() => setIsDatePickerOpen(false)} // Закрыть при выборе даты
-              onCalendarClose={() => setIsDatePickerOpen(false)} // Закрыть, если календарь закрылся
-              onCalendarOpen={() => setIsDatePickerOpen(true)} // Открыть, если календарь открылся
+              onSelect={() => setIsDatePickerOpen(false)}
+              onCalendarClose={() => setIsDatePickerOpen(false)}
+              onCalendarOpen={() => setIsDatePickerOpen(true)}
             />
           </div>
 
@@ -174,55 +186,36 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             ))}
           </datalist>
 
-          <div className={styles.selectWrapper}>
-            <select
-              className={styles.formSelect}
-              value={universityInput}
-              onChange={(e) => setUniversityInput(e.target.value)}
-            >
-              <option value="">ВУЗ</option>
-              {availableUniversities.map((university) => (
-                <option key={university} value={university}>
-                  {university}
-                </option>
-              ))}
-            </select>
-            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
-          </div>
+          {/* Заменяем нативный select для ВУЗа на CustomSelect */}
+          <CustomSelect
+            options={universityOptions}
+            value={universityInput}
+            onChange={setUniversityInput}
+            placeholder="ВУЗ"
+            arrowIcon="sortUpDown"
+          />
 
           <input type="text" className={styles.formInput} placeholder="Факультет" />
 
-          <div className={styles.selectWrapper}>
-            <select
-              className={styles.formSelect}
-              value={courseInput}
-              onChange={(e) => setCourseInput(e.target.value)}
-            >
-              <option value="">Курс</option>
-              {[1, 2, 3, 4, 5].map((num) => (
-                <option key={num} value={String(num)}>
-                  {num} курс
-                </option>
-              ))}
-            </select>
-            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
-          </div>
+          {/* Заменяем нативный select для Курса на CustomSelect */}
+          <CustomSelect
+            options={courseOptions}
+            value={courseInput}
+            onChange={setCourseInput}
+            placeholder="Курс"
+            arrowIcon="sortUpDown"
+          />
 
-          <div className={styles.selectWrapper}>
-            <select
-              className={styles.formSelect}
-              value={degreeInput}
-              onChange={(e) => setDegreeInput(e.target.value)}
-            >
-              <option value="">Степень</option>
-              <option value="bachelor">Бакалавр</option>
-              <option value="master">Магистр</option>
-            </select>
-            <SortUpDownIcon className={styles.selectArrowIcon} fill="#78797E" />
-          </div>
+          {/* Заменяем нативный select для Степени на CustomSelect */}
+          <CustomSelect
+            options={degreeOptions}
+            value={degreeInput}
+            onChange={setDegreeInput}
+            placeholder="Степень"
+            arrowIcon="sortUpDown"
+          />
 
-
-          {/* Цели знакомства block */}
+          {/* Цели знакомства block (остается без изменений, так как он уже кастомный) */}
           <div className={styles.formField}>
             <div
               className={`${styles.formInput} ${styles.goalsInputWrapper}`}

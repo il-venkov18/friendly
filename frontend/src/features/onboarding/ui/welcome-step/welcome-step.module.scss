@@ -1,3 +1,4 @@
+// src/features/onboarding/ui/welcome-step.module.scss
 // =====================================
 // FONTS
 // =====================================
@@ -98,18 +99,13 @@
 }
 
 // =====================================
-// INPUTS & SELECTS
+// INPUTS & SELECTS (Теперь тут только стили для formInput)
 // =====================================
 
-// Wrapper для селекта с кастомной стрелкой
-.selectWrapper {
-  position: relative;
-  width: 350px;
-  height: 48px;
-}
+// Wrapper для селекта с кастомной стрелкой - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
+// .selectWrapper { ... }
 
-.formInput,
-.formSelect {
+.formInput {
   width: 100%;
   height: 48px;
   padding: 0 16px;
@@ -129,42 +125,21 @@
   }
 }
 
-.formSelect {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding-right: 40px;
+// .formSelect - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
+// .formSelect { ... }
 
-  color: #888; // Default gray color for placeholder
-
-  &:not([value=""]) {
-    color: white; // Change to white when a value is selected
-  }
-
-  option {
-    color: white;
-    background-color: rgba(33, 33, 33, 1);
-  }
-}
-
-.selectArrowIcon {
-  position: absolute;
-  right: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  fill: #78797e;
-}
+// .selectArrowIcon - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
+// .selectArrowIcon { ... }
 
 // =====================================
-// CUSTOM DATE INPUT
+// CUSTOM DATE INPUT (Остается без изменений, так как уже скорректирован)
 // =====================================
 
 .dateInputWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 16px;
+  padding: 0 16px; // Стандартный padding слева и справа
   height: 48px;
   border-radius: 12px;
   background-color: rgba(33, 33, 33, 1);
@@ -181,14 +156,16 @@
 .dateValue {
   color: #007AFF; // Blue color as per Figma
   font-size: 16px;
-  margin-left: auto;
-  margin-right: 8px;
+  margin-left: auto; // Отталкивает влево
+  margin-right: 8px; // Отступ 8px от иконки
 }
 
 .dateArrowIcon {
-  // `RightArrowIcon` уже имеет синий цвет в SVG,
-  // Если нужна серая стрелка, раскомментируйте stroke.
-  // stroke: #888;
+  position: absolute; // Делаем иконку абсолютно позиционированной
+  right: 16px; // Отступ 16px от правого края
+  top: 50%;
+  transform: translateY(-50%); // Центрируем по вертикали
+  // stroke: #888; // Если нужна серая стрелка, раскомментируйте
   width: 7px;
   height: 12px;
   flex-shrink: 0;
@@ -196,7 +173,7 @@
 
 
 // =====================================
-// DATING GOALS
+// DATING GOALS (Остается без изменений)
 // =====================================
 
 .goalsInputWrapper {
@@ -204,11 +181,14 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
+  padding: 8px 16px; // Стандартный padding
   height: auto;
   min-height: 48px;
   cursor: pointer;
   position: relative;
+  // Добавляем padding-right, чтобы чипы не заползали на стрелку
+  // Ширина иконки SortUpDownIcon: 12px, отступ 16px.
+  padding-right: calc(12px + 16px + 8px); // Ширина иконки + отступ от края + небольшой запас для текста/чипа
 }
 
 .goalsPlaceholder {
@@ -241,11 +221,14 @@
 
 .goalsDropdownArrowIcon {
   position: absolute;
-  right: 14px;
+  right: 16px; // Иконка прибита к 16px от правого края
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
   fill: #78797E;
+  // Размеры иконки SortUpDownIcon
+  width: 12px;
+  height: 16px;
 }
 
 .goalsDropdown {
@@ -459,8 +442,6 @@
 // Сегодняшний день (если не выбран)
 .react-datepicker__day--today {
   font-weight: bold;
-  // border: 1px solid #007AFF; // Можно добавить рамку для сегодняшнего дня
-  // color: #007AFF;
 }
 
 // Дни в другом месяце (неактивные)
@@ -500,7 +481,6 @@
 .react-datepicker-popper {
   z-index: 1000; // Убедитесь, что календарь поверх других элементов
   .react-datepicker__triangle {
-    // Стиль для стрелки, если showPopperArrow=true
     display: none; // Скрываем стрелку, если showPopperArrow: false
   }
 }

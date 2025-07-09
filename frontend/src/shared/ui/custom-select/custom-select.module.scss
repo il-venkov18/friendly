@@ -1,0 +1,80 @@
+.customSelectWrapper {
+  position: relative;
+  width: 100%; // Будет занимать всю ширину родителя
+  height: 48px; // Высота инпута
+  box-sizing: border-box; // Учитываем padding в ширине/высоте
+}
+
+.customSelectInput {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; // Разносит текст и иконку по краям
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 12px;
+  background-color: rgba(33, 33, 33, 1);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  box-sizing: border-box;
+  position: relative; // Для позиционирования стрелки
+  text-align: left; // Выравнивание текста по левому краю
+}
+
+.selectArrowIcon {
+  position: absolute;
+  right: 16px; // Отступ 16px от правого края
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; // Чтобы клик проходил на input
+  fill: #78797E;
+  width: 12px; // Убедитесь, что это правильный размер для SortUpDownIcon
+  height: 16px; // Убедитесь, что это правильный размер для SortUpDownIcon
+}
+
+// Для ArrowDownIcon, если она используется
+.customSelectInput .selectArrowIcon[data-arrow-icon="arrowDown"] {
+  width: 14px;
+  height: 8px;
+}
+
+
+.customSelectDropdown {
+  position: absolute;
+  top: calc(100% + 8px); // Отступ 8px от инпута
+  left: 0;
+  width: 100%;
+  background-color: rgba(33, 33, 33, 1);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 100; // Убедитесь, что дропдаун поверх других элементов
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4); // Как у DatePicker
+}
+
+.customSelectDropdownItem {
+  padding: 12px 16px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  &:hover {
+    background-color: rgba(45, 45, 45, 1);
+  }
+
+  &.selected {
+    // Стиль для выбранного элемента, если нужно
+    // background-color: rgba(60, 60, 67, 0.6);
+  }
+
+  .checkmarkIcon {
+    flex-shrink: 0;
+    color: #007AFF;
+    width: 20px; // Немного уменьшил, чтобы было как в целях
+    height: 20px;
+  }
+}
