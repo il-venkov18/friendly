@@ -143,7 +143,7 @@
 
   color: #888; // Default gray color for placeholder "Пол"
 
-  &:not([value="Пол"]) {
+  &:not([value=""]) { // Updated to check for empty string instead of "Пол"
     color: white; // Change to white when a value is selected (i.e., not empty string)
   }
 }
@@ -194,45 +194,43 @@
 .formCheckboxGroup {
   display: flex;
   flex-direction: column;
-  gap: 8px; // Отступ между чекбоксами
+  background-color: rgba(33, 33, 33, 1);
+  border-radius: 12px; // Match input/select border-radius
+
 }
 
 .formCheckbox {
   display: flex;
+  justify-content: space-between; // Pushes content to ends
   align-items: center;
+  padding: 14px 16px; // Adjusted padding to match 48px height from Figma
+  border-radius: 12px; // Match input/select border-radius
+  background-color: rgba(33, 33, 33, 1);
   color: white;
-  font-size: 16px; // Отдельный размер шрифта для чекбоксов
+  font-size: 16px; // Same as inputs/selects
   cursor: pointer;
-  // Унаследует SF Pro Text
 
   input[type="checkbox"] {
-    width: 20px; // Размер чекбокса
-    height: 20px;
-    margin-right: 8px; // Отступ от чекбокса до текста
-    border-radius: 4px; // Закругление углов чекбокса
-    background-color: rgba(33, 33, 33, 1);
-    appearance: none; // Скрываем дефолтный чекбокс
-    -webkit-appearance: none;
-    border: 1px solid rgba(153, 236, 255, 1); // Цвет границы чекбокса
-
-    &:checked {
-      background-color: rgba(153, 236, 255, 1); // Цвет фона при активации
-      border-color: rgba(153, 236, 255, 1); // Цвет границы при активации
-      position: relative;
-
-      &::after {
-        content: "";
-        position: absolute;
-        top: 3px;
-        left: 5px;
-        width: 6px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 2px 2px 0;
-        transform: rotate(45deg);
-      }
-    }
+    // Visually hide the native checkbox input but keep it accessible
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none; // Ensures clicks go to the label
   }
+
+  span {
+    // Styles for the text "Парни" / "Девушки"
+    flex-grow: 1; // Allows the text to take up available space
+  }
+
+  .checkmarkIcon {
+    flex-shrink: 0; // Prevents the icon from shrinking
+    // The fill color is defined in the SVG itself, so no need to set here unless overriding
+  }
+
+  // Remove the old CSS checkmark styles since we are using SVG
+  // No background color change on checked state as per Figma
 }
 
 .nextFooter {

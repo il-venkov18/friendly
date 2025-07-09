@@ -13,6 +13,8 @@ import { Button } from "@/shared/ui/button/button"
 
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon" // Import CheckmarkIcon
+
 // Adjust path if necessary
 
 const currentOnboardingStep = 1
@@ -62,7 +64,14 @@ const availableUniversities = [
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [cityInput, setCityInput] = useState<string>("Москва") // Начальное значение по умолчанию
-  const [universityInput, setUniversityInput] = useState<string>("") // NEW state for university input
+  const [universityInput, setUniversityInput] = useState<string>("")
+  const [genderPreference, setGenderPreference] = useState<string[]>([]); // State for "Кого ищу" checkboxes
+
+  const handleGenderPreferenceChange = (gender: string) => {
+    setGenderPreference((prev) =>
+      prev.includes(gender) ? prev.filter((g) => g !== gender) : [...prev, gender]
+    );
+  };
 
   return (
     <div className={styles.onboardingForm}>
@@ -164,12 +173,28 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
             <div className={styles.formCheckboxGroup}>
               <label className={styles.formCheckbox}>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  value="male"
+                  checked={genderPreference.includes("male")}
+                  onChange={() => handleGenderPreferenceChange("male")}
+                />
                 <span>Парни</span>
+                {genderPreference.includes("male") && (
+                  <CheckmarkIcon className={styles.checkmarkIcon} />
+                )}
               </label>
               <label className={styles.formCheckbox}>
-                <input type="checkbox" />
+                <input
+                  type="checkbox"
+                  value="female"
+                  checked={genderPreference.includes("female")}
+                  onChange={() => handleGenderPreferenceChange("female")}
+                />
                 <span>Девушки</span>
+                {genderPreference.includes("female") && (
+                  <CheckmarkIcon className={styles.checkmarkIcon} />
+                )}
               </label>
             </div>
           </div>
