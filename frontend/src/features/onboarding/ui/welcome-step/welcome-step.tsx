@@ -2,30 +2,48 @@
 import styles from "./welcome-step.module.scss"
 
 import { useState } from "react"
-
 // Импорты для react-datepicker
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css'; // Обязательно импортировать стили
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+
+// Обязательно импортировать стили
 
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
-// Общие иконки, которые теперь будут использоваться в CustomSelect
-import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
+import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon"
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { CloseIcon } from "@/shared/assets/icons/CloseIcon"
-import { ArrowRightIcon } from "@/shared/assets/icons/ArrowRightIcon"; 
-
+// Общие иконки, которые теперь будут использоваться в CustomSelect
+import { SortUpDownIcon } from "@/shared/assets/icons/SortUpDownIcon"
 import { Button } from "@/shared/ui/button/button"
+import { CustomSelect } from "@/shared/ui/custom-select/CustomSelect"
+
 import { ProgressBar } from "../progress-bar/ProgressBar"
-import { CustomSelect } from "@/shared/ui/custom-select/CustomSelect"; // Импортируем новый компонент
+
+// Импортируем новый компонент
 
 const currentOnboardingStep = 1
 
 const availableCities = [
-  "Москва", "Санкт-Петербург", "Новосибирск", "Екатеринбург", "Казань",
-  "Нижний Новгород", "Челябинск", "Самара", "Омск", "Ростов-на-Дону",
-  "Уфа", "Красноярск", "Воронеж", "Пермь", "Волгоград",
-  "Минск", "Нур-Султан (Астана)", "Бишкек", "Ташкент",
+  "Москва",
+  "Санкт-Петербург",
+  "Новосибирск",
+  "Екатеринбург",
+  "Казань",
+  "Нижний Новгород",
+  "Челябинск",
+  "Самара",
+  "Омск",
+  "Ростов-на-Дону",
+  "Уфа",
+  "Красноярск",
+  "Воронеж",
+  "Пермь",
+  "Волгоград",
+  "Минск",
+  "Нур-Султан (Астана)",
+  "Бишкек",
+  "Ташкент",
 ]
 
 const availableUniversities = [
@@ -47,246 +65,271 @@ const availableUniversities = [
   "Казахский национальный университет имени аль-Фараби (КазНУ)",
 ]
 
-const allDatingGoals = ["Дружба", "Отношения", "Серьезные отношения", "Поиск партнера", "Общение", "Совместный досуг"];
+const allDatingGoals = [
+  "Дружба",
+  "Отношения",
+  "Серьезные отношения",
+  "Поиск партнера",
+  "Общение",
+  "Совместный досуг",
+]
 
 // Опции для CustomSelect
 const genderOptions = [
   { value: "", label: "Пол" },
   { value: "male", label: "Мужской" },
   { value: "female", label: "Женский" },
-];
+]
 
 const universityOptions = [
   { value: "", label: "ВУЗ" },
-  ...availableUniversities.map(uni => ({ value: uni, label: uni }))
-];
+  ...availableUniversities.map((uni) => ({ value: uni, label: uni })),
+]
 
 const courseOptions = [
   { value: "", label: "Курс" },
-  ...[1, 2, 3, 4, 5].map(num => ({ value: String(num), label: `${num} курс` }))
-];
+  ...[1, 2, 3, 4, 5].map((num) => ({
+    value: String(num),
+    label: `${num} курс`,
+  })),
+]
 
 const degreeOptions = [
   { value: "", label: "Степень" },
   { value: "bachelor", label: "Бакалавр" },
   { value: "master", label: "Магистр" },
-];
-
+]
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [cityInput, setCityInput] = useState<string>("Москва")
   const [universityInput, setUniversityInput] = useState<string>("")
-  const [genderPreference, setGenderPreference] = useState<string[]>([]);
+  const [genderPreference, setGenderPreference] = useState<string[]>([])
 
-  const [selectedGender, setSelectedGender] = useState<string>("");
+  const [selectedGender, setSelectedGender] = useState<string>("")
 
-  const [courseInput, setCourseInput] = useState<string>("");
-  const [degreeInput, setDegreeInput] = useState<string>("");
+  const [courseInput, setCourseInput] = useState<string>("")
+  const [degreeInput, setDegreeInput] = useState<string>("")
 
-  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(new Date(2002, 2, 20)); // Месяцы в JS 0-индексированы: Февраль = 1
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(
+    new Date(2002, 2, 20)
+  ) // Месяцы в JS 0-индексированы: Февраль = 1
 
-  const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([]);
-  const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false);
+  const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([])
+  const [isGoalsDropdownOpen, setIsGoalsDropdownOpen] = useState(false)
 
   // НОВОЕ состояние для управления видимостью календаря
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
   const handleGenderPreferenceChange = (gender: string) => {
     setGenderPreference((prev) =>
-      prev.includes(gender) ? prev.filter((g) => g !== gender) : [...prev, gender]
-    );
-  };
+      prev.includes(gender)
+        ? prev.filter((g) => g !== gender)
+        : [...prev, gender]
+    )
+  }
 
   const handleRemoveGoal = (goalToRemove: string) => {
-    setSelectedDatingGoals((prev) => prev.filter((goal) => goal !== goalToRemove));
-  };
+    setSelectedDatingGoals((prev) =>
+      prev.filter((goal) => goal !== goalToRemove)
+    )
+  }
 
   const handleToggleGoalInDropdown = (goal: string) => {
     setSelectedDatingGoals((prev) =>
       prev.includes(goal) ? prev.filter((g) => g !== goal) : [...prev, goal]
-    );
-  };
+    )
+  }
 
   const formatDate = (date: Date | null): string => {
-    if (!date) return "дд . мм . гггг";
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
-  };
+    if (!date) return "дд . мм . гггг"
+    const day = String(date.getDate()).padStart(2, "0")
+    const month = String(date.getMonth() + 1).padStart(2, "0")
+    const year = date.getFullYear()
+    return `${day}.${month}.${year}`
+  }
 
   // Обработчик изменения даты в DatePicker
   const handleDateChange = (date: Date | null) => {
-    setDateOfBirth(date);
-    setIsDatePickerOpen(false); // Закрываем календарь после выбора даты
-  };
-
+    setDateOfBirth(date)
+    setIsDatePickerOpen(false) // Закрываем календарь после выбора даты
+  }
 
   return (
     <div className={styles.onboardingForm}>
-      <div className={styles.formHeader}>
-        <ProgressBar currentStep={currentOnboardingStep} totalSteps={4} />
-      </div>
+      <div className={styles.formContent}>
+        <div className={styles.formHeader}>
+          <ProgressBar currentStep={currentOnboardingStep} totalSteps={4} />
+        </div>
 
-      <div className={styles.formSection}>
-        <div className={styles.sectionTitle}>профиль</div>
+        <div className={styles.formSection}>
+          <div className={styles.sectionTitle}>профиль</div>
 
-        <div className={styles.sectionContent}>
-          <input
-            type="text"
-            className={styles.formInput}
-            placeholder="Имя"
-            defaultValue="Илья"
-          />
-
-          {/* Заменяем нативный select для Пола на CustomSelect */}
-          <CustomSelect
-            options={genderOptions}
-            value={selectedGender}
-            onChange={setSelectedGender}
-            placeholder="Пол"
-            arrowIcon="arrowDown" // Для пола используем ArrowDownIcon
-          />
-
-          {/* БЛОК: Дата рождения с DatePicker (остается без изменений) */}
-          <div className={styles.formField}>
-            <DatePicker
-              selected={dateOfBirth}
-              onChange={handleDateChange}
-              dateFormat="dd.MM.yyyy"
-              showPopperArrow={false}
-              customInput={
-                <div
-                  className={`${styles.formInput} ${styles.dateInputWrapper}`}
-                  onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}
-                >
-                  <span className={styles.dateLabel}>Дата рождения</span>
-                  <span className={styles.dateValue}>{formatDate(dateOfBirth)}</span>
-                  <ArrowRightIcon className={styles.dateArrowIcon} />
-                </div>
-              }
-              onSelect={() => setIsDatePickerOpen(false)}
-              onCalendarClose={() => setIsDatePickerOpen(false)}
-              onCalendarOpen={() => setIsDatePickerOpen(true)}
+          <div className={styles.sectionContent}>
+            <input
+              type="text"
+              className={styles.formInput}
+              placeholder="Имя"
+              defaultValue="Илья"
             />
-          </div>
 
-          <input
-            type="text"
-            className={styles.formInput}
-            placeholder="Город"
-            value={cityInput}
-            onChange={(e) => setCityInput(e.target.value)}
-            list="city-suggestions"
-          />
-          <datalist id="city-suggestions" className={styles.cities}>
-            {availableCities.map((city) => (
-              <option key={city} value={city} />
-            ))}
-          </datalist>
+            {/* Заменяем нативный select для Пола на CustomSelect */}
+            <CustomSelect
+              options={genderOptions}
+              value={selectedGender}
+              onChange={setSelectedGender}
+              placeholder="Пол"
+              arrowIcon="arrowDown" // Для пола используем ArrowDownIcon
+            />
 
-          {/* Заменяем нативный select для ВУЗа на CustomSelect */}
-          <CustomSelect
-            options={universityOptions}
-            value={universityInput}
-            onChange={setUniversityInput}
-            placeholder="ВУЗ"
-            arrowIcon="sortUpDown"
-          />
-
-          <input type="text" className={styles.formInput} placeholder="Факультет" />
-
-          {/* Заменяем нативный select для Курса на CustomSelect */}
-          <CustomSelect
-            options={courseOptions}
-            value={courseInput}
-            onChange={setCourseInput}
-            placeholder="Курс"
-            arrowIcon="sortUpDown"
-          />
-
-          {/* Заменяем нативный select для Степени на CustomSelect */}
-          <CustomSelect
-            options={degreeOptions}
-            value={degreeInput}
-            onChange={setDegreeInput}
-            placeholder="Степень"
-            arrowIcon="sortUpDown"
-          />
-
-          {/* Цели знакомства block (остается без изменений, так как он уже кастомный) */}
-          <div className={styles.formField}>
-            <div
-              className={`${styles.formInput} ${styles.goalsInputWrapper}`}
-              onClick={() => setIsGoalsDropdownOpen(!isGoalsDropdownOpen)}
-            >
-              {selectedDatingGoals.length > 0 ? (
-                selectedDatingGoals.map((goal) => (
-                  <div key={goal} className={styles.selectedGoalChip}>
-                    <span>{goal}</span>
-                    <CloseIcon
-                      className={styles.chipCloseIcon}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleRemoveGoal(goal);
-                      }}
-                    />
+            {/* БЛОК: Дата рождения с DatePicker (остается без изменений) */}
+            <div className={styles.formField}>
+              <DatePicker
+                selected={dateOfBirth}
+                onChange={handleDateChange}
+                dateFormat="dd.MM.yyyy"
+                showPopperArrow={false}
+                customInput={
+                  <div
+                    className={`${styles.formInput} ${styles.dateInputWrapper}`}
+                    onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
+                    <span className={styles.dateLabel}>Дата рождения</span>
+                    <span className={styles.dateValue}>
+                      {formatDate(dateOfBirth)}
+                    </span>
+                    <ArrowRightIcon className={styles.dateArrowIcon} />
                   </div>
-                ))
-              ) : (
-                <span className={styles.goalsPlaceholder}>Цели</span>
-              )}
-              <SortUpDownIcon className={styles.goalsDropdownArrowIcon} fill="#78797E" />
+                }
+                onSelect={() => setIsDatePickerOpen(false)}
+                onCalendarClose={() => setIsDatePickerOpen(false)}
+                onCalendarOpen={() => setIsDatePickerOpen(true)}
+              />
             </div>
 
-            {isGoalsDropdownOpen && (
-              <div className={styles.goalsDropdown}>
-                {allDatingGoals.map((goal) => (
-                  <div
-                    key={goal}
-                    className={`${styles.goalsDropdownItem} ${selectedDatingGoals.includes(goal) ? styles.selected : ''}`}
-                    onClick={() => handleToggleGoalInDropdown(goal)}
-                  >
-                    <span>{goal}</span>
-                    {selectedDatingGoals.includes(goal) && <CheckmarkIcon className={styles.dropdownCheckmarkIcon} />}
-                  </div>
-                ))}
+            <input
+              type="text"
+              className={styles.formInput}
+              placeholder="Город"
+              value={cityInput}
+              onChange={(e) => setCityInput(e.target.value)}
+              list="city-suggestions"
+            />
+            <datalist id="city-suggestions" className={styles.cities}>
+              {availableCities.map((city) => (
+                <option key={city} value={city} />
+              ))}
+            </datalist>
+
+            {/* Заменяем нативный select для ВУЗа на CustomSelect */}
+            <CustomSelect
+              options={universityOptions}
+              value={universityInput}
+              onChange={setUniversityInput}
+              placeholder="ВУЗ"
+              arrowIcon="sortUpDown"
+            />
+
+            <input
+              type="text"
+              className={styles.formInput}
+              placeholder="Факультет"
+            />
+
+            {/* Заменяем нативный select для Курса на CustomSelect */}
+            <CustomSelect
+              options={courseOptions}
+              value={courseInput}
+              onChange={setCourseInput}
+              placeholder="Курс"
+              arrowIcon="sortUpDown"
+            />
+
+            {/* Заменяем нативный select для Степени на CustomSelect */}
+            <CustomSelect
+              options={degreeOptions}
+              value={degreeInput}
+              onChange={setDegreeInput}
+              placeholder="Степень"
+              arrowIcon="sortUpDown"
+            />
+
+            {/* Цели знакомства block (остается без изменений, так как он уже кастомный) */}
+            <div className={styles.formField}>
+              <div
+                className={`${styles.formInput} ${styles.goalsInputWrapper}`}
+                onClick={() => setIsGoalsDropdownOpen(!isGoalsDropdownOpen)}>
+                {selectedDatingGoals.length > 0 ? (
+                  selectedDatingGoals.map((goal) => (
+                    <div key={goal} className={styles.selectedGoalChip}>
+                      <span>{goal}</span>
+                      <CloseIcon
+                        className={styles.chipCloseIcon}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleRemoveGoal(goal)
+                        }}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <span className={styles.goalsPlaceholder}>Цели</span>
+                )}
+                <SortUpDownIcon
+                  className={styles.goalsDropdownArrowIcon}
+                  fill="#78797E"
+                />
               </div>
-            )}
 
-            {selectedDatingGoals.length === 0 && (
-              <p className={`${styles.formHint} ${styles.errorHint}`}>
-                Выберите минимум одно значение
-              </p>
-            )}
+              {isGoalsDropdownOpen && (
+                <div className={styles.goalsDropdown}>
+                  {allDatingGoals.map((goal) => (
+                    <div
+                      key={goal}
+                      className={`${styles.goalsDropdownItem} ${selectedDatingGoals.includes(goal) ? styles.selected : ""}`}
+                      onClick={() => handleToggleGoalInDropdown(goal)}>
+                      <span>{goal}</span>
+                      {selectedDatingGoals.includes(goal) && (
+                        <CheckmarkIcon
+                          className={styles.dropdownCheckmarkIcon}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
 
-            <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
-            <div className={styles.formCheckboxGroup}>
-              <label className={styles.formCheckbox}>
-                <input
-                  type="checkbox"
-                  value="male"
-                  checked={genderPreference.includes("male")}
-                  onChange={() => handleGenderPreferenceChange("male")}
-                />
-                <span>Парни</span>
-                {genderPreference.includes("male") && (
-                  <CheckmarkIcon className={styles.checkmarkIcon} />
-                )}
-              </label>
-              <label className={styles.formCheckbox}>
-                <input
-                  type="checkbox"
-                  value="female"
-                  checked={genderPreference.includes("female")}
-                  onChange={() => handleGenderPreferenceChange("female")}
-                />
-                <span>Девушки</span>
-                {genderPreference.includes("female") && (
-                  <CheckmarkIcon className={styles.checkmarkIcon} />
-                )}
-              </label>
+              {selectedDatingGoals.length === 0 && (
+                <p className={`${styles.formHint} ${styles.errorHint}`}>
+                  Выберите минимум одно значение
+                </p>
+              )}
+
+              <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
+              <div className={styles.formCheckboxGroup}>
+                <label className={styles.formCheckbox}>
+                  <input
+                    type="checkbox"
+                    value="male"
+                    checked={genderPreference.includes("male")}
+                    onChange={() => handleGenderPreferenceChange("male")}
+                  />
+                  <span>Парни</span>
+                  {genderPreference.includes("male") && (
+                    <CheckmarkIcon className={styles.checkmarkIcon} />
+                  )}
+                </label>
+                <label className={styles.formCheckbox}>
+                  <input
+                    type="checkbox"
+                    value="female"
+                    checked={genderPreference.includes("female")}
+                    onChange={() => handleGenderPreferenceChange("female")}
+                  />
+                  <span>Девушки</span>
+                  {genderPreference.includes("female") && (
+                    <CheckmarkIcon className={styles.checkmarkIcon} />
+                  )}
+                </label>
+              </div>
             </div>
           </div>
         </div>
