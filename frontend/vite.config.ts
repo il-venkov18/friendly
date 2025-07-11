@@ -12,5 +12,9 @@ export default defineConfig({
     host: true, 
     port: 5173,
     strictPort: true,
+    headers: {
+      "Cross-Origin-Embedder-Policy": "require-corp",
+      "Cross-Origin-Opener-Policy": "same-origin",
+    }
   },
 })

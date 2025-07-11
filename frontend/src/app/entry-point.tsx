@@ -17,7 +17,6 @@ if (isTelegramWebApp()) {
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Provider store={store}>
-      <link href="https://fonts.googleapis.com/css2?family=Soyuz+Grotesk:wght@700&display=swap" rel="stylesheet"></link>
       <PersistGate loading={null} persistor={persistor}>
         <RouterProvider router={router} />
       </PersistGate>
