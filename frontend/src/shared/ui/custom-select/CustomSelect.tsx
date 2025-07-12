@@ -7,6 +7,7 @@ import { CheckmarkIcon } from '@/shared/assets/icons/CheckmarkIcon';
 interface Option {
   value: string;
   label: string;
+  shortLabel?: string;
   icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
@@ -18,6 +19,7 @@ interface CustomSelectProps {
   arrowIcon?: 'sortUpDown' | 'arrowDown';
   hasError?: boolean;
   className?: string;
+  displayShortLabel?: boolean;
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -28,11 +30,15 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   arrowIcon = 'sortUpDown',
   hasError = false,
   className = '',
+  displayShortLabel = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const selectedOptionLabel = options.find(option => option.value === value)?.label || placeholder;
+  const selectedOption = options.find(option => option.value === value);
+  const selectedOptionLabel = displayShortLabel && selectedOption?.shortLabel 
+    ? selectedOption.shortLabel 
+    : selectedOption?.label || placeholder;
 
   const handleSelect = (optionValue: string) => {
     onChange(optionValue);

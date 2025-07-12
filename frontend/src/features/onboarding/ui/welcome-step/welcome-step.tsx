@@ -58,17 +58,26 @@ const availableUniversities = [
   "Казахский национальный университет имени аль-Фараби (КазНУ)",
 ]
 
+const universityOptions = [
+  { value: "", label: "ВУЗ" },
+  ...availableUniversities.map((uni) => {
+    // Извлекаем сокращение из скобок
+    const shortNameMatch = uni.match(/\(([^)]+)\)/);
+    const shortName = shortNameMatch ? shortNameMatch[1] : uni;
+    return {
+      value: uni,
+      label: uni,
+      shortLabel: shortName
+    };
+  }),
+];
+
 const allDatingGoals = ["Дружба", "Отношения", "Учёба", "Тусовки", "Нетворкинг"]
 
 const genderOptions = [
   { value: "", label: "Пол" },
   { value: "male", label: "Мужской" },
   { value: "female", label: "Женский" },
-]
-
-const universityOptions = [
-  { value: "", label: "ВУЗ" },
-  ...availableUniversities.map((uni) => ({ value: uni, label: uni })),
 ]
 
 const courseOptions = [
@@ -313,6 +322,7 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
               onChange={setUniversityInput}
               placeholder="ВУЗ"
               arrowIcon="sortUpDown"
+              displayShortLabel={true}
             />
 
             <input
