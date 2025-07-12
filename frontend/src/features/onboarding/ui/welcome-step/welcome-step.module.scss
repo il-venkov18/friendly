@@ -17,10 +17,16 @@
 // San Francisco / SF Pro Text Regular (для всех остальных элементов)
 @font-face {
   font-family: "SF Pro Text";
-  src:
-    url("/fonts/SF-Pro-Text-Regular.woff2") format("woff2"),
-    url("/fonts/SF-Pro-Text-Regular.woff") format("woff");
+  src: url("/src/shared/assets/fonts/SFProText-Regular.ttf") format("truetype");
   font-weight: 400; /* Regular */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/src/shared/assets/fonts/SFProText-Bold.ttf") format("truetype");
+  font-weight: 700; /* Regular */
   font-style: normal;
   font-display: swap;
 }
@@ -48,7 +54,7 @@
     "Helvetica Neue",
     Arial,
     sans-serif;
-  font-weight: 400; /* Regular */
+  font-weight: 400; // Regular
   font-size: 17px;
   line-height: 22px;
   letter-spacing: -0.4px;
@@ -78,7 +84,8 @@
   letter-spacing: 0.07px;
   color: #ffffff; // Цвет текста заголовка секции
   text-transform: uppercase;
-  margin-bottom: 8px; // Отступ от заголовка до первого поля
+  margin-bottom: 22px; // Отступ от заголовка до первого поля
+  margin-top: 25px;
 }
 
 .sectionContent {
@@ -154,7 +161,7 @@
 }
 
 .dateValue {
-  color: #007AFF; // Blue color as per Figma
+  color: #007aff; // Blue color as per Figma
   font-size: 16px;
   margin-left: auto; // Отталкивает влево
   margin-right: 18px; // Отступ 8px от иконки
@@ -170,7 +177,6 @@
   height: 12px;
   flex-shrink: 0;
 }
-
 
 // =====================================
 // DATING GOALS (Остается без изменений)
@@ -188,7 +194,9 @@
   position: relative;
   // Добавляем padding-right, чтобы чипы не заползали на стрелку
   // Ширина иконки SortUpDownIcon: 12px, отступ 16px.
-  padding-right: calc(12px + 16px + 8px); // Ширина иконки + отступ от края + небольшой запас для текста/чипа
+  padding-right: calc(
+    12px + 16px + 8px
+  ); // Ширина иконки + отступ от края + небольшой запас для текста/чипа
 }
 
 .goalsPlaceholder {
@@ -210,6 +218,8 @@
   background-color: rgba(60, 60, 67, 0.6);
   color: white;
   font-size: 15px;
+  font-weight: 700 !important;
+  letter-spacing: -0.23px;
   line-height: 20px;
   flex-shrink: 0;
 
@@ -225,7 +235,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  fill: #78797E;
+  fill: #78797e;
   // Размеры иконки SortUpDownIcon
   width: 12px;
   height: 16px;
@@ -268,7 +278,7 @@
 }
 
 .errorHint {
-  color: #FF3B30; // Red color for error message
+  color: #ff3b30; // Red color for error message
 }
 
 .formSubtitle {
@@ -317,7 +327,7 @@
 
   .checkmarkIcon {
     flex-shrink: 0;
-    color: #007AFF; // Синий цвет для галки в чекбоксах
+    color: #007aff; // Синий цвет для галки в чекбоксах
     width: 24px;
     height: 24px;
   }
@@ -346,18 +356,16 @@
   position: sticky;
   bottom: 20px;
   z-index: 10;
-  
+
   .formButton {
     width: 100%;
-  
   }
 }
 
-.cities{
+.cities {
   color: white;
   background-color: #78797e;
 }
-
 
 // =====================================
 // REACT-DATEPICKER CUSTOM STYLES (ОСНОВНАЯ КАСТОМИЗАЦИЯ)
@@ -399,7 +407,7 @@
   }
   &-icon {
     &::before {
-      border-color: #78797E; // Серый цвет стрелок
+      border-color: #78797e; // Серый цвет стрелок
       border-width: 1px 1px 0 0; // Толщина стрелок
       height: 9px; // Размер стрелок
       width: 9px;
@@ -455,7 +463,7 @@
 // Выбранный день
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: #007AFF; // Синий цвет для выбранного дня
+  background-color: #007aff; // Синий цвет для выбранного дня
   color: white;
   font-weight: bold;
 }
@@ -479,7 +487,7 @@
     background-color: rgba(60, 60, 67, 0.6);
   }
   &--selected {
-    background-color: #007AFF;
+    background-color: #007aff;
   }
 }
 
@@ -495,7 +503,6 @@
     padding: 4px;
   }
 }
-
 
 // Стиль для popper (контейнер, в котором рендерится календарь)
 // Важно, если вы используете `withPortal`

@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import styles from './custom-select.module.scss'; // Создадим этот SCSS файл позже
+import styles from './custom-select.module.scss';
 import { SortUpDownIcon } from '@/shared/assets/icons/SortUpDownIcon';
-import { ArrowDownIcon } from '@/shared/assets/icons/ArrowDownIcon'; // Для поля "Пол"
+import { ArrowDownIcon } from '@/shared/assets/icons/ArrowDownIcon';
 import { CheckmarkIcon } from '@/shared/assets/icons/CheckmarkIcon';
 
 interface Option {
   value: string;
   label: string;
-  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>; // Если нужны иконки для опций
+  icon?: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
 interface CustomSelectProps {
@@ -15,7 +15,9 @@ interface CustomSelectProps {
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
-  arrowIcon?: 'sortUpDown' | 'arrowDown'; // Тип стрелки
+  arrowIcon?: 'sortUpDown' | 'arrowDown';
+  hasError?: boolean;
+  className?: string;
 }
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -23,7 +25,9 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   value,
   onChange,
   placeholder,
-  arrowIcon = 'sortUpDown', // По умолчанию используем SortUpDownIcon
+  arrowIcon = 'sortUpDown',
+  hasError = false,
+  className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
@@ -35,7 +39,6 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
     setIsOpen(false);
   };
 
-  // Закрытие дропдауна при клике вне компонента
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
@@ -51,10 +54,22 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
   const ArrowComponent = arrowIcon === 'sortUpDown' ? SortUpDownIcon : ArrowDownIcon;
 
   return (
-    <div className={styles.customSelectWrapper} ref={selectRef}>
-      <div className={styles.customSelectInput} onClick={() => setIsOpen(!isOpen)}>
-        {selectedOptionLabel}
-        <ArrowComponent className={styles.selectArrowIcon} fill="#78797E" />
+    <div 
+      className={`${styles.customSelectWrapper} ${className} ${hasError ? styles.error : ''}`} 
+      ref={selectRef}
+    >
+      <div 
+        className={`${styles.customSelectInput} ${hasError ? styles.inputError : ''}`} 
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <span className={value ? '' : styles.placeholder}>
+          {selectedOptionLabel}
+        </span>
+        <ArrowComponent 
+          className={styles.selectArrowIcon} 
+          fill="#78797E" 
+          data-arrow-icon={arrowIcon}
+        />
       </div>
 
       {isOpen && (
@@ -66,7 +81,9 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               onClick={() => handleSelect(option.value)}
             >
               <span>{option.label}</span>
-              {value === option.value && <CheckmarkIcon className={styles.checkmarkIcon} />}
+              {value === option.value && (
+                <CheckmarkIcon className={styles.checkmarkIcon} />
+              )}
             </div>
           ))}
         </div>
