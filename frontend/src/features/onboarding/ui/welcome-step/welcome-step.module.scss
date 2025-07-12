@@ -97,7 +97,7 @@
 .formField {
   display: flex;
   flex-direction: column;
-  gap: 8px; // Отступ 8px между label и input/select
+  gap: 4px; // Отступ 8px между label и input/select
 }
 
 .formLabel {
@@ -108,9 +108,6 @@
 // =====================================
 // INPUTS & SELECTS (Теперь тут только стили для formInput)
 // =====================================
-
-// Wrapper для селекта с кастомной стрелкой - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
-// .selectWrapper { ... }
 
 .formInput {
   width: 100%;
@@ -132,14 +129,8 @@
   }
 }
 
-// .formSelect - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
-// .formSelect { ... }
-
-// .selectArrowIcon - УДАЛЕН И ПЕРЕНЕСЕН В CustomSelect.module.scss
-// .selectArrowIcon { ... }
-
 // =====================================
-// CUSTOM DATE INPUT (Остается без изменений, так как уже скорректирован)
+// CUSTOM DATE INPUT 
 // =====================================
 
 .dateInputWrapper {
@@ -179,7 +170,7 @@
 }
 
 // =====================================
-// DATING GOALS (Остается без изменений)
+// DATING GOALS 
 // =====================================
 
 .goalsInputWrapper {
@@ -279,8 +270,9 @@
 
 .errorHint {
   color: #FF3B30;
-  margin-top: 4px;
-  margin-bottom: 8px;
+  margin-top: 1px;
+  margin-bottom: 1  px;
+  font-size: 12px;
 }
 
 .formSubtitle {
