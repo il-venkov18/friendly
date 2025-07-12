@@ -65,13 +65,7 @@ const availableUniversities = [
   "Казахский национальный университет имени аль-Фараби (КазНУ)",
 ]
 
-const allDatingGoals = [
-  "Дружба",
-  "Отношения",
-  "Учёба",
-  "Тусовки",
-  "Нетворкинг",
-]
+const allDatingGoals = ["Дружба", "Отношения", "Учёба", "Тусовки", "Нетворкинг"]
 
 // Опции для CustomSelect
 const genderOptions = [
@@ -100,7 +94,8 @@ const degreeOptions = [
 ]
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
-  const [cityInput, setCityInput] = useState<string>("Москва")
+  const [cityInput, setCityInput] = useState<string>("")
+  const [cityError, setCityError] = useState<string>("")
   const [universityInput, setUniversityInput] = useState<string>("")
   const [genderPreference, setGenderPreference] = useState<string[]>([])
 
@@ -110,7 +105,7 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [degreeInput, setDegreeInput] = useState<string>("")
 
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(
-    new Date(2002, 2, 20)
+    new Date(2001, 0, 0)
   ) // Месяцы в JS 0-индексированы: Февраль = 1
 
   const [selectedDatingGoals, setSelectedDatingGoals] = useState<string[]>([])
@@ -125,6 +120,21 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
         ? prev.filter((g) => g !== gender)
         : [...prev, gender]
     )
+  }
+
+  const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const city = e.target.value;
+    setCityInput(city);
+    if (cityError) validateCity(city); // Validate on change if there's already an error
+  };
+
+  const validateCity = (city: string) => {
+    if (!availableCities.includes(city)) {
+      setCityError("Выберите город из списка")
+      return false
+    }
+    setCityError("")
+    return true
   }
 
   const handleRemoveGoal = (goalToRemove: string) => {
@@ -151,6 +161,12 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const handleDateChange = (date: Date | null) => {
     setDateOfBirth(date)
     setIsDatePickerOpen(false) // Закрываем календарь после выбора даты
+  }
+
+  const handleNext = () => {
+    if (!validateCity(cityInput)) return
+    if (selectedDatingGoals.length === 0) return
+    onNext()
   }
 
   return (
@@ -204,19 +220,26 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
               />
             </div>
 
-            <input
-              type="text"
-              className={styles.formInput}
-              placeholder="Город"
-              value={cityInput}
-              onChange={(e) => setCityInput(e.target.value)}
-              list="city-suggestions"
-            />
-            <datalist id="city-suggestions" className={styles.cities}>
-              {availableCities.map((city) => (
-                <option key={city} value={city} />
-              ))}
-            </datalist>
+            <div className={styles.formField}>
+              <input
+                type="text"
+                className={`${styles.formInput} ${cityError ? styles.inputError : ""}`}
+                placeholder="Город"
+                value={cityInput}
+                onChange={handleCityChange}
+                list="city-suggestions"
+              />
+              <datalist id="city-suggestions" className={styles.cities}>
+                {availableCities.map((city) => (
+                  <option key={city} value={city} />
+                ))}
+              </datalist>
+              {cityError && (
+                <p className={`${styles.formHint} ${styles.errorHint}`}>
+                  {cityError}
+                </p>
+              )}
+            </div>
 
             {/* Заменяем нативный select для ВУЗа на CustomSelect */}
             <CustomSelect
@@ -334,7 +357,7 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
         </div>
       </div>
       <div className={styles.nextFooter}>
-        <Button onClick={onNext}>Далее</Button>
+        <Button onClick={handleNext}>Далее</Button>
       </div>
     </div>
   )

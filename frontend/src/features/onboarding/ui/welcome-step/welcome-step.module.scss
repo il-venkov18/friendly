@@ -278,7 +278,9 @@
 }
 
 .errorHint {
-  color: #ff3b30; // Red color for error message
+  color: #FF3B30;
+  margin-top: 4px;
+  margin-bottom: 8px;
 }
 
 .formSubtitle {
@@ -362,9 +364,21 @@
   }
 }
 
+.inputError {
+  border: 1px solid #FF3B30 !important;
+}
+
+// Update the cities datalist style:
 .cities {
-  color: white;
-  background-color: #78797e;
+  option {
+    color: white;
+    background-color: #212121;
+    padding: 8px 16px;
+    
+    &:hover {
+      background-color: #007AFF;
+    }
+  }
 }
 
 // =====================================
