@@ -7,7 +7,13 @@ export const WelcomePage = () => {
   const navigate = useNavigate();
 
   const handleCreateProfile = () => {
-    navigate('/onboarding'); // Или ваш путь к онбордингу
+    navigate('/onboarding');
+  };
+
+  const handlePrivacyPolicyClick = () => {
+    // Здесь можно добавить переход на страницу политики конфиденциальности
+    // Например: navigate('/privacy-policy');
+    console.log('Переход к политике конфиденциальности');
   };
 
   return (
@@ -21,7 +27,13 @@ export const WelcomePage = () => {
           реального письменного текста, но является случайным набором слов
         </p>
         <p className={styles.agreement}>
-          Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
+          Нажимая кнопку, вы соглашаетесь с{' '}
+          <span 
+            className={styles.privacyLink}
+            onClick={handlePrivacyPolicyClick}
+          >
+            политикой конфиденциальности
+          </span>
         </p>
       </div>
 

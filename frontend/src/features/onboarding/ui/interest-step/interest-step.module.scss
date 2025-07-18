@@ -1,4 +1,35 @@
 // src/features/onboarding/ui/interest-step/interest-step.module.scss
+// =====================================
+// FONTS
+// =====================================
+
+// Soyuz Grotesk w-700 Bold
+@font-face {
+  font-family: "Soyuz Grotesk";
+  src:
+    url("/src/shared/assets/fonts/Soyuz_Grotesk_Bold.otf") format("opentype"),
+    url("/src/shared/assets/fonts/SoyuzGroteskBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+// San Francisco / SF Pro Text Regular (для всех остальных элементов)
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/src/shared/assets/fonts/SFProText-Regular.ttf") format("truetype");
+  font-weight: 400; /* Regular */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/src/shared/assets/fonts/SFProText-Bold.ttf") format("truetype");
+  font-weight: 700; /* Regular */
+  font-style: normal;
+  font-display: swap;
+}
 
 .onboardingForm {
   display: flex;
@@ -72,6 +103,8 @@
   padding: 12px;
   transition: box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  width: 140px;
+  height: 178px;
 }
 
 .interestCardHeader {
@@ -83,7 +116,9 @@
 }
 
 .interestLabel {
-  font-size: 18px;
+  font-size: 20px;
+  line-height: 18px;
+  font-family: "Soyuz Grotesk", sans-serif;
   font-weight: 700;
   color: #fff;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
@@ -154,10 +189,11 @@
 }
 
 .selectedChips {  
-  text-align: left;
+  text-align: center;
   margin-left: 3px;
   margin-top: 4px;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: "SF Pro Text", sans-serif;
   color: rgba(153, 236, 255, 1);
 }
 

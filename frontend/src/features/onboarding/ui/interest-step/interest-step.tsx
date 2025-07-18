@@ -8,88 +8,104 @@ import { Button } from "@/shared/ui/button/button"
 
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
+import musicPlaceholder from '@/shared/assets/images/music-placeholder.jpg'
+import gamesPlaceholder from '@/shared/assets/images/games-placeholder.jpg'
+import moviesPlaceholder from '@/shared/assets/images/movies-placeholder.jpg'
+import lifestylePlaceholder from '@/shared/assets/images/lifestyle-placeholder.jpg'
+import studyPlaceholder from '@/shared/assets/images/study-placeholder.jpg'
+import vibePlaceholder from '@/shared/assets/images/vibe-placeholder.jpg'
+
 const INTEREST_CLUSTERS = [
   {
     id: 1,
     name: "Музыка",
+    placeholder: musicPlaceholder,
     interests: [
-      { label: "Рэп и Хип-хоп", img: "/assets/interests/music/rap.jpg" },
-      { label: "Рок", img: "/assets/interests/music/rock.jpg" },
-      { label: "Электронная", img: "/assets/interests/music/electronic.jpg" },
-      { label: "Поп", img: "/assets/interests/music/pop.jpg" },
-      { label: "Джаз и блюз", img: "/assets/interests/music/jazz.jpg" },
-      { label: "Классическая", img: "/assets/interests/music/classic.jpg" },
+      { label: "Рэп\nХип-хоп", img: musicPlaceholder },
+      { label: "Рок", img: musicPlaceholder },
+      { label: "Электро", img: musicPlaceholder },
+      { label: "Поп", img: musicPlaceholder },
+      { label: "Джаз\nи блюз", img: musicPlaceholder },
+      { label: "Классика", img: musicPlaceholder },
     ],
   },
   {
     id: 2,
     name: "Игры",
+    placeholder: gamesPlaceholder,
     interests: [
-      { label: "Шутеры", img: "/assets/interests/games/shooters.jpg" },
-      { label: "RPG", img: "/assets/interests/games/rpg.jpg" },
-      { label: "Симуляторы", img: "/assets/interests/games/simulators.jpg" },
-      { label: "Экшн", img: "/assets/interests/games/action.jpg" },
-      { label: "Хоррор", img: "/assets/interests/games/horror.jpg" },
-      { label: "Настольные игры", img: "/assets/interests/games/board.jpg" },
+      { label: "Шутеры", img: gamesPlaceholder },
+      { label: "RPG", img: gamesPlaceholder },
+      { label: "Симуляторы", img: gamesPlaceholder },
+      { label: "Экшн", img: gamesPlaceholder },
+      { label: "Хоррор", img: gamesPlaceholder },
+      { label: "Настольные\n игры", img: gamesPlaceholder },
     ],
   },
   {
     id: 3,
     name: "Кино и сериалы",
+    placeholder: moviesPlaceholder,
     interests: [
-      { label: "Фэнтези", img: "/assets/interests/movies/fantasy.jpg" },
-      { label: "Детективы", img: "/assets/interests/movies/detective.jpg" },
-      { label: "Романтические", img: "/assets/interests/movies/romantic.jpg" },
-      { label: "Комедии", img: "/assets/interests/movies/comedy.jpg" },
-      { label: "Ужасы", img: "/assets/interests/movies/horror.jpg" },
-      { label: "Аниме", img: "/assets/interests/movies/anime.jpg" },
+      { label: "Фэнтези", img: moviesPlaceholder },
+      { label: "Детективы", img: moviesPlaceholder },
+      { label: "Романтические", img: moviesPlaceholder },
+      { label: "Комедии", img: moviesPlaceholder },
+      { label: "Ужасы", img: moviesPlaceholder },
+      { label: "Аниме", img: moviesPlaceholder },
     ],
   },
   {
     id: 4,
     name: "Образ жизни",
+    placeholder: lifestylePlaceholder,
     interests: [
-      { label: "Спорт", img: "/assets/interests/lifestyle/sport.jpg" },
-      { label: "Путешествия", img: "/assets/interests/lifestyle/travel.jpg" },
-      { label: "Медитация", img: "/assets/interests/lifestyle/meditation.jpg" },
-      { label: "Вечеринки", img: "/assets/interests/lifestyle/parties.jpg" },
+      { label: "Спорт", img: lifestylePlaceholder },
+      { label: "Путешествия", img: lifestylePlaceholder },
+      { label: "Медитация", img: lifestylePlaceholder },
+      { label: "Вечеринки", img: lifestylePlaceholder },
       {
         label: "Волонтерство",
-        img: "/assets/interests/lifestyle/volunteer.jpg",
+        img: lifestylePlaceholder,
       },
       {
-        label: "Активный отдых",
-        img: "/assets/interests/lifestyle/active.jpg",
+        label: "Активный\n отдых",
+        img: lifestylePlaceholder,
       },
     ],
   },
   {
     id: 5,
     name: "Учёба и развитие",
+    placeholder: studyPlaceholder,
     interests: [
-      { label: "IT", img: "/assets/interests/study/it.jpg" },
+      { label: "IT", img: studyPlaceholder },
       {
-        label: "Предпринимательство",
-        img: "/assets/interests/study/business.jpg",
+        label: "Предприни-\nмательство",
+        img: studyPlaceholder,
       },
-      { label: "Научпоп", img: "/assets/interests/study/science.jpg" },
-      { label: "Книги", img: "/assets/interests/study/books.jpg" },
+      { label: "Научпоп", img: studyPlaceholder },
       {
-        label: "Изучение языков",
-        img: "/assets/interests/study/languages.jpg",
+        label: "Изучение\nязыков",
+        img: studyPlaceholder,
       },
-      { label: "Хакатоны", img: "/assets/interests/study/hackathons.jpg" },
+      {
+        label: "Худ.\nлитература",
+        img: studyPlaceholder,
+      },
+      { label: "Хакатоны", img: studyPlaceholder },
     ],
   },
   {
     id: 6,
     name: "Вайб",
+    placeholder: vibePlaceholder,
     interests: [
-      { label: "Мемы", img: "/assets/interests/vibe/memes.jpg" },
-      { label: "Глубокие разговоры", img: "/assets/interests/vibe/talks.jpg" },
-      { label: "Чилл", img: "/assets/interests/vibe/chill.jpg" },
-      { label: "Романтика", img: "/assets/interests/vibe/romance.jpg" },
-      { label: "Спонтанность", img: "/assets/interests/vibe/spontaneous.jpg" },
+      { label: "Мемы", img: vibePlaceholder },
+      { label: "Глубокие\nразговоры", img: vibePlaceholder },
+      { label: "Чилл", img: vibePlaceholder },
+      { label: "Романтика", img: vibePlaceholder },
+      { label: "Спонтан-\nность", img: vibePlaceholder },
     ],
   },
 ]

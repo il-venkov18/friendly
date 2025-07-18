@@ -17,27 +17,7 @@ import { ProgressBar } from "../progress-bar/ProgressBar"
 
 const currentOnboardingStep = 1
 
-const availableCities = [
-  "Москва",
-  "Санкт-Петербург",
-  "Новосибирск",
-  "Екатеринбург",
-  "Казань",
-  "Нижний Новгород",
-  "Челябинск",
-  "Самара",
-  "Омск",
-  "Ростов-на-Дону",
-  "Уфа",
-  "Красноярск",
-  "Воронеж",
-  "Пермь",
-  "Волгоград",
-  "Минск",
-  "Нур-Султан (Астана)",
-  "Бишкек",
-  "Ташкент",
-]
+const availableCities = ["Москва", "Санкт-Петербург"]
 
 const availableUniversities = [
   "Московский Государственный Университет им. М.В. Ломоносова (МГУ)",
@@ -45,32 +25,12 @@ const availableUniversities = [
   "Национальный исследовательский университет «Высшая школа экономики» (НИУ ВШЭ)",
   "Московский физико-технический институт (МФТИ)",
   "Московский государственный технический университет им. Н.Э. Баумана (МГТУ)",
-  "Казанский (Приволжский) федеральный университет (КФУ)",
-  "Новосибирский национальный исследовательский государственный университет (НГУ)",
-  "Уральский федеральный университет имени первого Президента России Б.Н. Ельцина (УрФУ)",
-  "Томский политехнический университет (ТПУ)",
   "Национальный исследовательский технологический университет «МИСиС» (МИСиС)",
   "Российский экономический университет имени Г.В. Плеханова (РЭУ им. Плеханова)",
   "Финансовый университет при Правительстве РФ",
   "МГИМО (У) МИД России",
   "Первый Московский государственный медицинский университет имени И.М. Сеченова",
-  "Белорусский государственный университет (БГУ)",
-  "Казахский национальный университет имени аль-Фараби (КазНУ)",
 ]
-
-const universityOptions = [
-  { value: "", label: "ВУЗ" },
-  ...availableUniversities.map((uni) => {
-    // Извлекаем сокращение из скобок
-    const shortNameMatch = uni.match(/\(([^)]+)\)/);
-    const shortName = shortNameMatch ? shortNameMatch[1] : uni;
-    return {
-      value: uni,
-      label: uni,
-      shortLabel: shortName
-    };
-  }),
-];
 
 const allDatingGoals = ["Дружба", "Отношения", "Учёба", "Тусовки", "Нетворкинг"]
 
@@ -80,18 +40,11 @@ const genderOptions = [
   { value: "female", label: "Женский" },
 ]
 
-const courseOptions = [
-  { value: "", label: "Курс" },
-  ...[1, 2, 3, 4, 5].map((num) => ({
-    value: String(num),
-    label: `${num} курс`,
-  })),
-]
-
 const degreeOptions = [
   { value: "", label: "Степень" },
   { value: "bachelor", label: "Бакалавр" },
   { value: "master", label: "Магистр" },
+  { value: "phd", label: "Аспирант" },
 ]
 
 export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
@@ -100,11 +53,15 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
   const [cityInput, setCityInput] = useState<string>("")
   const [cityError, setCityError] = useState<string>("")
   const [universityInput, setUniversityInput] = useState<string>("")
+  const [displayedUniversity, setDisplayedUniversity] = useState<string>("")
   const [genderPreference, setGenderPreference] = useState<string[]>([])
   const [genderPreferenceError, setGenderPreferenceError] = useState<string>("")
   const [selectedGender, setSelectedGender] = useState<string>("")
   const [genderError, setGenderError] = useState<string>("")
   const [courseInput, setCourseInput] = useState<string>("")
+  const [courseOptions, setCourseOptions] = useState<
+    { value: string; label: string }[]
+  >([{ value: "", label: "Курс" }])
   const [degreeInput, setDegreeInput] = useState<string>("")
   const [dateOfBirth, setDateOfBirth] = useState<Date | null>(
     new Date(2001, 0, 0)
@@ -134,14 +91,55 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
       dateOfBirth: dateOfBirth?.toISOString(),
       datingGoals: selectedDatingGoals,
     }
-    
-    localStorage.setItem('onboardingFormData', JSON.stringify(formData))
-  } 
+
+    localStorage.setItem("onboardingFormData", JSON.stringify(formData))
+  }
 
   const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const city = e.target.value
     setCityInput(city)
     if (cityError) validateCity(city)
+  }
+
+  const getShortUniversityName = (fullName: string): string => {
+    const match = fullName.match(/\(([^)]+)\)/)
+    return match ? match[1] : fullName
+  }
+
+  const handleUniversityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setUniversityInput(value)
+
+    // Если выбранный вуз есть в списке доступных, показываем краткое название
+    if (availableUniversities.includes(value)) {
+      setDisplayedUniversity(getShortUniversityName(value))
+    } else {
+      setDisplayedUniversity(value)
+    }
+  }
+
+  const updateCourseOptions = (degree: string) => {
+    let maxCourses = 4 // По умолчанию для бакалавра
+
+    if (degree === "master" || degree === "phd") {
+      maxCourses = 2
+    }
+
+    const newOptions = [
+      { value: "", label: "Курс" },
+      ...Array.from({ length: maxCourses }, (_, i) => ({
+        value: String(i + 1),
+        label: `${i + 1} курс`,
+      })),
+    ]
+
+    setCourseOptions(newOptions)
+    setCourseInput("");
+  }
+
+  const handleDegreeChange = (value: string) => {
+    setDegreeInput(value)
+    updateCourseOptions(value)
   }
 
   const validateCity = (city: string) => {
@@ -316,14 +314,21 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
               )}
             </div>
 
-            <CustomSelect
-              options={universityOptions}
-              value={universityInput}
-              onChange={setUniversityInput}
-              placeholder="ВУЗ"
-              arrowIcon="sortUpDown"
-              displayShortLabel={true}
-            />
+            <div className={styles.formField}>
+              <input
+                type="text"
+                className={styles.formInput}
+                placeholder="ВУЗ"
+                value={displayedUniversity || universityInput}
+                onChange={handleUniversityChange}
+                list="university-suggestions"
+              />
+              <datalist id="university-suggestions">
+                {availableUniversities.map((uni) => (
+                  <option key={uni} value={uni} />
+                ))}
+              </datalist>
+            </div>
 
             <input
               type="text"
@@ -332,18 +337,18 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
             />
 
             <CustomSelect
-              options={courseOptions}
-              value={courseInput}
-              onChange={setCourseInput}
-              placeholder="Курс"
+              options={degreeOptions}
+              value={degreeInput}
+              onChange={handleDegreeChange}
+              placeholder="Степень"
               arrowIcon="sortUpDown"
             />
 
             <CustomSelect
-              options={degreeOptions}
-              value={degreeInput}
-              onChange={setDegreeInput}
-              placeholder="Степень"
+              options={courseOptions}
+              value={courseInput}
+              onChange={setCourseInput}
+              placeholder="Курс"
               arrowIcon="sortUpDown"
             />
 

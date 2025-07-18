@@ -117,3 +117,13 @@
   background-color: rgb(28, 28, 28); // Чтобы перекрывать контент
   box-sizing: border-box;
 }
+
+.privacyLink {
+  color: #007AFF; // Синий цвет, как в iOS
+  text-decoration: none;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
