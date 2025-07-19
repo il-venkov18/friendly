@@ -1,9 +1,4 @@
-// src/features/onboarding/ui/interest-step/interest-step.module.scss
-// =====================================
 // FONTS
-// =====================================
-
-// Soyuz Grotesk w-700 Bold
 @font-face {
   font-family: "Soyuz Grotesk";
   src:
@@ -14,11 +9,10 @@
   font-display: swap;
 }
 
-// San Francisco / SF Pro Text Regular (для всех остальных элементов)
 @font-face {
   font-family: "SF Pro Text";
   src: url("/src/shared/assets/fonts/SFProText-Regular.ttf") format("truetype");
-  font-weight: 400; /* Regular */
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -26,7 +20,7 @@
 @font-face {
   font-family: "SF Pro Text";
   src: url("/src/shared/assets/fonts/SFProText-Bold.ttf") format("truetype");
-  font-weight: 700; /* Regular */
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
@@ -75,14 +69,6 @@
   margin-bottom: 12px;
 }
 
-.selectedCount {
-  font-size: 16px;
-  color: #fff;
-  margin-bottom: 12px;
-  font-weight: 500;
-  text-align: center;
-}
-
 .interestGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -105,6 +91,16 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 140px;
   height: 178px;
+  
+  .imageOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
 }
 
 .interestCardHeader {
@@ -113,6 +109,7 @@
   align-items: flex-start;
   width: 100%;
   position: relative;
+  z-index: 1;
 }
 
 .interestLabel {
@@ -166,12 +163,13 @@
 
 .dots {
   display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .clusterProgress {
   display: flex;
   justify-content: left;
-  margin-left: 12px;
   gap: 8px;
 }
 
@@ -189,9 +187,6 @@
 }
 
 .selectedChips {  
-  text-align: center;
-  margin-left: 3px;
-  margin-top: 4px;
   font-size: 16px;
   font-family: "SF Pro Text", sans-serif;
   color: rgba(153, 236, 255, 1);
@@ -201,4 +196,24 @@
   opacity: 0.5;
   filter: grayscale(80%);
   cursor: not-allowed;
+}
+
+.validationError {
+  color: #ff4d4f;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 12px;
+  animation: fadeIn 0.3s ease-in-out;
+  font-family: "SF Pro Text", sans-serif;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
