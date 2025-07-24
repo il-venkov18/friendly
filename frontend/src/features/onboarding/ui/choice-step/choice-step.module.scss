@@ -1,0 +1,132 @@
+// src/features/onboarding/ui/choice-step/choice-step.module.scss
+
+@import "../welcome-step/welcome-step.module.scss"; // Reuse existing variables and mixins if needed
+
+.onboardingForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 382px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.formHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionTitle {
+  // --- Типографика для заголовка "профиль" (Soyuz Grotesk Bold) ---
+  font-family: "Soyuz Grotesk", sans-serif !important;
+  font-weight: 700; /* Bold */
+  font-size: 24px;
+  line-height: 28px;
+  letter-spacing: 0.07px;
+  color: #ffffff; // Цвет текста заголовка секции
+  text-transform: uppercase;
+  margin-bottom: 22px; // Отступ от заголовка до первого поля
+  margin-top: 25px;
+}
+
+.sectionSubtitle {
+  font-size: 14px;
+  color: #a0a0a0;
+  margin-top: 8px;
+  margin-bottom: 16px; // Добавим отступ снизу
+}
+
+// Оберточный контейнер для слайдера с фиксированной высотой и скрытым overflow
+.sliderWrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden; // Скрывает карточки вне видимой области
+  // height: 130px; // Примерная высота карточки + отступы
+}
+
+// Контейнер слайдера
+.sliderContainer {
+  width: 100%;
+  overflow-x: auto; // Горизонтальная прокрутка
+  overflow-y: hidden; // Вертикальная прокрутка скрыта
+  scrollbar-width: none; // Скрываем полосу прокрутки для Firefox
+  -ms-overflow-style: none; // Скрываем полосу прокрутки для IE/Edge
+  &::-webkit-scrollbar {
+    display: none; // Скрываем полосу прокрутки для Webkit (Chrome, Safari)
+  }
+  padding-bottom: 10px; // Небольшой отступ снизу для красоты
+}
+
+// Контейнер для карточек
+.sliderTrack {
+  display: flex;
+  gap: 16px; // Отступ между карточками
+  // width: max-content; // Ширина контента определяется детьми
+}
+
+// Стили карточки
+.card {
+  flex: 0 0 auto; // Не растягивается, не сжимается, автоматический размер
+  width: 100px;
+  height: 100px;
+  background-color: rgba(33, 33, 33, 1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative; // Для позиционирования галочки
+
+  &:hover {
+    background-color: rgba(60, 60, 67, 0.6);
+  }
+
+  &.selected {
+    background-color: #007aff; // Selected card color
+    color: white;
+  }
+}
+
+.cardIcon {
+  font-size: 32px;
+}
+
+.cardLabel {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.checkmarkIcon {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  color: white;
+  width: 16px;
+  height: 16px;
+}
+
+.successMessage {
+  font-size: 14px;
+  color: #007aff;
+  margin-top: 16px;
+  text-align: center;
+}
+
+.nextFooter {
+  margin-top: 20px;
+  position: sticky;
+  bottom: 20px;
+  z-index: 10;
+}
