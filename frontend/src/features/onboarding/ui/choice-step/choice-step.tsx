@@ -1,11 +1,13 @@
-import { useState, useRef, useEffect } from "react";
-import styles from "./choice-step.module.scss";
-import { ProgressBar } from "../progress-bar/ProgressBar";
-import { Button } from "@/shared/ui/button/button";
-import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon";
-import { OnboardingStepProps } from "../../lib/models/types";
+import styles from "./choice-step.module.scss"
 
-// Mock data for the cards
+import { useEffect, useRef, useState } from "react"
+
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
+import { Button } from "@/shared/ui/button/button"
+
+import { OnboardingStepProps } from "../../lib/models/types"
+import { ProgressBar } from "../progress-bar/ProgressBar"
+
 const cardData = [
   {
     id: 1,
@@ -37,48 +39,47 @@ const cardData = [
     icon: "💪",
     label: "Целеустремленный",
   },
-];
+]
 
 export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
-  const [startIndex, setStartIndex] = useState(0); // Для управления видимыми карточками
-  const sliderRef = useRef<HTMLDivElement>(null); // Ссылка на контейнер слайдера
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null)
+  const [startIndex, setStartIndex] = useState(0) // Для управления видимыми карточками
+  const sliderRef = useRef<HTMLDivElement>(null) // Ссылка на контейнер слайдера
 
   const handleCardSelection = (id: number) => {
-    setSelectedCardId(id);
-  };
-
+    setSelectedCardId(id)
+  }
 
   // Автоматическая прокрутка к выбранной карточке (если она вне видимости)
   useEffect(() => {
     if (selectedCardId !== null && sliderRef.current) {
-      const selectedIndex = cardData.findIndex(card => card.id === selectedCardId);
+      const selectedIndex = cardData.findIndex(
+        (card) => card.id === selectedCardId
+      )
       if (selectedIndex >= 0) {
-        const visibleStart = startIndex;
-        const visibleEnd = startIndex + 2; // Предполагаем 3 видимых карточки
+        const visibleStart = startIndex
+        const visibleEnd = startIndex + 2 // Предполагаем 3 видимых карточки
 
         if (selectedIndex < visibleStart) {
-          setStartIndex(selectedIndex);
+          setStartIndex(selectedIndex)
         } else if (selectedIndex > visibleEnd) {
-          setStartIndex(Math.max(0, selectedIndex - 2)); // Центрируем выбранную карточку
+          setStartIndex(Math.max(0, selectedIndex - 2)) // Центрируем выбранную карточку
         }
       }
     }
-  }, [selectedCardId, startIndex]);
+  }, [selectedCardId, startIndex])
 
   const validateForm = () => {
-    return selectedCardId !== null;
-  };
+    return selectedCardId !== null
+  }
 
   const handleNext = () => {
     if (validateForm()) {
       // Здесь можно сохранить выбранный вайб в localStorage или состоянии
       // Например: localStorage.setItem('onboardingVibe', selectedCardId.toString());
-      onNext();
+      onNext()
     }
-  };
-
-  // Определяем видимые карточки
+  }
 
   return (
     <div className={styles.onboardingForm}>
@@ -87,12 +88,15 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
           <ProgressBar currentStep={2} totalSteps={4} />
         </div>
         <div className={styles.formSection}>
-          <div className={styles.sectionTitle}>Твой вайб</div>
- {/* Обернем слайдер в контейнер с overflow: hidden */}
-          <div className={styles.sliderWrapper}>
+          <div className={styles.sectionT}>
+            <div className={styles.sectionTitle}>Твой вайб</div>
             <div className={styles.sectionSubtitle}>
-              Выбери один из вариантов
+              выбери один из вариантов
             </div>
+          </div>
+
+          {/* Обернем слайдер в контейнер с overflow: hidden */}
+          <div className={styles.sliderWrapper}>
             <div className={styles.sliderContainer} ref={sliderRef}>
               <div className={styles.sliderTrack}>
                 {cardData.map((card) => (
@@ -101,8 +105,7 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
                     className={`${styles.card} ${
                       selectedCardId === card.id ? styles.selected : ""
                     }`}
-                    onClick={() => handleCardSelection(card.id)}
-                  >
+                    onClick={() => handleCardSelection(card.id)}>
                     <div className={styles.cardIcon}>{card.icon}</div>
                     {selectedCardId === card.id && (
                       <CheckmarkIcon className={styles.checkmarkIcon} />
@@ -123,5 +126,5 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
         <Button onClick={handleNext}>Далее</Button>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -34,15 +34,18 @@
   letter-spacing: 0.07px;
   color: #ffffff; // Цвет текста заголовка секции
   text-transform: uppercase;
-  margin-bottom: 22px; // Отступ от заголовка до первого поля
-  margin-top: 25px;
+  margin-top: 20px;
+  margin-bottom: 14px;
 }
 
 .sectionSubtitle {
-  font-size: 14px;
+  font-size: 17px;
   color: #a0a0a0;
-  margin-top: 8px;
   margin-bottom: 16px; // Добавим отступ снизу
+}
+
+.sectionT{
+    margin-bottom: 120px;
 }
 
 // Оберточный контейнер для слайдера с фиксированной высотой и скрытым overflow
@@ -76,9 +79,9 @@
 // Стили карточки
 .card {
   flex: 0 0 auto; // Не растягивается, не сжимается, автоматический размер
-  width: 100px;
-  height: 100px;
-  background-color: rgba(33, 33, 33, 1);
+  width: 150px;
+  height: 150px;
+  background-color: rgba(44, 44, 44, 1);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
@@ -93,19 +96,12 @@
   }
 
   &.selected {
-    background-color: #007aff; // Selected card color
     color: white;
   }
 }
 
 .cardIcon {
   font-size: 32px;
-}
-
-.cardLabel {
-  font-size: 14px;
-  text-align: center;
-  margin-top: 8px;
 }
 
 .checkmarkIcon {
@@ -118,9 +114,9 @@
 }
 
 .successMessage {
-  font-size: 14px;
-  color: #007aff;
-  margin-top: 16px;
+  font-size: 15px;
+  color: rgba(153, 236, 255, 1);
+  margin-top: 40px;
   text-align: center;
 }
 

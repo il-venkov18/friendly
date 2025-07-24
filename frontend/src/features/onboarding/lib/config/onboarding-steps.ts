@@ -4,8 +4,8 @@ import { BioStep } from '@/features/onboarding/ui/bio-step';
 import { InterestStep } from '@/features/onboarding/ui/interest-step';
 
 export const ONBOARDING_STEPS = [
-  { id: 'welcome', component: WelcomeStep },
+  { id: 'welcome', component: ChoiceStep },
   { id: 'interests', component: InterestStep },
-  { id: 'choice', component: ChoiceStep },
+  { id: 'choice', component: WelcomeStep },
   { id: 'bio', component: BioStep },
 ] as const;
