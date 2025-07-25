@@ -1,0 +1,114 @@
+.bio {
+  padding: 24px 20px 0;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  min-height: 100vh;
+  &Header {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &Back {
+      position: absolute;
+      left: -7px;
+      top: 50%;
+      transform: translate(0%, -50%);
+    }
+  }
+  &Wrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &Title {
+    font-family: $third-family;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 117%;
+    letter-spacing: 0em;
+    color: $text-color;
+    margin-top: 30px;
+    margin-bottom: 12px;
+  }
+  &Textarea {
+    font-size: 17px;
+    line-height: 129%;
+    letter-spacing: -0.02em;
+    resize: none;
+    color: $native-button-text-color;
+    &Title {
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 133%;
+      color: $native-subtitle-text-color;
+    }
+    &Wrapper {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 16px;
+      background: #212121;
+      border-radius: 12px;
+    }
+    &Length {
+      margin-top: 6px;
+      margin-left: 16px;
+      font-weight: 400;
+      font-size: 13px;
+      line-height: 123%;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      color: $native-section-header-text-color;
+    }
+    &Generator {
+      border-radius: 20px;
+      background: rgba(43, 223, 255, 0.15);
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 133%;
+      letter-spacing: -0.02em;
+      text-align: center;
+      color: #99ecff;
+      margin-right: auto;
+      text-wrap: nowrap;
+    }
+  }
+  &Decor {
+    position: relative;
+    height: 370px;
+    &Image {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translate(20px, -50%);
+    }
+    &Text {
+      position: absolute;
+      top: 20%;
+      right: 100px;
+      z-index: 1;
+      font-family: $third-family;
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 94%;
+      letter-spacing: 0.03em;
+      color: #595959;
+    }
+  }
+  &Footer {
+    backdrop-filter: blur(44px);
+    background: $background-color;
+    border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+    padding: 24px 20px 0;
+    width: 100%;
+    margin-top: 20px;
+    position: sticky;
+    bottom: 20px;
+    z-index: 10;
+  }
+}
