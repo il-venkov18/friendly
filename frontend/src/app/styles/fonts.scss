@@ -1,0 +1,25 @@
+@font-face {
+  font-family: "Soyuz Grotesk";
+  src:
+    url("/src/shared/assets/fonts/Soyuz_Grotesk_Bold.otf") format("opentype"),
+    url("/src/shared/assets/fonts/SoyuzGroteskBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/src/shared/assets/fonts/SFProText-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Text";
+  src: url("/src/shared/assets/fonts/SFProText-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

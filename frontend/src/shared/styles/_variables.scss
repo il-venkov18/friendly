@@ -3,12 +3,39 @@
 // Colors
 $primary-color: #007bff;
 $secondary-color: #6c757d;
-$text-color: #FFFFFF;
+$text-color: #ffffff;
 $text-secondary-color: #787878;
-$background-color: #1C1C1C;
+$background-color: #1c1c1c;
+$native-button-text-color: #fff;
+$native-subtitle-text-color: #707579;
+$native-destructive-text-color: #e53935;
+$native-button-text-color: #fff;
+$custom-skeleton: rgba(0, 0, 0, 0.03);
+$native-bg-color: #fff;
+$native-subtitle-text-color: #707579;
+$native-secondary-bg-color: #efeff4;
+$native-hint-color: #707579;
+$custom-secondary-code-highlight: #b00fb4;
+$custom-plain-foreground: rgba(0, 0, 0, 0.8);
+$native-link-color: #007aff;
+$custom-card-bg-color: #fff;
+$custom-white: #fff;
+$custom-outline: rgba(0, 0, 0, 0.05);
+$native-text-color: #000;
+$custom-quaternary-bg-color: #f6f6fa;
+$custom-plain-background: rgba(0, 0, 0, 0.04);
+$custom-secondary-fill: rgba(67, 120, 255, 0.1);
+$custom-divider: rgba(0, 0, 0, 0.15);
+$native-section-header-text-color: #707579;
+$custom-tertiary-bg-color: #f4f4f7;
+$custom-secondary-hint-color: #a2acb0;
+$custom-surface-primary: rgba(255, 255, 255, 0.95);
+$native-button-color: #007aff;
 
 // Fonts
 $main-font: "Arial", sans-serif;
+$font-family: "SF Pro", sans-serif;
+$third-family: "Soyuz Grotesk", sans-serif;
 
 // Breakpoints
 $breakpoint-mobile: 767px;

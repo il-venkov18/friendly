@@ -1,4 +1,15 @@
-// reset.scss - Reset and normalize styles
+// Links
+
+a,
+a:link,
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 
 * {
   padding: 0px;
@@ -11,18 +22,6 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}
-
-// Links
-
-a,
-a:link,
-a:visited {
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: none;
 }
 
 // Common
@@ -97,6 +96,11 @@ button:focus,
 button:active,
 select:focus,
 select:active {
+  outline: none;
+}
+
+textarea:focus,
+textarea:active {
   outline: none;
 }
 
