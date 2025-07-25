@@ -1,40 +1,3 @@
-// src/features/onboarding/ui/welcome-step.module.scss
-// =====================================
-// FONTS
-// =====================================
-
-// Soyuz Grotesk w-700 Bold
-@font-face {
-  font-family: "Soyuz Grotesk";
-  src:
-    url("/src/shared/assets/fonts/Soyuz_Grotesk_Bold.otf") format("opentype"),
-    url("/src/shared/assets/fonts/SoyuzGroteskBold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-// San Francisco / SF Pro Text Regular (для всех остальных элементов)
-@font-face {
-  font-family: "SF Pro Text";
-  src: url("/src/shared/assets/fonts/SFProText-Regular.ttf") format("truetype");
-  font-weight: 400; /* Regular */
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "SF Pro Text";
-  src: url("/src/shared/assets/fonts/SFProText-Bold.ttf") format("truetype");
-  font-weight: 700; /* Regular */
-  font-style: normal;
-  font-display: swap;
-}
-
-// =====================================
-// FORM STYLES
-// =====================================
-
 .onboardingForm {
   display: flex;
   flex-direction: column;
@@ -82,7 +45,7 @@
   font-size: 24px;
   line-height: 28px;
   letter-spacing: 0.07px;
-  color: #ffffff; // Цвет текста заголовка секции
+  color: $background-color; // Цвет текста заголовка секции
   text-transform: uppercase;
   margin-bottom: 22px; // Отступ от заголовка до первого поля
   margin-top: 25px;
@@ -123,13 +86,13 @@ datalist#city-suggestions {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.4);
   z-index: 100;
   margin-top: 4px;
-  
+
   option {
     padding: 12px 16px;
     color: white;
     font-size: 16px;
     cursor: pointer;
-    
+
     &:hover {
       background-color: rgba(45, 45, 45, 1);
     }
@@ -139,7 +102,7 @@ datalist#city-suggestions {
 // Обновите стиль для поля ввода города
 .formField {
   position: relative; // Добавляем для правильного позиционирования datalist
-  
+
   input[list="city-suggestions"] {
     // Дополнительные стили для поля ввода с подсказками
   }
@@ -166,7 +129,7 @@ datalist#city-suggestions {
 }
 
 // =====================================
-// CUSTOM DATE INPUT 
+// CUSTOM DATE INPUT
 // =====================================
 
 .dateInputWrapper {
@@ -206,7 +169,7 @@ datalist#city-suggestions {
 }
 
 // =====================================
-// DATING GOALS 
+// DATING GOALS
 // =====================================
 
 .goalsInputWrapper {
@@ -305,9 +268,9 @@ datalist#city-suggestions {
 }
 
 .errorHint {
-  color: #FF3B30;
+  color: #ff3b30;
   margin-top: 1px;
-  margin-bottom: 1  px;
+  margin-bottom: 1 px;
   font-size: 12px;
 }
 
@@ -393,7 +356,7 @@ datalist#city-suggestions {
 }
 
 .inputError {
-  border: 1px solid #FF3B30 !important;
+  border: 1px solid #ff3b30 !important;
 }
 
 // Update the cities datalist style:
@@ -402,9 +365,9 @@ datalist#city-suggestions {
     color: white;
     background-color: #212121;
     padding: 8px 16px;
-    
+
     &:hover {
-      background-color: #007AFF;
+      background-color: #007aff;
     }
   }
 }
