@@ -93,8 +93,9 @@
 }
 
 // Стили карточки
+/* Стили для карточки */
 .card {
-  flex: 0 0 auto; // Не растягивается, не сжимается, автоматический размер
+  flex: 0 0 auto;
   width: 150px;
   height: 150px;
   background-color: rgba(44, 44, 44, 1);
@@ -105,7 +106,7 @@
   align-items: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative; // Для позиционирования галочки
+  position: relative; /* Для позиционирования галочки */
 
   &:hover {
     background-color: rgba(60, 60, 67, 0.6);
@@ -120,13 +121,43 @@
   font-size: 32px;
 }
 
-.checkmarkIcon {
+/* Стили для контейнера галки */
+.checkmarkContainer {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
+  top: 10px; /* Перемещаем в верхний край */
+  right: 12px; /* Перемещаем в правый край */
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* Активное состояние галки */
+.card.selected .checkmarkContainer {
+  background-color: rgba(41, 144, 255, 1);
+}
+
+/* Стили для самой галки */
+.checkmarkIcon {
   color: white;
-  width: 16px;
-  height: 16px;
+  fill:white;
+  width: 11px;
+  height: 11px;
+}
+
+/* Неактивное состояние (пустой круг) */
+.card:not(.selected) .checkmarkContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
 }
 
 .successMessage {

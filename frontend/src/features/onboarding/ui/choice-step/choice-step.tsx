@@ -140,9 +140,11 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
                     }`}
                     onClick={() => handleCardSelection(card.id)}>
                     <div className={styles.cardIcon}>{card.icon}</div>
-                    {selectedId === card.id && (
-                      <CheckmarkIcon className={styles.checkmarkIcon} />
-                    )}
+                    <div className={styles.checkmarkContainer}>
+                      {selectedId === card.id && (
+                        <CheckmarkIcon className={styles.checkmarkIcon} />
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
