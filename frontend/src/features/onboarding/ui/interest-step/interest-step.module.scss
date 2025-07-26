@@ -38,10 +38,17 @@
 }
 
 .formHeader {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  &Back {
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translate(0%, -50%);
+  }
 }
 
 .formSection {

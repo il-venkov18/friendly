@@ -6,6 +6,7 @@ import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { Button } from "@/shared/ui/button/button"
 
 import { OnboardingStepProps } from "../../lib/models/types"
+import arrowLeftSvg from "../icons/arrow-left.svg"
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
 const cardData = [
@@ -41,7 +42,7 @@ const cardData = [
   },
 ]
 
-export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
+export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null)
   const [startIndex, setStartIndex] = useState(0) // Для управления видимыми карточками
   const sliderRef = useRef<HTMLDivElement>(null) // Ссылка на контейнер слайдера
@@ -86,6 +87,9 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
       <div className={styles.onboardingForm}>
         <div className={styles.formContent}>
           <div className={styles.formHeader}>
+            <button className={styles.formHeaderBack} onClick={onBack}>
+              <img src={arrowLeftSvg} alt="back" />
+            </button>
             <ProgressBar currentStep={3} totalSteps={4} />
           </div>
           <div className={styles.formSection}>

@@ -76,6 +76,7 @@
 
 // Стили для datalist с подсказками городов
 datalist#city-suggestions {
+  content: '';
   position: absolute;
   background-color: rgba(33, 33, 33, 1);
   border-radius: 12px;
@@ -151,7 +152,7 @@ datalist#city-suggestions {
 }
 
 .dateValue {
-  color: #007aff; // Blue color as per Figma
+  color: #99ecff; // Blue color as per Figma
   font-size: 16px;
   margin-left: auto; // Отталкивает влево
   margin-right: 18px; // Отступ 8px от иконки
@@ -320,7 +321,7 @@ datalist#city-suggestions {
 
   .checkmarkIcon {
     flex-shrink: 0;
-    color: #007aff; // Синий цвет для галки в чекбоксах
+    color: #99ecff; // Синий цвет для галки в чекбоксах
     width: 16px;
     height: 16px;
   }
@@ -373,7 +374,7 @@ datalist#city-suggestions {
     padding: 8px 16px;
 
     &:hover {
-      background-color: #007aff;
+      background-color: #99ecff;
     }
   }
 }
@@ -474,7 +475,7 @@ datalist#city-suggestions {
 // Выбранный день
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: #007aff; // Синий цвет для выбранного дня
+  background-color: #99ecff; // Синий цвет для выбранного дня
   color: white;
   font-weight: bold;
 }
@@ -498,7 +499,7 @@ datalist#city-suggestions {
     background-color: rgba(60, 60, 67, 0.6);
   }
   &--selected {
-    background-color: #007aff;
+    background-color: #99ecff;
   }
 }
 

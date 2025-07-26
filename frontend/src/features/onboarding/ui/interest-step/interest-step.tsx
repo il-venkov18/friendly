@@ -12,6 +12,7 @@ import studyPlaceholder from "@/shared/assets/images/study-placeholder.jpg"
 import vibePlaceholder from "@/shared/assets/images/vibe-placeholder.jpg"
 import { Button } from "@/shared/ui/button/button"
 
+import arrowLeftSvg from "../icons/arrow-left.svg"
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
 const INTEREST_CLUSTERS = [
@@ -97,7 +98,7 @@ const INTEREST_CLUSTERS = [
 const MIN_SELECTED_PER_CLUSTER = 3
 const MAX_SELECTED_PER_CLUSTER = 6
 
-export const InterestStep = ({ onNext }: OnboardingStepProps) => {
+export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
   const [currentClusterIndex, setCurrentClusterIndex] = useState(0)
   const [selectedInterests, setSelectedInterests] = useState<{
     [key: string]: number[]
@@ -202,6 +203,9 @@ export const InterestStep = ({ onNext }: OnboardingStepProps) => {
     <>
       <div className={styles.onboardingForm}>
         <div className={styles.formHeader}>
+          <button className={styles.formHeaderBack} onClick={onBack}>
+            <img src={arrowLeftSvg} alt="back" />
+          </button>
           <ProgressBar currentStep={2} totalSteps={4} />
         </div>
 

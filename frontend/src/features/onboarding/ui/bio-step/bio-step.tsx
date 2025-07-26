@@ -7,7 +7,7 @@ import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 import { Button } from "@/shared/ui/button/button"
 
 import { ProgressBar } from "../progress-bar/ProgressBar"
-import arrowLeftSvg from "./icons/arrow-left.svg"
+import arrowLeftSvg from "../icons/arrow-left.svg"
 import fireSvg from "./icons/fire.svg"
 import playerSvg from "./icons/player.svg"
 
