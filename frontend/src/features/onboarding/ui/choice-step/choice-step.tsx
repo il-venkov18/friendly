@@ -82,52 +82,54 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
   }
 
   return (
-    <div className={styles.onboardingForm}>
-      <div className={styles.formContent}>
-        <div className={styles.formHeader}>
-          <ProgressBar currentStep={3} totalSteps={4} />
-        </div>
-        <div className={styles.formSection}>
-          <div className={styles.sectionT}>
-            <div className={styles.sectionTitle}>Личность и стиль общения</div>
-            <div className={styles.questionText}>Где ты на перерыве?</div>
+    <>
+      <div className={styles.onboardingForm}>
+        <div className={styles.formContent}>
+          <div className={styles.formHeader}>
+            <ProgressBar currentStep={3} totalSteps={4} />
           </div>
+          <div className={styles.formSection}>
+            <div className={styles.sectionT}>
+              <div className={styles.sectionTitle}>
+                Личность и стиль общения
+              </div>
+              <div className={styles.questionText}>Где ты на перерыве?</div>
+            </div>
 
-          {/* Обернем слайдер в контейнер с overflow: hidden */}
-          <div className={styles.sliderWrapper}>
-            <div className={styles.questionSection}>
-              <div className={styles.sectionSubtitle}>
-                Выбери 1 вариант
+            {/* Обернем слайдер в контейнер с overflow: hidden */}
+            <div className={styles.sliderWrapper}>
+              <div className={styles.questionSection}>
+                <div className={styles.sectionSubtitle}>Выбери 1 вариант</div>
+              </div>
+              <div className={styles.sliderContainer} ref={sliderRef}>
+                <div className={styles.sliderTrack}>
+                  {cardData.map((card) => (
+                    <div
+                      key={card.id}
+                      className={`${styles.card} ${
+                        selectedCardId === card.id ? styles.selected : ""
+                      }`}
+                      onClick={() => handleCardSelection(card.id)}>
+                      <div className={styles.cardIcon}>{card.icon}</div>
+                      {selectedCardId === card.id && (
+                        <CheckmarkIcon className={styles.checkmarkIcon} />
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className={styles.sliderContainer} ref={sliderRef}>
-              <div className={styles.sliderTrack}>
-                {cardData.map((card) => (
-                  <div
-                    key={card.id}
-                    className={`${styles.card} ${
-                      selectedCardId === card.id ? styles.selected : ""
-                    }`}
-                    onClick={() => handleCardSelection(card.id)}>
-                    <div className={styles.cardIcon}>{card.icon}</div>
-                    {selectedCardId === card.id && (
-                      <CheckmarkIcon className={styles.checkmarkIcon} />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+            {selectedCardId !== null && (
+              <p className={styles.successMessage}>
+                Учли! Ты {cardData.find((c) => c.id === selectedCardId)?.label}!
+              </p>
+            )}
           </div>
-          {selectedCardId !== null && (
-            <p className={styles.successMessage}>
-              Учли! Ты {cardData.find((c) => c.id === selectedCardId)?.label}!
-            </p>
-          )}
         </div>
       </div>
       <div className={styles.nextFooter}>
         <Button onClick={handleNext}>Далее</Button>
       </div>
-    </div>
+    </>
   )
 }

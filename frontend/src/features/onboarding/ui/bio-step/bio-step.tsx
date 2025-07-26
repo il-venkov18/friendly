@@ -1,6 +1,6 @@
 import styles from "./bio-step.module.scss"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
@@ -15,6 +15,8 @@ const maxCountOfLetters = 140
 export const USER_DESCRIPTION_KEY = "about"
 
 export const BioStep = ({ onNext, onBack }: OnboardingStepProps) => {
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+
   const [description, setDescription] = useState<string>("")
 
   const handleChange = (text: string) => {
@@ -32,6 +34,10 @@ export const BioStep = ({ onNext, onBack }: OnboardingStepProps) => {
     }
   }
 
+  const handleInputClick = () => {
+    inputRef.current?.focus()
+  }
+
   return (
     <>
       <div className={styles.bio}>
@@ -42,9 +48,11 @@ export const BioStep = ({ onNext, onBack }: OnboardingStepProps) => {
           <ProgressBar currentStep={4} totalSteps={4} />
         </div>
         <h2 className={styles.bioTitle}>Твой вайб</h2>
-        <div className={styles.bioTextareaWrapper}>
+        <div className={styles.bioTextareaWrapper} onClick={handleInputClick}>
           <h3 className={styles.bioTextareaTitle}>О себе</h3>
           <textarea
+            ref={inputRef}
+            placeholder="Введите текст или сгенирируйте с помощью ИИ"
             className={styles.bioTextarea}
             value={description}
             onChange={(e) => handleChange(e.target.value)}></textarea>

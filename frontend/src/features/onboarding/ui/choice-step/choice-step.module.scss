@@ -36,8 +36,8 @@
 
 .sectionSubtitle {
   font-size: 16px;
-    font-family: "SF Pro Text", sans-serif !important;
-  font-weight: 500; 
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
   color: #a0a0a0;
   margin-bottom: 16px; // Добавим отступ снизу
 }
@@ -137,8 +137,14 @@
 }
 
 .nextFooter {
+  backdrop-filter: blur(44px);
+  background: #212121;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+  padding: 24px 20px 0;
+  width: 100%;
   margin-top: 20px;
   position: sticky;
-  bottom: 20px;
+  bottom: 0px;
+  padding-bottom: 20px;
   z-index: 10;
 }
