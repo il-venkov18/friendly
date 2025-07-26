@@ -213,16 +213,18 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
                         Перетащи сюда 2 качества
                       </div>
                     ) : (
-                      selectedChips.map((chip) => (
-                        <div 
-                          key={chip.id} 
-                          className={styles.selectedChip}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, chip)}
-                        >
-                          <span>{chip.icon}</span> {chip.label}
-                        </div>
-                      ))
+                      <div className={styles.selectedChipsContainer}>
+                        {selectedChips.map((chip) => (
+                          <div 
+                            key={chip.id} 
+                            className={styles.selectedChip}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, chip)}
+                          >
+                            <span>{chip.icon}</span> {chip.label}
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
                   <div className={styles.chipList}>
