@@ -22,13 +22,12 @@
 }
 
 .sectionTitle {
-  // --- Типографика для заголовка "профиль" (Soyuz Grotesk Bold) ---
   font-family: "Soyuz Grotesk", sans-serif !important;
-  font-weight: 700; /* Bold */
+  font-weight: 700;
   font-size: 24px;
   line-height: 28px;
   letter-spacing: 0.07px;
-  color: $text-color; // Цвет текста заголовка секции
+  color: $text-color;
   text-transform: uppercase;
   margin-top: 20px;
   margin-bottom: 14px;
@@ -36,10 +35,10 @@
 
 .sectionSubtitle {
   font-size: 16px;
-    font-family: "SF Pro Text", sans-serif !important;
-  font-weight: 500; 
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
   color: #a0a0a0;
-  margin-bottom: 16px; // Добавим отступ снизу
+  margin-bottom: 16px;
 }
 
 .sectionT {
@@ -55,45 +54,36 @@
 }
 
 .questionText {
-  // --- Типографика для текста вопроса (SF Pro Text Bold) ---
   font-family: "SF Pro Text", sans-serif;
-  font-weight: 500; /* Bold */
+  font-weight: 500;
   font-size: 18px;
   line-height: 100%;
   letter-spacing: -0.4px;
   color: #ffffff;
 }
 
-// Оберточный контейнер для слайдера с фиксированной высотой и скрытым overflow
 .sliderWrapper {
   position: relative;
   width: 100%;
-  overflow: hidden; // Скрывает карточки вне видимой области
-  // height: 130px; // Примерная высота карточки + отступы
+  overflow: hidden;
 }
 
-// Контейнер слайдера
 .sliderContainer {
   width: 100%;
-  overflow-x: auto; // Горизонтальная прокрутка
-  overflow-y: hidden; // Вертикальная прокрутка скрыта
-  scrollbar-width: none; // Скрываем полосу прокрутки для Firefox
-  -ms-overflow-style: none; // Скрываем полосу прокрутки для IE/Edge
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
-    display: none; // Скрываем полосу прокрутки для Webkit (Chrome, Safari)
+    display: none;
   }
-  padding-bottom: 10px; // Небольшой отступ снизу для красоты
+  padding-bottom: 10px;
 }
 
-// Контейнер для карточек
 .sliderTrack {
   display: flex;
-  gap: 16px; // Отступ между карточками
-  // width: max-content; // Ширина контента определяется детьми
+  gap: 16px;
 }
 
-// Стили карточки
-/* Стили для карточки */
 .card {
   flex: 0 0 auto;
   width: 150px;
@@ -106,7 +96,7 @@
   align-items: center;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative; /* Для позиционирования галочки */
+  position: relative;
 
   &:hover {
     background-color: rgba(60, 60, 67, 0.6);
@@ -121,11 +111,10 @@
   font-size: 32px;
 }
 
-/* Стили для контейнера галки */
 .checkmarkContainer {
   position: absolute;
-  top: 10px; /* Перемещаем в верхний край */
-  right: 12px; /* Перемещаем в правый край */
+  top: 10px;
+  right: 12px;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -135,20 +124,17 @@
   transition: all 0.3s ease;
 }
 
-/* Активное состояние галки */
 .card.selected .checkmarkContainer {
   background-color: rgba(41, 144, 255, 1);
 }
 
-/* Стили для самой галки */
 .checkmarkIcon {
   color: white;
-  fill:white;
+  fill: white;
   width: 11px;
   height: 11px;
 }
 
-/* Неактивное состояние (пустой круг) */
 .card:not(.selected) .checkmarkContainer::before {
   content: "";
   position: absolute;
@@ -177,9 +163,89 @@
 .centeredSubtitle {
   font-size: 16px;
   font-family: "SF Pro Text", sans-serif !important;
-  font-weight: 500; 
+  font-weight: 500;
   color: #a0a0a0;
   margin-bottom: 16px;
-  text-align: center; // Добавлено центрирование
-  width: 100%; // Занимает всю ширину
+  text-align: center;
+  width: 100%;
+}
+
+/* Стили для третьего шага */
+.chipSection {
+  display: flex;
+  gap: 24px;
+}
+
+.availableChips,
+.selectedChips {
+  flex: 1;
+}
+
+.subtitle {
+  font-size: 16px;
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
+  color: #a0a0a0;
+  margin-bottom: 16px;
+}
+
+.chipList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(44, 44, 44, 1);
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
+  font-size: 15px;
+  gap: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: rgba(60, 60, 67, 0.6);
+  }
+}
+
+.dropZone {
+  background-color: rgba(44, 44, 44, 0.5);
+  border: 2px dashed rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 26px;
+  height: 184px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.selectedChip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(44, 44, 44, 1);
+  border-radius: 12px;
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
+  font-size: 15px;
+  color: white;
+  padding: 8px 12px;
+}
+
+.removeButton {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
 }

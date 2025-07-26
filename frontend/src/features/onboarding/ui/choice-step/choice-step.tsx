@@ -73,11 +73,30 @@ const communicationData = [
   },
 ]
 
+// Данные для третьего шага (чипы)
+const chipData = [
+  { id: 1, icon: "🧠", label: "Умный" },
+  { id: 2, icon: "😄", label: "Веселый" },
+  { id: 3, icon: "😌", label: "Спокойный" },
+  { id: 4, icon: "💬", label: "Общительный" },
+  { id: 5, icon: "✨", label: "Стильный" },
+  { id: 6, icon: "💡", label: "Увлеченный" },
+  { id: 7, icon: "🔒", label: "Надежный" },
+  { id: 8, icon: "🤷‍♂️", label: "Немного крэйзи" },
+  { id: 9, icon: "👀", label: "Внимательный" },
+  { id: 10, icon: "📚", label: "Эрудированный" },
+  { id: 11, icon: "🔍", label: "Загадочный" },
+  { id: 12, icon: "🔥", label: "Страстный" },
+]
+
 export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
-  const [currentStep, setCurrentStep] = useState<1 | 2>(1)
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
   const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null)
   const [selectedCommunicationId, setSelectedCommunicationId] = useState<number | null>(null)
   const sliderRef = useRef<HTMLDivElement>(null)
+
+  // Для третьего шага: выбранные чипы
+  const [selectedChips, setSelectedChips] = useState<{ id: number; icon: string; label: string }[]>([])
 
   // Сбрасываем позицию слайдера при смене шага
   useEffect(() => {
@@ -96,71 +115,155 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
 
   const validateForm = () => {
     if (currentStep === 1) return selectedVibeId !== null
-    return selectedCommunicationId !== null
+    if (currentStep === 2) return selectedCommunicationId !== null
+    if (currentStep === 3) return selectedChips.length === 2
+    return false
   }
 
   const handleNext = () => {
     if (!validateForm()) return
-    
+
     if (currentStep === 1) {
       setCurrentStep(2)
+    } else if (currentStep === 2) {
+      setCurrentStep(3)
     } else {
       onNext()
     }
   }
 
-  const currentData = currentStep === 1 ? vibeData : communicationData
-  const selectedId = currentStep === 1 ? selectedVibeId : selectedCommunicationId
+  const currentData =
+    currentStep === 1
+      ? vibeData
+      : currentStep === 2
+      ? communicationData
+      : chipData
+
+  const selectedId =
+    currentStep === 1
+      ? selectedVibeId
+      : currentStep === 2
+      ? selectedCommunicationId
+      : null
+
+  const handleDragStart = (event: React.DragEvent, chip: { id: number; icon: string; label: string }) => {
+    event.dataTransfer.setData("chip", JSON.stringify(chip))
+  }
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault()
+  }
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault()
+    const chip = JSON.parse(event.dataTransfer.getData("chip"))
+    if (selectedChips.length < 2 && !selectedChips.some((c) => c.id === chip.id)) {
+      setSelectedChips([...selectedChips, chip])
+    }
+  }
+
+  const handleRemoveChip = (chipId: number) => {
+    setSelectedChips(selectedChips.filter((chip) => chip.id !== chipId))
+  }
 
   return (
     <div className={styles.onboardingForm}>
       <div className={styles.formContent}>
         <div className={styles.formHeader}>
-          <ProgressBar currentStep={currentStep === 1 ? 3 : 4} totalSteps={4} />
+          <ProgressBar currentStep={currentStep} totalSteps={4} />
         </div>
         <div className={styles.formSection}>
-          <div className={styles.sectionT}>
-            <div className={styles.sectionTitle}>Личность и стиль общения</div>
-            <div className={styles.questionText}>
-              {currentStep === 1 ? "Где ты на перерыве?" : "Какая у тебя суперсила в общении?"}
-            </div>
-          </div>
+          {currentStep === 1 || currentStep === 2 ? (
+            <>
+              <div className={styles.sectionT}>
+                <div className={styles.sectionTitle}>Личность и стиль общения</div>
+                <div className={styles.questionText}>
+                  {currentStep === 1 ? "Где ты на перерыве?" : "Какая у тебя суперсила в общении?"}
+                </div>
+              </div>
 
-          <div className={styles.sliderWrapper}>
-            <div className={styles.questionSection}>
-              <div className={styles.centeredSubtitle}>Выбери 1 вариант</div>
-            </div>
-            <div className={styles.sliderContainer} ref={sliderRef}>
-              <div className={styles.sliderTrack}>
-                {currentData.map((card) => (
-                  <div
-                    key={card.id}
-                    className={`${styles.card} ${
-                      selectedId === card.id ? styles.selected : ""
-                    }`}
-                    onClick={() => handleCardSelection(card.id)}>
-                    <div className={styles.cardIcon}>{card.icon}</div>
-                    <div className={styles.checkmarkContainer}>
-                      {selectedId === card.id && (
-                        <CheckmarkIcon className={styles.checkmarkIcon} />
-                      )}
-                    </div>
+              <div className={styles.sliderWrapper}>
+                <div className={styles.questionSection}>
+                  <div className={styles.centeredSubtitle}>Выбери 1 вариант</div>
+                </div>
+                <div className={styles.sliderContainer} ref={sliderRef}>
+                  <div className={styles.sliderTrack}>
+                    {currentData.map((card) => (
+                      <div
+                        key={card.id}
+                        className={`${styles.card} ${
+                          selectedId === card.id ? styles.selected : ""
+                        }`}
+                        onClick={() => handleCardSelection(card.id)}>
+                        <div className={styles.cardIcon}>{card.icon}</div>
+                        <div className={styles.checkmarkContainer}>
+                          {selectedId === card.id && (
+                            <CheckmarkIcon className={styles.checkmarkIcon} />
+                          )}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
+              </div>
+
+              {selectedId !== null && (
+                <p className={styles.successMessage}>
+                  Учли! Ты {currentData.find((c) => c.id === selectedId)?.label}!
+                </p>
+              )}
+            </>
+          ) : (
+            <div>
+              <div className={styles.sectionT}>
+                <div className={styles.sectionTitle}>Личность и стиль общения</div>
+                <div className={styles.questionText}>Что цепляет в людях?</div>
+              </div>
+
+              <div className={styles.chipSection}>
+                <div className={styles.availableChips}>
+                                    <div className={styles.subtitle}>Перетащи сюда 2 качества</div>
+
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    className={styles.dropZone}>
+                    {selectedChips.map((chip) => (
+                      <div key={chip.id} className={styles.selectedChip}>
+                        <span>{chip.icon} </span> {chip.label}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveChip(chip.id)}
+                          className={styles.removeButton}>
+                          ×
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className={styles.chipList}>
+                    {chipData
+                      .filter((chip) => !selectedChips.includes(chip))
+                      .map((chip) => (
+                        <div
+                          key={chip.id}
+                          className={styles.chip}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, chip)}>
+                          <span>{chip.icon}</span> {chip.label}
+                        </div>
+                      ))}
+                  </div>
+                </div>
+
+                
               </div>
             </div>
-          </div>
-          
-          {selectedId !== null && (
-            <p className={styles.successMessage}>
-              Учли! Ты {currentData.find((c) => c.id === selectedId)?.label}!
-            </p>
           )}
         </div>
       </div>
       <div className={styles.nextFooter}>
         <Button onClick={handleNext}>
-          {currentStep === 1 ? "Далее" : "Завершить"}
+          {currentStep === 1 ? "Далее" : currentStep === 2 ? "Далее" : "Завершить"}
         </Button>
       </div>
     </div>
