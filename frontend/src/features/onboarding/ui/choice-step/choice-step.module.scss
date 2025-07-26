@@ -142,3 +142,13 @@
   bottom: 20px;
   z-index: 10;
 }
+
+.centeredSubtitle {
+  font-size: 16px;
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500; 
+  color: #a0a0a0;
+  margin-bottom: 16px;
+  text-align: center; // Добавлено центрирование
+  width: 100%; // Занимает всю ширину
+}

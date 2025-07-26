@@ -1,14 +1,12 @@
 import styles from "./choice-step.module.scss"
-
 import { useEffect, useRef, useState } from "react"
-
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { Button } from "@/shared/ui/button/button"
-
 import { OnboardingStepProps } from "../../lib/models/types"
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
-const cardData = [
+// Данные для первого шага (вайб)
+const vibeData = [
   {
     id: 1,
     icon: "😊",
@@ -41,76 +39,108 @@ const cardData = [
   },
 ]
 
+// Данные для второго шага (суперсила в общении)
+const communicationData = [
+  {
+    id: 1,
+    icon: "🤝",
+    label: "Нахожу общий язык со всеми",
+  },
+  {
+    id: 2,
+    icon: "💬",
+    label: "Отличный слушатель",
+  },
+  {
+    id: 3,
+    icon: "🎭",
+    label: "Мастер импровизации",
+  },
+  {
+    id: 4,
+    icon: "🤩",
+    label: "Заряжаю энергией",
+  },
+  {
+    id: 5,
+    icon: "🧠",
+    label: "Глубокие темы",
+  },
+  {
+    id: 6,
+    icon: "😂",
+    label: "Разряжаю обстановку",
+  },
+]
+
 export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null)
-  const [startIndex, setStartIndex] = useState(0) // Для управления видимыми карточками
-  const sliderRef = useRef<HTMLDivElement>(null) // Ссылка на контейнер слайдера
+  const [currentStep, setCurrentStep] = useState<1 | 2>(1)
+  const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null)
+  const [selectedCommunicationId, setSelectedCommunicationId] = useState<number | null>(null)
+  const sliderRef = useRef<HTMLDivElement>(null)
+
+  // Сбрасываем позицию слайдера при смене шага
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo(0, 0)
+    }
+  }, [currentStep])
 
   const handleCardSelection = (id: number) => {
-    setSelectedCardId(id)
+    if (currentStep === 1) {
+      setSelectedVibeId(id)
+    } else {
+      setSelectedCommunicationId(id)
+    }
   }
 
-  // Автоматическая прокрутка к выбранной карточке (если она вне видимости)
-  useEffect(() => {
-    if (selectedCardId !== null && sliderRef.current) {
-      const selectedIndex = cardData.findIndex(
-        (card) => card.id === selectedCardId
-      )
-      if (selectedIndex >= 0) {
-        const visibleStart = startIndex
-        const visibleEnd = startIndex + 2 // Предполагаем 3 видимых карточки
-
-        if (selectedIndex < visibleStart) {
-          setStartIndex(selectedIndex)
-        } else if (selectedIndex > visibleEnd) {
-          setStartIndex(Math.max(0, selectedIndex - 2)) // Центрируем выбранную карточку
-        }
-      }
-    }
-  }, [selectedCardId, startIndex])
-
   const validateForm = () => {
-    return selectedCardId !== null
+    if (currentStep === 1) return selectedVibeId !== null
+    return selectedCommunicationId !== null
   }
 
   const handleNext = () => {
-    if (validateForm()) {
-      // Здесь можно сохранить выбранный вайб в localStorage или состоянии
-      // Например: localStorage.setItem('onboardingVibe', selectedCardId.toString());
+    if (!validateForm()) return
+    
+    if (currentStep === 1) {
+      setCurrentStep(2)
+    } else {
       onNext()
     }
   }
+
+  const currentData = currentStep === 1 ? vibeData : communicationData
+  const selectedId = currentStep === 1 ? selectedVibeId : selectedCommunicationId
 
   return (
     <div className={styles.onboardingForm}>
       <div className={styles.formContent}>
         <div className={styles.formHeader}>
-          <ProgressBar currentStep={3} totalSteps={4} />
+          <ProgressBar currentStep={currentStep === 1 ? 3 : 4} totalSteps={4} />
         </div>
         <div className={styles.formSection}>
           <div className={styles.sectionT}>
             <div className={styles.sectionTitle}>Личность и стиль общения</div>
-            <div className={styles.questionText}>Где ты на перерыве?</div>
+            <div className={styles.questionText}>
+              {currentStep === 1 ? "Где ты на перерыве?" : "Какая у тебя суперсила в общении?"}
+            </div>
           </div>
 
-          {/* Обернем слайдер в контейнер с overflow: hidden */}
           <div className={styles.sliderWrapper}>
             <div className={styles.questionSection}>
-              <div className={styles.sectionSubtitle}>
-                Выбери 1 вариант
-              </div>
+              <div className={styles.centeredSubtitle}>Выбери 1 вариант</div>
             </div>
             <div className={styles.sliderContainer} ref={sliderRef}>
               <div className={styles.sliderTrack}>
-                {cardData.map((card) => (
+                {currentData.map((card) => (
                   <div
                     key={card.id}
                     className={`${styles.card} ${
-                      selectedCardId === card.id ? styles.selected : ""
+                      selectedId === card.id ? styles.selected : ""
                     }`}
                     onClick={() => handleCardSelection(card.id)}>
                     <div className={styles.cardIcon}>{card.icon}</div>
-                    {selectedCardId === card.id && (
+                    {selectedId === card.id && (
                       <CheckmarkIcon className={styles.checkmarkIcon} />
                     )}
                   </div>
@@ -118,15 +148,18 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
               </div>
             </div>
           </div>
-          {selectedCardId !== null && (
+          
+          {selectedId !== null && (
             <p className={styles.successMessage}>
-              Учли! Ты {cardData.find((c) => c.id === selectedCardId)?.label}!
+              Учли! Ты {currentData.find((c) => c.id === selectedId)?.label}!
             </p>
           )}
         </div>
       </div>
       <div className={styles.nextFooter}>
-        <Button onClick={handleNext}>Далее</Button>
+        <Button onClick={handleNext}>
+          {currentStep === 1 ? "Далее" : "Завершить"}
+        </Button>
       </div>
     </div>
   )
