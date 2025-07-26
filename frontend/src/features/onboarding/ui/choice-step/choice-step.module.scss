@@ -42,7 +42,7 @@
 }
 
 .sectionT {
-  margin-bottom: 120px;
+  margin-bottom: 40px;
 }
 
 .questionSection {
@@ -172,21 +172,53 @@
 
 /* Стили для третьего шага */
 .chipSection {
+  margin-top: 40px;
+}
+
+.availableChips {
+  width: 100%;
+}
+
+.dropZone {
+  background-color: rgba(25, 25, 25, 1);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 26px;
+  min-height: 100px;
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
-.availableChips,
-.selectedChips {
-  flex: 1;
-}
-
-.subtitle {
-  font-size: 16px;
+.dropZonePlaceholder {
+  color: #a0a0a0;
   font-family: "SF Pro Text", sans-serif !important;
   font-weight: 500;
-  color: #a0a0a0;
-  margin-bottom: 16px;
+  font-size: 16px;
+  text-align: center;
+  pointer-events: none;
+}
+
+.selectedChip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(37, 37, 37, 1);
+  border-radius: 20px;
+  font-family: "SF Pro Text", sans-serif !important;
+  font-weight: 500;
+  font-size: 15px;
+  color: white;
+  padding: 8px 12px;
+  width: 100%;
+  cursor: grab;
+  
+  &:active {
+    cursor: grabbing;
+  }
 }
 
 .chipList {
@@ -199,53 +231,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(44, 44, 44, 1);
-  border-radius: 12px;
+  background-color: rgba(37, 37, 37, 1);
+  border-radius: 20px;
   color: #ffffff;
   font-family: "SF Pro Text", sans-serif !important;
   font-weight: 500;
   font-size: 15px;
   gap: 6px;
   padding: 8px 12px;
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
   transition: background-color 0.3s ease;
 
-  &:hover {
-    background-color: rgba(60, 60, 67, 0.6);
+  &:active {
+    cursor: grabbing;
   }
-}
-
-.dropZone {
-  background-color: rgba(44, 44, 44, 0.5);
-  border: 2px dashed rgba(255, 255, 255, 0.3);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 26px;
-  height: 184px;
-  min-height: 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.selectedChip {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: rgba(44, 44, 44, 1);
-  border-radius: 12px;
-  font-family: "SF Pro Text", sans-serif !important;
-  font-weight: 500;
-  font-size: 15px;
-  color: white;
-  padding: 8px 12px;
-}
-
-.removeButton {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 18px;
 }

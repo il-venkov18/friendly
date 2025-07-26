@@ -1,11 +1,10 @@
-import styles from "./choice-step.module.scss"
-import { useEffect, useRef, useState } from "react"
-import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
-import { Button } from "@/shared/ui/button/button"
-import { OnboardingStepProps } from "../../lib/models/types"
-import { ProgressBar } from "../progress-bar/ProgressBar"
+import styles from "./choice-step.module.scss";
+import { useEffect, useRef, useState } from "react";
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon";
+import { Button } from "@/shared/ui/button/button";
+import { OnboardingStepProps } from "../../lib/models/types";
+import { ProgressBar } from "../progress-bar/ProgressBar";
 
-// Данные для первого шага (вайб)
 const vibeData = [
   {
     id: 1,
@@ -37,9 +36,8 @@ const vibeData = [
     icon: "💪",
     label: "Целеустремленный",
   },
-]
+];
 
-// Данные для второго шага (суперсила в общении)
 const communicationData = [
   {
     id: 1,
@@ -71,9 +69,8 @@ const communicationData = [
     icon: "😂",
     label: "Разряжаю обстановку",
   },
-]
+];
 
-// Данные для третьего шага (чипы)
 const chipData = [
   { id: 1, icon: "🧠", label: "Умный" },
   { id: 2, icon: "😄", label: "Веселый" },
@@ -87,84 +84,69 @@ const chipData = [
   { id: 10, icon: "📚", label: "Эрудированный" },
   { id: 11, icon: "🔍", label: "Загадочный" },
   { id: 12, icon: "🔥", label: "Страстный" },
-]
+];
 
 export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
-  const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null)
-  const [selectedCommunicationId, setSelectedCommunicationId] = useState<number | null>(null)
-  const sliderRef = useRef<HTMLDivElement>(null)
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null);
+  const [selectedCommunicationId, setSelectedCommunicationId] = useState<number | null>(null);
+  const [selectedChips, setSelectedChips] = useState<{ id: number; icon: string; label: string }[]>([]);
+  const sliderRef = useRef<HTMLDivElement>(null);
 
-  // Для третьего шага: выбранные чипы
-  const [selectedChips, setSelectedChips] = useState<{ id: number; icon: string; label: string }[]>([])
-
-  // Сбрасываем позицию слайдера при смене шага
   useEffect(() => {
     if (sliderRef.current) {
-      sliderRef.current.scrollTo(0, 0)
+      sliderRef.current.scrollTo(0, 0);
     }
-  }, [currentStep])
+  }, [currentStep]);
 
   const handleCardSelection = (id: number) => {
     if (currentStep === 1) {
-      setSelectedVibeId(id)
-    } else {
-      setSelectedCommunicationId(id)
-    }
-  }
-
-  const validateForm = () => {
-    if (currentStep === 1) return selectedVibeId !== null
-    if (currentStep === 2) return selectedCommunicationId !== null
-    if (currentStep === 3) return selectedChips.length === 2
-    return false
-  }
-
-  const handleNext = () => {
-    if (!validateForm()) return
-
-    if (currentStep === 1) {
-      setCurrentStep(2)
+      setSelectedVibeId(id);
     } else if (currentStep === 2) {
-      setCurrentStep(3)
-    } else {
-      onNext()
+      setSelectedCommunicationId(id);
     }
-  }
-
-  const currentData =
-    currentStep === 1
-      ? vibeData
-      : currentStep === 2
-      ? communicationData
-      : chipData
-
-  const selectedId =
-    currentStep === 1
-      ? selectedVibeId
-      : currentStep === 2
-      ? selectedCommunicationId
-      : null
+  };
 
   const handleDragStart = (event: React.DragEvent, chip: { id: number; icon: string; label: string }) => {
-    event.dataTransfer.setData("chip", JSON.stringify(chip))
-  }
+    event.dataTransfer.setData("chip", JSON.stringify(chip));
+  };
 
   const handleDragOver = (event: React.DragEvent) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   const handleDrop = (event: React.DragEvent) => {
-    event.preventDefault()
-    const chip = JSON.parse(event.dataTransfer.getData("chip"))
-    if (selectedChips.length < 2 && !selectedChips.some((c) => c.id === chip.id)) {
-      setSelectedChips([...selectedChips, chip])
+    event.preventDefault();
+    const chip = JSON.parse(event.dataTransfer.getData("chip"));
+    
+    if (selectedChips.some(c => c.id === chip.id)) {
+      setSelectedChips(selectedChips.filter(c => c.id !== chip.id));
+    } else if (selectedChips.length < 2) {
+      setSelectedChips([...selectedChips, chip]);
     }
-  }
+  };
 
-  const handleRemoveChip = (chipId: number) => {
-    setSelectedChips(selectedChips.filter((chip) => chip.id !== chipId))
-  }
+  const validateForm = () => {
+    if (currentStep === 1) return selectedVibeId !== null;
+    if (currentStep === 2) return selectedCommunicationId !== null;
+    if (currentStep === 3) return selectedChips.length === 2;
+    return false;
+  };
+
+  const handleNext = () => {
+    if (!validateForm()) return;
+
+    if (currentStep === 1) {
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      setCurrentStep(3);
+    } else {
+      onNext();
+    }
+  };
+
+  const currentData = currentStep === 1 ? vibeData : currentStep === 2 ? communicationData : chipData;
+  const selectedId = currentStep === 1 ? selectedVibeId : currentStep === 2 ? selectedCommunicationId : null;
 
   return (
     <div className={styles.onboardingForm}>
@@ -173,7 +155,7 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
           <ProgressBar currentStep={currentStep} totalSteps={4} />
         </div>
         <div className={styles.formSection}>
-          {currentStep === 1 || currentStep === 2 ? (
+          {currentStep !== 3 ? (
             <>
               <div className={styles.sectionT}>
                 <div className={styles.sectionTitle}>Личность и стиль общения</div>
@@ -191,10 +173,9 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
                     {currentData.map((card) => (
                       <div
                         key={card.id}
-                        className={`${styles.card} ${
-                          selectedId === card.id ? styles.selected : ""
-                        }`}
-                        onClick={() => handleCardSelection(card.id)}>
+                        className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
+                        onClick={() => handleCardSelection(card.id)}
+                      >
                         <div className={styles.cardIcon}>{card.icon}</div>
                         <div className={styles.checkmarkContainer}>
                           {selectedId === card.id && (
@@ -222,40 +203,43 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
 
               <div className={styles.chipSection}>
                 <div className={styles.availableChips}>
-                                    <div className={styles.subtitle}>Перетащи сюда 2 качества</div>
-
                   <div
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
-                    className={styles.dropZone}>
-                    {selectedChips.map((chip) => (
-                      <div key={chip.id} className={styles.selectedChip}>
-                        <span>{chip.icon} </span> {chip.label}
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveChip(chip.id)}
-                          className={styles.removeButton}>
-                          ×
-                        </button>
+                    className={styles.dropZone}
+                  >
+                    {selectedChips.length === 0 ? (
+                      <div className={styles.dropZonePlaceholder}>
+                        Перетащи сюда 2 качества
                       </div>
-                    ))}
+                    ) : (
+                      selectedChips.map((chip) => (
+                        <div 
+                          key={chip.id} 
+                          className={styles.selectedChip}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, chip)}
+                        >
+                          <span>{chip.icon}</span> {chip.label}
+                        </div>
+                      ))
+                    )}
                   </div>
                   <div className={styles.chipList}>
                     {chipData
-                      .filter((chip) => !selectedChips.includes(chip))
+                      .filter(chip => !selectedChips.some(c => c.id === chip.id))
                       .map((chip) => (
                         <div
                           key={chip.id}
                           className={styles.chip}
                           draggable
-                          onDragStart={(e) => handleDragStart(e, chip)}>
+                          onDragStart={(e) => handleDragStart(e, chip)}
+                        >
                           <span>{chip.icon}</span> {chip.label}
                         </div>
                       ))}
                   </div>
                 </div>
-
-                
               </div>
             </div>
           )}
@@ -263,9 +247,9 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
       </div>
       <div className={styles.nextFooter}>
         <Button onClick={handleNext}>
-          {currentStep === 1 ? "Далее" : currentStep === 2 ? "Далее" : "Завершить"}
+          {currentStep === 3 ? "Завершить" : "Далее"}
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
