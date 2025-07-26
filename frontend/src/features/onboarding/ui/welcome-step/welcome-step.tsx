@@ -1,6 +1,6 @@
 import styles from "./welcome-step.module.scss"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
@@ -227,6 +227,12 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
       onNext()
     }
   }
+
+  useEffect(() => {
+    if (nameInput.trim()) {
+      setNameError("")
+    }
+  }, [nameInput])
 
   return (
     <>
