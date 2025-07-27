@@ -6,7 +6,7 @@
 
   &.error {
     .customSelectInput {
-      border: 1px solid #FF3B30;
+      border: 1px solid #ff3b30;
     }
   }
 }
@@ -29,7 +29,7 @@
   text-align: left;
 
   &.inputError {
-    border: 1px solid #FF3B30 !important;
+    border: 1px solid #ff3b30 !important;
   }
 }
 
@@ -43,7 +43,7 @@
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  fill: #78797E;
+  fill: #78797e;
 
   &[data-arrow-icon="arrowDown"] {
     width: 14px;
@@ -88,7 +88,7 @@
 
 .checkmarkIcon {
   flex-shrink: 0;
-  color: #007AFF;
-  width: 20px;
-  height: 20px;
+  fill: #99ecff;
+  width: 16px;
+  height: 16px;
 }

@@ -5,7 +5,7 @@
   padding: 30px 20px;
   background-color: rgb(28, 28, 28);
   color: white;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* Первый скелетон (200x60) */
@@ -20,7 +20,7 @@
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -48,7 +48,7 @@
   overflow: hidden;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -84,9 +84,9 @@
   }
 }
 
-.contant{
-      margin: 0 4.2px 14px 4.2px; 
-      height: 110px;
+.contant {
+  margin: 0 4.2px 14px 4.2px;
+  height: 110px;
 }
 .text {
   font-size: 14px;
@@ -97,6 +97,7 @@
 }
 
 .agreement {
+  margin-top: 12px;
   font-size: 12px;
   line-height: 15px;
   color: rgba(120, 120, 120, 1);
@@ -119,10 +120,10 @@
 }
 
 .privacyLink {
-  color: #007AFF; // Синий цвет, как в iOS
+  color: #99ecff; // Синий цвет, как в iOS
   text-decoration: none;
   cursor: pointer;
-  
+
   &:hover {
     text-decoration: underline;
   }

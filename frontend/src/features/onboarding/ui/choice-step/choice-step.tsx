@@ -1,9 +1,11 @@
-import styles from "./choice-step.module.scss";
-import { useEffect, useRef, useState } from "react";
+import styles from "./choice-step.module.scss"
+
+import { useEffect, useRef, useState } from "react"
+
+import { ProgressBar } from "../progress-bar/ProgressBar"
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon";
 import { Button } from "@/shared/ui/button/button";
 import { OnboardingStepProps } from "../../lib/models/types";
-import { ProgressBar } from "../progress-bar/ProgressBar";
 
 const vibeData = [
   {
@@ -152,7 +154,7 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
     <div className={styles.onboardingForm}>
       <div className={styles.formContent}>
         <div className={styles.formHeader}>
-          <ProgressBar currentStep={currentStep} totalSteps={4} />
+          <ProgressBar currentStep={3} totalSteps={4} />
         </div>
         <div className={styles.formSection}>
           {currentStep !== 3 ? (
