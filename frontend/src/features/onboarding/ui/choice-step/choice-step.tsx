@@ -1,9 +1,11 @@
-import styles from "./choice-step.module.scss";
-import { useEffect, useRef, useState } from "react";
+import styles from "./choice-step.module.scss"
+
+import { useEffect, useRef, useState } from "react"
+
+import { ProgressBar } from "../progress-bar/ProgressBar"
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon";
 import { Button } from "@/shared/ui/button/button";
 import { OnboardingStepProps } from "../../lib/models/types";
-import { ProgressBar } from "../progress-bar/ProgressBar";
 
 const vibeData = [
   {

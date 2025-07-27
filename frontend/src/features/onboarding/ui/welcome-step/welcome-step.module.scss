@@ -76,6 +76,7 @@
 
 // Стили для datalist с подсказками городов
 datalist#city-suggestions {
+  content: '';
   position: absolute;
   background-color: rgba(33, 33, 33, 1);
   border-radius: 12px;
@@ -151,7 +152,7 @@ datalist#city-suggestions {
 }
 
 .dateValue {
-  color: #007aff; // Blue color as per Figma
+  color: #99ecff; // Blue color as per Figma
   font-size: 16px;
   margin-left: auto; // Отталкивает влево
   margin-right: 18px; // Отступ 8px от иконки
@@ -345,10 +346,16 @@ datalist#city-suggestions {
 }
 
 .nextFooter {
-  margin-top: 20px; // Прижимаем к низу
+  backdrop-filter: blur(44px);
+  background: #212121;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+  padding: 24px 20px 0;
+  width: 100%;
+  margin-top: 20px;
   position: sticky;
-  bottom: 20px;
-  z-index: 10;
+  bottom: 0px;
+  padding-bottom: 20px;
+  z-index: 110;
 
   .formButton {
     width: 100%;
@@ -367,7 +374,7 @@ datalist#city-suggestions {
     padding: 8px 16px;
 
     &:hover {
-      background-color: #007aff;
+      background-color: #99ecff;
     }
   }
 }
@@ -468,7 +475,7 @@ datalist#city-suggestions {
 // Выбранный день
 .react-datepicker__day--selected,
 .react-datepicker__day--keyboard-selected {
-  background-color: #007aff; // Синий цвет для выбранного дня
+  background-color: #99ecff; // Синий цвет для выбранного дня
   color: white;
   font-weight: bold;
 }
@@ -492,7 +499,7 @@ datalist#city-suggestions {
     background-color: rgba(60, 60, 67, 0.6);
   }
   &--selected {
-    background-color: #007aff;
+    background-color: #99ecff;
   }
 }
 

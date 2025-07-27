@@ -38,10 +38,17 @@
 }
 
 .formHeader {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  &Back {
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translate(0%, -50%);
+  }
 }
 
 .formSection {
@@ -91,7 +98,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   width: 140px;
   height: 178px;
-  
+
   .imageOverlay {
     position: absolute;
     top: 0;
@@ -154,7 +161,17 @@
 }
 
 .nextFooter {
-  margin-top: 24px;
+  // margin-top: 24px;
+  backdrop-filter: blur(44px);
+  background: #212121;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+  padding: 24px 20px 0;
+  width: 100%;
+  margin-top: 20px;
+  position: sticky;
+  bottom: 0px;
+  padding-bottom: 20px;
+  z-index: 110;
 
   .formButton {
     width: 100%;
@@ -186,11 +203,10 @@
   transform: scale(1.2);
 }
 
-.selectedChips {  
+.selectedChips {
   font-size: 16px;
   font-family: "SF Pro Text", sans-serif;
   color: rgba(153, 236, 255, 1);
-
 }
 
 .interestCard.disabled {
