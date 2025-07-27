@@ -1,6 +1,6 @@
 import styles from "./welcome-step.module.scss"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
@@ -134,7 +134,7 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     ]
 
     setCourseOptions(newOptions)
-    setCourseInput("");
+    setCourseInput("")
   }
 
   const handleDegreeChange = (value: string) => {
@@ -228,218 +228,226 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
     }
   }
 
+  useEffect(() => {
+    if (nameInput.trim()) {
+      setNameError("")
+    }
+  }, [nameInput])
+
   return (
-    <div className={styles.onboardingForm}>
-      <div className={styles.formContent}>
-        <div className={styles.formHeader}>
-          <ProgressBar currentStep={currentOnboardingStep} totalSteps={4} />
-        </div>
+    <>
+      <div className={styles.onboardingForm}>
+        <div className={styles.formContent}>
+          <div className={styles.formHeader}>
+            <ProgressBar currentStep={currentOnboardingStep} totalSteps={4} />
+          </div>
 
-        <div className={styles.formSection}>
-          <div className={styles.sectionTitle}>профиль</div>
+          <div className={styles.formSection}>
+            <div className={styles.sectionTitle}>профиль</div>
 
-          <div className={styles.sectionContent}>
-            <div className={styles.formField}>
-              <input
-                type="text"
-                className={`${styles.formInput} ${nameError ? styles.inputError : ""}`}
-                placeholder="Имя"
-                value={nameInput}
-                onChange={(e) => setNameInput(e.target.value)}
-              />
-              {nameError && (
-                <p className={`${styles.formHint} ${styles.errorHint}`}>
-                  {nameError}
-                </p>
-              )}
-            </div>
-
-            <div className={styles.formField}>
-              <CustomSelect
-                options={genderOptions}
-                value={selectedGender}
-                onChange={handleGenderSelect}
-                placeholder="Пол"
-                arrowIcon="arrowDown"
-                hasError={!!genderError}
-              />
-              {genderError && (
-                <p className={`${styles.formHint} ${styles.errorHint}`}>
-                  {genderError}
-                </p>
-              )}
-            </div>
-
-            <div className={styles.formField}>
-              <DatePicker
-                selected={dateOfBirth}
-                onChange={handleDateChange}
-                dateFormat="dd.MM.yyyy"
-                showPopperArrow={false}
-                customInput={
-                  <div
-                    className={`${styles.formInput} ${styles.dateInputWrapper}`}
-                    onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
-                    <span className={styles.dateLabel}>Дата рождения</span>
-                    <span className={styles.dateValue}>
-                      {formatDate(dateOfBirth)}
-                    </span>
-                    <ArrowRightIcon className={styles.dateArrowIcon} />
-                  </div>
-                }
-                onSelect={() => setIsDatePickerOpen(false)}
-                onCalendarClose={() => setIsDatePickerOpen(false)}
-                onCalendarOpen={() => setIsDatePickerOpen(true)}
-              />
-            </div>
-
-            <div className={styles.formField}>
-              <input
-                type="text"
-                className={`${styles.formInput} ${cityError ? styles.inputError : ""}`}
-                placeholder="Город"
-                value={cityInput}
-                onChange={handleCityChange}
-                list="city-suggestions"
-              />
-              <datalist id="city-suggestions">
-                {availableCities.map((city) => (
-                  <option key={city} value={city} />
-                ))}
-              </datalist>
-              {cityError && (
-                <p className={`${styles.formHint} ${styles.errorHint}`}>
-                  {cityError}
-                </p>
-              )}
-            </div>
-
-            <div className={styles.formField}>
-              <input
-                type="text"
-                className={styles.formInput}
-                placeholder="ВУЗ"
-                value={displayedUniversity || universityInput}
-                onChange={handleUniversityChange}
-                list="university-suggestions"
-              />
-              <datalist id="university-suggestions">
-                {availableUniversities.map((uni) => (
-                  <option key={uni} value={uni} />
-                ))}
-              </datalist>
-            </div>
-
-            <input
-              type="text"
-              className={styles.formInput}
-              placeholder="Факультет"
-            />
-
-            <CustomSelect
-              options={degreeOptions}
-              value={degreeInput}
-              onChange={handleDegreeChange}
-              placeholder="Степень"
-              arrowIcon="sortUpDown"
-            />
-
-            <CustomSelect
-              options={courseOptions}
-              value={courseInput}
-              onChange={setCourseInput}
-              placeholder="Курс"
-              arrowIcon="sortUpDown"
-            />
-
-            <div className={styles.formField}>
-              <div
-                className={`${styles.formInput} ${styles.goalsInputWrapper}`}
-                onClick={() => setIsGoalsDropdownOpen(!isGoalsDropdownOpen)}>
-                {selectedDatingGoals.length > 0 ? (
-                  selectedDatingGoals.map((goal) => (
-                    <div key={goal} className={styles.selectedGoalChip}>
-                      <span>{goal}</span>
-                      <CloseIcon
-                        className={styles.chipCloseIcon}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleRemoveGoal(goal)
-                        }}
-                      />
-                    </div>
-                  ))
-                ) : (
-                  <span className={styles.goalsPlaceholder}>Цели</span>
+            <div className={styles.sectionContent}>
+              <div className={styles.formField}>
+                <input
+                  type="text"
+                  className={`${styles.formInput} ${nameError ? styles.inputError : ""}`}
+                  placeholder="Имя"
+                  value={nameInput}
+                  onChange={(e) => setNameInput(e.target.value)}
+                />
+                {nameError && (
+                  <p className={`${styles.formHint} ${styles.errorHint}`}>
+                    {nameError}
+                  </p>
                 )}
-                <SortUpDownIcon
-                  className={styles.goalsDropdownArrowIcon}
-                  fill="#78797E"
+              </div>
+
+              <div className={styles.formField}>
+                <CustomSelect
+                  options={genderOptions}
+                  value={selectedGender}
+                  onChange={handleGenderSelect}
+                  placeholder="Пол"
+                  arrowIcon="arrowDown"
+                  hasError={!!genderError}
+                />
+                {genderError && (
+                  <p className={`${styles.formHint} ${styles.errorHint}`}>
+                    {genderError}
+                  </p>
+                )}
+              </div>
+
+              <div className={styles.formField}>
+                <DatePicker
+                  selected={dateOfBirth}
+                  onChange={handleDateChange}
+                  dateFormat="dd.MM.yyyy"
+                  showPopperArrow={false}
+                  customInput={
+                    <div
+                      className={`${styles.formInput} ${styles.dateInputWrapper}`}
+                      onClick={() => setIsDatePickerOpen(!isDatePickerOpen)}>
+                      <span className={styles.dateLabel}>Дата рождения</span>
+                      <span className={styles.dateValue}>
+                        {formatDate(dateOfBirth)}
+                      </span>
+                      <ArrowRightIcon className={styles.dateArrowIcon} />
+                    </div>
+                  }
+                  onSelect={() => setIsDatePickerOpen(false)}
+                  onCalendarClose={() => setIsDatePickerOpen(false)}
+                  onCalendarOpen={() => setIsDatePickerOpen(true)}
                 />
               </div>
 
-              {isGoalsDropdownOpen && (
-                <div className={styles.goalsDropdown}>
-                  {allDatingGoals.map((goal) => (
-                    <div
-                      key={goal}
-                      className={`${styles.goalsDropdownItem} ${
-                        selectedDatingGoals.includes(goal)
-                          ? styles.selected
-                          : ""
-                      }`}
-                      onClick={() => handleToggleGoalInDropdown(goal)}>
-                      <span>{goal}</span>
-                      {selectedDatingGoals.includes(goal) && (
-                        <CheckmarkIcon
-                          className={styles.dropdownCheckmarkIcon}
-                        />
-                      )}
-                    </div>
+              <div className={styles.formField}>
+                <input
+                  type="text"
+                  className={`${styles.formInput} ${cityError ? styles.inputError : ""}`}
+                  placeholder="Город"
+                  value={cityInput}
+                  onChange={handleCityChange}
+                  list="city-suggestions"
+                />
+                <datalist id="city-suggestions">
+                  {availableCities.map((city) => (
+                    <option key={city} value={city} />
                   ))}
-                </div>
-              )}
-
-              {selectedDatingGoals.length === 0 && (
-                <p className={`${styles.formHint} ${styles.errorHint}`}>
-                  Выберите минимум одно значение
-                </p>
-              )}
-            </div>
-
-            <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
-            <div className={styles.formField}>
-              <div className={styles.formCheckboxGroup}>
-                <label className={styles.formCheckbox}>
-                  <input
-                    type="checkbox"
-                    value="male"
-                    checked={genderPreference.includes("male")}
-                    onChange={() => handleGenderPreferenceChange("male")}
-                  />
-                  <span>Парни</span>
-                  {genderPreference.includes("male") && (
-                    <CheckmarkIcon className={styles.checkmarkIcon} />
-                  )}
-                </label>
-                <label className={styles.formCheckbox}>
-                  <input
-                    type="checkbox"
-                    value="female"
-                    checked={genderPreference.includes("female")}
-                    onChange={() => handleGenderPreferenceChange("female")}
-                  />
-                  <span>Девушки</span>
-                  {genderPreference.includes("female") && (
-                    <CheckmarkIcon className={styles.checkmarkIcon} />
-                  )}
-                </label>
+                </datalist>
+                {cityError && (
+                  <p className={`${styles.formHint} ${styles.errorHint}`}>
+                    {cityError}
+                  </p>
+                )}
               </div>
-              {genderPreferenceError && (
-                <p className={`${styles.formHint} ${styles.errorHint}`}>
-                  {genderPreferenceError}
-                </p>
-              )}
+
+              <div className={styles.formField}>
+                <input
+                  type="text"
+                  className={styles.formInput}
+                  placeholder="ВУЗ"
+                  value={displayedUniversity || universityInput}
+                  onChange={handleUniversityChange}
+                  list="university-suggestions"
+                />
+                <datalist id="university-suggestions">
+                  {availableUniversities.map((uni) => (
+                    <option key={uni} value={uni} />
+                  ))}
+                </datalist>
+              </div>
+
+              <input
+                type="text"
+                className={styles.formInput}
+                placeholder="Факультет"
+              />
+
+              <CustomSelect
+                options={degreeOptions}
+                value={degreeInput}
+                onChange={handleDegreeChange}
+                placeholder="Степень"
+                arrowIcon="sortUpDown"
+              />
+
+              <CustomSelect
+                options={courseOptions}
+                value={courseInput}
+                onChange={setCourseInput}
+                placeholder="Курс"
+                arrowIcon="sortUpDown"
+              />
+
+              <div className={styles.formField}>
+                <div
+                  className={`${styles.formInput} ${styles.goalsInputWrapper}`}
+                  onClick={() => setIsGoalsDropdownOpen(!isGoalsDropdownOpen)}>
+                  {selectedDatingGoals.length > 0 ? (
+                    selectedDatingGoals.map((goal) => (
+                      <div key={goal} className={styles.selectedGoalChip}>
+                        <span>{goal}</span>
+                        <CloseIcon
+                          className={styles.chipCloseIcon}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleRemoveGoal(goal)
+                          }}
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <span className={styles.goalsPlaceholder}>Цели</span>
+                  )}
+                  <SortUpDownIcon
+                    className={styles.goalsDropdownArrowIcon}
+                    fill="#78797E"
+                  />
+                </div>
+
+                {isGoalsDropdownOpen && (
+                  <div className={styles.goalsDropdown}>
+                    {allDatingGoals.map((goal) => (
+                      <div
+                        key={goal}
+                        className={`${styles.goalsDropdownItem} ${
+                          selectedDatingGoals.includes(goal)
+                            ? styles.selected
+                            : ""
+                        }`}
+                        onClick={() => handleToggleGoalInDropdown(goal)}>
+                        <span>{goal}</span>
+                        {selectedDatingGoals.includes(goal) && (
+                          <CheckmarkIcon
+                            className={styles.dropdownCheckmarkIcon}
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {selectedDatingGoals.length === 0 && (
+                  <p className={`${styles.formHint} ${styles.errorHint}`}>
+                    Выберите минимум одно значение
+                  </p>
+                )}
+              </div>
+
+              <h3 className={styles.formSubtitle}>КОГО ИЩУ</h3>
+              <div className={styles.formField}>
+                <div className={styles.formCheckboxGroup}>
+                  <label className={styles.formCheckbox}>
+                    <input
+                      type="checkbox"
+                      value="male"
+                      checked={genderPreference.includes("male")}
+                      onChange={() => handleGenderPreferenceChange("male")}
+                    />
+                    <span>Парни</span>
+                    {genderPreference.includes("male") && (
+                      <CheckmarkIcon className={styles.checkmarkIcon} />
+                    )}
+                  </label>
+                  <label className={styles.formCheckbox}>
+                    <input
+                      type="checkbox"
+                      value="female"
+                      checked={genderPreference.includes("female")}
+                      onChange={() => handleGenderPreferenceChange("female")}
+                    />
+                    <span>Девушки</span>
+                    {genderPreference.includes("female") && (
+                      <CheckmarkIcon className={styles.checkmarkIcon} />
+                    )}
+                  </label>
+                </div>
+                {genderPreferenceError && (
+                  <p className={`${styles.formHint} ${styles.errorHint}`}>
+                    {genderPreferenceError}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -447,6 +455,6 @@ export const WelcomeStep = ({ onNext }: OnboardingStepProps) => {
       <div className={styles.nextFooter}>
         <Button onClick={handleNext}>Далее</Button>
       </div>
-    </div>
+    </>
   )
 }

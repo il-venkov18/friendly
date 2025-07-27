@@ -9,10 +9,17 @@
 }
 
 .formHeader {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  &Back {
+    position: absolute;
+    left: -7px;
+    top: 50%;
+    transform: translate(0%, -50%);
+  }
 }
 
 .formSection {
@@ -154,9 +161,15 @@
 }
 
 .nextFooter {
+  backdrop-filter: blur(44px);
+  background: #212121;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.05);
+  padding: 24px 20px 0;
+  width: 100%;
   margin-top: 20px;
   position: sticky;
-  bottom: 20px;
+  bottom: 0px;
+  padding-bottom: 20px;
   z-index: 10;
 }
 

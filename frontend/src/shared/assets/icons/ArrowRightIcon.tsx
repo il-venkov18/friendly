@@ -13,7 +13,7 @@ export const ArrowRightIcon: React.FC<RightArrowIconProps> = (props) => (
   >
     <path
       d="M1 1L6 6L1 11"
-      stroke="#007AFF" // По умолчанию цвет синий, как в вашем SVG
+      stroke="#99ecff" // По умолчанию цвет синий, как в вашем SVG
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
