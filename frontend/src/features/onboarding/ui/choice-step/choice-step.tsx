@@ -2,14 +2,12 @@ import styles from "./choice-step.module.scss"
 
 import { useEffect, useRef, useState } from "react"
 
-import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
-import { Button } from "@/shared/ui/button/button"
-
-import { OnboardingStepProps } from "../../lib/models/types"
-import arrowLeftSvg from "../icons/arrow-left.svg"
 import { ProgressBar } from "../progress-bar/ProgressBar"
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon";
+import { Button } from "@/shared/ui/button/button";
+import { OnboardingStepProps } from "../../lib/models/types";
 
-const cardData = [
+const vibeData = [
   {
     id: 1,
     icon: "😊",
@@ -40,100 +38,222 @@ const cardData = [
     icon: "💪",
     label: "Целеустремленный",
   },
-]
+];
 
-export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null)
-  const [startIndex, setStartIndex] = useState(0) // Для управления видимыми карточками
-  const sliderRef = useRef<HTMLDivElement>(null) // Ссылка на контейнер слайдера
+const communicationData = [
+  {
+    id: 1,
+    icon: "🤝",
+    label: "Нахожу общий язык со всеми",
+  },
+  {
+    id: 2,
+    icon: "💬",
+    label: "Отличный слушатель",
+  },
+  {
+    id: 3,
+    icon: "🎭",
+    label: "Мастер импровизации",
+  },
+  {
+    id: 4,
+    icon: "🤩",
+    label: "Заряжаю энергией",
+  },
+  {
+    id: 5,
+    icon: "🧠",
+    label: "Глубокие темы",
+  },
+  {
+    id: 6,
+    icon: "😂",
+    label: "Разряжаю обстановку",
+  },
+];
+
+const chipData = [
+  { id: 1, icon: "🧠", label: "Умный" },
+  { id: 2, icon: "😄", label: "Веселый" },
+  { id: 3, icon: "😌", label: "Спокойный" },
+  { id: 4, icon: "💬", label: "Общительный" },
+  { id: 5, icon: "✨", label: "Стильный" },
+  { id: 6, icon: "💡", label: "Увлеченный" },
+  { id: 7, icon: "🔒", label: "Надежный" },
+  { id: 8, icon: "🤷‍♂️", label: "Немного крэйзи" },
+  { id: 9, icon: "👀", label: "Внимательный" },
+  { id: 10, icon: "📚", label: "Эрудированный" },
+  { id: 11, icon: "🔍", label: "Загадочный" },
+  { id: 12, icon: "🔥", label: "Страстный" },
+];
+
+export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
+  const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null);
+  const [selectedCommunicationId, setSelectedCommunicationId] = useState<number | null>(null);
+  const [selectedChips, setSelectedChips] = useState<{ id: number; icon: string; label: string }[]>([]);
+  const sliderRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo(0, 0);
+    }
+  }, [currentStep]);
 
   const handleCardSelection = (id: number) => {
-    setSelectedCardId(id)
-  }
-
-  // Автоматическая прокрутка к выбранной карточке (если она вне видимости)
-  useEffect(() => {
-    if (selectedCardId !== null && sliderRef.current) {
-      const selectedIndex = cardData.findIndex(
-        (card) => card.id === selectedCardId
-      )
-      if (selectedIndex >= 0) {
-        const visibleStart = startIndex
-        const visibleEnd = startIndex + 2 // Предполагаем 3 видимых карточки
-
-        if (selectedIndex < visibleStart) {
-          setStartIndex(selectedIndex)
-        } else if (selectedIndex > visibleEnd) {
-          setStartIndex(Math.max(0, selectedIndex - 2)) // Центрируем выбранную карточку
-        }
-      }
+    if (currentStep === 1) {
+      setSelectedVibeId(id);
+    } else if (currentStep === 2) {
+      setSelectedCommunicationId(id);
     }
-  }, [selectedCardId, startIndex])
+  };
+
+  const handleDragStart = (event: React.DragEvent, chip: { id: number; icon: string; label: string }) => {
+    event.dataTransfer.setData("chip", JSON.stringify(chip));
+  };
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    event.preventDefault();
+    const chip = JSON.parse(event.dataTransfer.getData("chip"));
+    
+    if (selectedChips.some(c => c.id === chip.id)) {
+      setSelectedChips(selectedChips.filter(c => c.id !== chip.id));
+    } else if (selectedChips.length < 2) {
+      setSelectedChips([...selectedChips, chip]);
+    }
+  };
 
   const validateForm = () => {
-    return selectedCardId !== null
-  }
+    if (currentStep === 1) return selectedVibeId !== null;
+    if (currentStep === 2) return selectedCommunicationId !== null;
+    if (currentStep === 3) return selectedChips.length === 2;
+    return false;
+  };
 
   const handleNext = () => {
-    if (validateForm()) {
-      // Здесь можно сохранить выбранный вайб в localStorage или состоянии
-      // Например: localStorage.setItem('onboardingVibe', selectedCardId.toString());
-      onNext()
+    if (!validateForm()) return;
+
+    if (currentStep === 1) {
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      setCurrentStep(3);
+    } else {
+      onNext();
     }
-  }
+  };
+
+  const currentData = currentStep === 1 ? vibeData : currentStep === 2 ? communicationData : chipData;
+  const selectedId = currentStep === 1 ? selectedVibeId : currentStep === 2 ? selectedCommunicationId : null;
 
   return (
-    <>
-      <div className={styles.onboardingForm}>
-        <div className={styles.formContent}>
-          <div className={styles.formHeader}>
-            <button className={styles.formHeaderBack} onClick={onBack}>
-              <img src={arrowLeftSvg} alt="back" />
-            </button>
-            <ProgressBar currentStep={3} totalSteps={4} />
-          </div>
-          <div className={styles.formSection}>
-            <div className={styles.sectionT}>
-              <div className={styles.sectionTitle}>
-                Личность и стиль общения
+    <div className={styles.onboardingForm}>
+      <div className={styles.formContent}>
+        <div className={styles.formHeader}>
+          <ProgressBar currentStep={currentStep} totalSteps={4} />
+        </div>
+        <div className={styles.formSection}>
+          {currentStep !== 3 ? (
+            <>
+              <div className={styles.sectionT}>
+                <div className={styles.sectionTitle}>Личность и стиль общения</div>
+                <div className={styles.questionText}>
+                  {currentStep === 1 ? "Где ты на перерыве?" : "Какая у тебя суперсила в общении?"}
+                </div>
               </div>
-              <div className={styles.questionText}>Где ты на перерыве?</div>
-            </div>
 
-            {/* Обернем слайдер в контейнер с overflow: hidden */}
-            <div className={styles.sliderWrapper}>
-              <div className={styles.questionSection}>
-                <div className={styles.sectionSubtitle}>Выбери 1 вариант</div>
+              <div className={styles.sliderWrapper}>
+                <div className={styles.questionSection}>
+                  <div className={styles.centeredSubtitle}>Выбери 1 вариант</div>
+                </div>
+                <div className={styles.sliderContainer} ref={sliderRef}>
+                  <div className={styles.sliderTrack}>
+                    {currentData.map((card) => (
+                      <div
+                        key={card.id}
+                        className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
+                        onClick={() => handleCardSelection(card.id)}
+                      >
+                        <div className={styles.cardIcon}>{card.icon}</div>
+                        <div className={styles.checkmarkContainer}>
+                          {selectedId === card.id && (
+                            <CheckmarkIcon className={styles.checkmarkIcon} />
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-              <div className={styles.sliderContainer} ref={sliderRef}>
-                <div className={styles.sliderTrack}>
-                  {cardData.map((card) => (
-                    <div
-                      key={card.id}
-                      className={`${styles.card} ${
-                        selectedCardId === card.id ? styles.selected : ""
-                      }`}
-                      onClick={() => handleCardSelection(card.id)}>
-                      <div className={styles.cardIcon}>{card.icon}</div>
-                      {selectedCardId === card.id && (
-                        <CheckmarkIcon className={styles.checkmarkIcon} />
-                      )}
-                    </div>
-                  ))}
+
+              {selectedId !== null && (
+                <p className={styles.successMessage}>
+                  Учли! Ты {currentData.find((c) => c.id === selectedId)?.label}!
+                </p>
+              )}
+            </>
+          ) : (
+            <div>
+              <div className={styles.sectionT}>
+                <div className={styles.sectionTitle}>Личность и стиль общения</div>
+                <div className={styles.questionText}>Что цепляет в людях?</div>
+              </div>
+
+              <div className={styles.chipSection}>
+                <div className={styles.availableChips}>
+                  <div
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
+                    className={styles.dropZone}
+                  >
+                    {selectedChips.length === 0 ? (
+                      <div className={styles.dropZonePlaceholder}>
+                        Перетащи сюда 2 качества
+                      </div>
+                    ) : (
+                      <div className={styles.selectedChipsContainer}>
+                        {selectedChips.map((chip) => (
+                          <div 
+                            key={chip.id} 
+                            className={styles.selectedChip}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, chip)}
+                          >
+                            <span>{chip.icon}</span> {chip.label}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  <div className={styles.chipList}>
+                    {chipData
+                      .filter(chip => !selectedChips.some(c => c.id === chip.id))
+                      .map((chip) => (
+                        <div
+                          key={chip.id}
+                          className={styles.chip}
+                          draggable
+                          onDragStart={(e) => handleDragStart(e, chip)}
+                        >
+                          <span>{chip.icon}</span> {chip.label}
+                        </div>
+                      ))}
+                  </div>
                 </div>
               </div>
             </div>
-            {selectedCardId !== null && (
-              <p className={styles.successMessage}>
-                Учли! Ты {cardData.find((c) => c.id === selectedCardId)?.label}!
-              </p>
-            )}
-          </div>
+          )}
         </div>
       </div>
       <div className={styles.nextFooter}>
-        <Button onClick={handleNext}>Далее</Button>
+        <Button onClick={handleNext}>
+          {currentStep === 3 ? "Завершить" : "Далее"}
+        </Button>
       </div>
-    </>
-  )
-}
+    </div>
+  );
+};

@@ -253,7 +253,7 @@ datalist#city-suggestions {
   }
 
   .dropdownCheckmarkIcon {
-    // Fill color is already in the SVG.
+    fill:#007aff;
   }
 }
 
@@ -321,7 +321,7 @@ datalist#city-suggestions {
 
   .checkmarkIcon {
     flex-shrink: 0;
-    color: #99ecff; // Синий цвет для галки в чекбоксах
+    fill: #007aff; // Синий цвет для галки в чекбоксах
     width: 16px;
     height: 16px;
   }
