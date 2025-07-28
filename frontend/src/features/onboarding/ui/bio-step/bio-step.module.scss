@@ -3,25 +3,33 @@
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 85vh;
+
   &Header {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+
     &Back {
       position: absolute;
       left: -7px;
       top: 50%;
       transform: translate(0%, -50%);
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
     }
   }
+
   &Wrapper {
     display: flex;
     height: 100%;
     flex-direction: column;
     justify-content: space-between;
   }
+
   &Title {
     font-family: $third-family;
     font-weight: 700;
@@ -32,23 +40,42 @@
     margin-top: 30px;
     margin-bottom: 12px;
   }
+
   &Textarea {
     font-size: 17px;
     line-height: 129%;
     letter-spacing: -0.02em;
     resize: none;
-    cursor: pointer;
     color: $native-button-text-color;
     margin-bottom: 12px;
+    min-height: 100px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
+    caret-color: #99ecff;
+    width: 100%;
+    box-sizing: border-box;
+
+    
+
     &::placeholder {
-      color: $native-button-text-color;
+      color: #707579;
+      opacity: 1;
+      transition: opacity 0.2s ease;
     }
+
+    &:focus::placeholder {
+      opacity: 0;
+    }
+
     &Title {
       font-weight: 400;
       font-size: 15px;
       line-height: 133%;
       color: $native-subtitle-text-color;
+      margin-bottom: 8px;
     }
+
     &Wrapper {
       cursor: pointer;
       display: flex;
@@ -57,6 +84,7 @@
       background: #212121;
       border-radius: 12px;
     }
+
     &Length {
       margin-top: 6px;
       margin-left: 16px;
@@ -67,6 +95,7 @@
       text-transform: uppercase;
       color: $native-section-header-text-color;
     }
+
     &Generator {
       border-radius: 20px;
       background: rgba(43, 223, 255, 0.15);
@@ -82,17 +111,30 @@
       color: #99ecff;
       margin-right: auto;
       text-wrap: nowrap;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: rgba(43, 223, 255, 0.25);
+      }
     }
   }
+
   &Decor {
     position: relative;
     height: 370px;
+    margin-top: 20px;
+
     &Image {
       position: absolute;
       top: 50%;
       right: 0;
       transform: translate(20px, -50%);
+      height: 200px;
+      width: auto;
     }
+
     &Text {
       position: absolute;
       top: 20%;
@@ -104,8 +146,10 @@
       line-height: 94%;
       letter-spacing: 0.03em;
       color: #595959;
+      text-align: right;
     }
   }
+
   &Footer {
     backdrop-filter: blur(44px);
     background: $background-color;
@@ -116,5 +160,22 @@
     position: sticky;
     bottom: 0px;
     z-index: 10;
+  }
+}
+
+.error {
+  color: #ff4d4f !important;
+}
+
+.success {
+  color: #99ecff !important;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
   }
 }
