@@ -199,36 +199,38 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                   <div className={styles.sliderContainer} ref={sliderRef}>
                     <div className={styles.sliderTrack}>
                       {currentData.map((card) => (
-                        <div
-                          key={card.id}
-                          className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
-                          onClick={() => handleCardSelection(card.id)}>
-                          <div className={styles.cardIcon}>{card.icon}</div>
-                          <div className={styles.checkmarkContainer}>
-                            {selectedId === card.id && (
-                              <CheckmarkIcon className={styles.checkmarkIcon} />
-                            )}
+                        <div key={card.id} className={styles.cardWrapper}>
+                          <div
+                            className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
+                            onClick={() => handleCardSelection(card.id)}>
+                            <div className={styles.cardIcon}>{card.icon}</div>
+                            <div className={styles.checkmarkContainer}>
+                              {selectedId === card.id && (
+                                <CheckmarkIcon
+                                  className={styles.checkmarkIcon}
+                                />
+                              )}
+                            </div>
                           </div>
+                          <div className={styles.cardLabel}>{card.label}</div>
                         </div>
                       ))}
                     </div>
-                    
                   </div>
-                  
                 </div>
                 {errorMessage && (
-                      <div
-                        className={`${styles.validationMessage} ${styles.error}`}>
-                        {errorMessage}
-                      </div>
-                    )}
+                  <div
+                    className={`${styles.validationMessage} ${styles.error}`}>
+                    {errorMessage}
+                  </div>
+                )}
 
-                    {successMessage && (
-                      <div
-                        className={`${styles.validationMessage} ${styles.success}`}>
-                        {successMessage}
-                      </div>
-                    )}
+                {successMessage && (
+                  <div
+                    className={`${styles.validationMessage} ${styles.success}`}>
+                    {successMessage}
+                  </div>
+                )}
               </>
             ) : (
               <div>

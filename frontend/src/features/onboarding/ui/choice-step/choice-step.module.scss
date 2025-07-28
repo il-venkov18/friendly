@@ -75,6 +75,13 @@
   gap: 16px;
 }
 
+.cardWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px; 
+}
+
 .card {
   flex: 0 0 auto;
   width: 200px;
@@ -96,6 +103,17 @@
   &.selected {
     color: white;
   }
+}
+
+.cardLabel {
+  font-family: "SF Pro Text", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #ffffff;
+  text-align: left;
+  width: 100%;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 .cardIcon {
@@ -145,7 +163,7 @@
   font-weight: 500;
   text-align: center;
   margin-top: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
   padding: 8px 0;
   animation: fadeIn 0.3s ease;
 }
