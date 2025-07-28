@@ -212,8 +212,23 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                         </div>
                       ))}
                     </div>
+                    
                   </div>
+                  
                 </div>
+                {errorMessage && (
+                      <div
+                        className={`${styles.validationMessage} ${styles.error}`}>
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    {successMessage && (
+                      <div
+                        className={`${styles.validationMessage} ${styles.success}`}>
+                        {successMessage}
+                      </div>
+                    )}
               </>
             ) : (
               <div>
