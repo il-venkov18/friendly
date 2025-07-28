@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { Button } from "@/shared/ui/button/button"
+import arrowLeftSvg from "../icons/arrow-left.svg"
 
 import { OnboardingStepProps } from "../../lib/models/types"
 import { ProgressBar } from "../progress-bar/ProgressBar"
@@ -41,7 +42,7 @@ const chipData = [
   { id: 12, icon: "🔥", label: "Страстный" },
 ]
 
-export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
+export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
   const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null)
   const [selectedCommunicationId, setSelectedCommunicationId] = useState<
@@ -152,6 +153,9 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
       <div className={styles.onboardingForm}>
         <div className={styles.formContent}>
           <div className={styles.formHeader}>
+            <button className={styles.formHeaderBack} onClick={onBack}>
+              <img src={arrowLeftSvg} alt="back" />
+            </button>
             <ProgressBar currentStep={3} totalSteps={4} />
           </div>
           <div className={styles.formSection}>
