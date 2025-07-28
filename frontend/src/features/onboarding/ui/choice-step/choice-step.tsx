@@ -19,12 +19,42 @@ const vibeData = [
 ]
 
 const communicationData = [
-  { id: 1, icon: "🤝", label: "Нахожу общий язык со всеми" },
-  { id: 2, icon: "💬", label: "Отличный слушатель" },
-  { id: 3, icon: "🎭", label: "Мастер импровизации" },
-  { id: 4, icon: "🤩", label: "Заряжаю энергией" },
-  { id: 5, icon: "🧠", label: "Глубокие темы" },
-  { id: 6, icon: "😂", label: "Разряжаю обстановку" },
+  {
+    id: 1,
+    icon: "🤝",
+    label: "Нахожу общий язык со всеми",
+    description: "Как дипломат в мире эмоций",
+  },
+  {
+    id: 2,
+    icon: "💬",
+    label: "Отличный слушатель",
+    description: "Создаешь пространство для искренности",
+  },
+  {
+    id: 3,
+    icon: "🎭",
+    label: "Мастер импровизации",
+    description: "Превращаешь обычный разговор в искусство",
+  },
+  {
+    id: 4,
+    icon: "🤩",
+    label: "Заряжаю энергией",
+    description: "Как кофе для уставшей беседы",
+  },
+  {
+    id: 5,
+    icon: "🧠",
+    label: "Глубокие темы",
+    description: "Разговор с тобой — это путешествие",
+  },
+  {
+    id: 6,
+    icon: "😂",
+    label: "Разряжаю обстановку",
+    description: "Твой юмор — как глоток свежего воздуха",
+  },
 ]
 
 const chipData = [
@@ -41,6 +71,15 @@ const chipData = [
   { id: 11, icon: "🔍", label: "Загадочный" },
   { id: 12, icon: "🔥", label: "Страстный" },
 ]
+
+const communicationComments = {
+  1: "Ты как универсальный ключ — находишь подход к любому замку!",
+  2: "Ты — тихая гавань, где каждый чувствует себя услышанным",
+  3: "Твои слова — как весенний дождь: освежают и вдохновляют",
+  4: "Ты как аккумулятор — заряжаешь атмосферу в чате!",
+  5: "Твои мысли — как глубокий океан, в котором хочется плавать",
+  6: "Ты — как солнечный луч, который разгоняет тучи неловкости",
+}
 
 export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
@@ -84,9 +123,9 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
       )
     } else if (currentStep === 2) {
       setSelectedCommunicationId(id)
-      setSuccessMessage(
-        `Ты ${communicationData.find((c) => c.id === id)?.label}. Мы это учтём!`
-      )
+      const comment =
+        communicationComments[id as keyof typeof communicationComments]
+      setSuccessMessage(comment)
     }
     setErrorMessage(null)
   }
@@ -212,7 +251,9 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                               )}
                             </div>
                           </div>
-                          <div className={styles.cardLabel}>{card.label}</div>
+                          <div className={styles.cardContent}>
+                            <div className={styles.cardLabel}>{card.label}</div>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -220,14 +261,14 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                 </div>
                 {errorMessage && (
                   <div
-                    className={`${styles.validationMessage} ${styles.error}`}>
+                    className={`${styles.validationMessage1} ${styles.error}`}>
                     {errorMessage}
                   </div>
                 )}
 
                 {successMessage && (
                   <div
-                    className={`${styles.validationMessage} ${styles.success}`}>
+                    className={`${styles.validationMessage1} ${styles.success}`}>
                     {successMessage}
                   </div>
                 )}

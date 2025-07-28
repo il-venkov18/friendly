@@ -157,6 +157,19 @@
   border-radius: 50%;
 }
 
+.validationMessage1 {
+  font-family: "SF Pro Text", sans-serif !important;
+  font-size: 15px;
+  font-weight: 500;
+  width: 300px;
+  align-self: center;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  padding: 8px 0;
+  animation: fadeIn 0.3s ease;
+}
+
 .validationMessage {
   font-family: "SF Pro Text", sans-serif !important;
   font-size: 15px;
