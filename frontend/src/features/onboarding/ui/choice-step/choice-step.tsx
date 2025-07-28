@@ -148,114 +148,118 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
         : null
 
   return (
-    <div className={styles.onboardingForm}>
-      <div className={styles.formContent}>
-        <div className={styles.formHeader}>
-          <ProgressBar currentStep={3} totalSteps={4} />
-        </div>
-        <div className={styles.formSection}>
-          {currentStep !== 3 ? (
-            <>
-              <div className={styles.sectionT}>
-                <div className={styles.sectionTitle}>
-                  Личность и стиль общения
-                </div>
-                <div className={styles.questionText}>
-                  {currentStep === 1
-                    ? "Где ты на перерыве?"
-                    : "Какая у тебя суперсила в общении?"}
-                </div>
-              </div>
-
-              <div className={styles.sliderWrapper}>
-                <div className={styles.questionSection}>
-                  <div className={styles.centeredSubtitle}>
-                    Выбери 1 вариант
+    <>
+      <div className={styles.onboardingForm}>
+        <div className={styles.formContent}>
+          <div className={styles.formHeader}>
+            <ProgressBar currentStep={3} totalSteps={4} />
+          </div>
+          <div className={styles.formSection}>
+            {currentStep !== 3 ? (
+              <>
+                <div className={styles.sectionT}>
+                  <div className={styles.sectionTitle}>
+                    Личность и стиль общения
+                  </div>
+                  <div className={styles.questionText}>
+                    {currentStep === 1
+                      ? "Где ты на перерыве?"
+                      : "Какая у тебя суперсила в общении?"}
                   </div>
                 </div>
-                <div className={styles.sliderContainer} ref={sliderRef}>
-                  <div className={styles.sliderTrack}>
-                    {currentData.map((card) => (
-                      <div
-                        key={card.id}
-                        className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
-                        onClick={() => handleCardSelection(card.id)}>
-                        <div className={styles.cardIcon}>{card.icon}</div>
-                        <div className={styles.checkmarkContainer}>
-                          {selectedId === card.id && (
-                            <CheckmarkIcon className={styles.checkmarkIcon} />
-                          )}
+
+                <div className={styles.sliderWrapper}>
+                  <div className={styles.questionSection}>
+                    <div className={styles.centeredSubtitle}>
+                      Выбери 1 вариант
+                    </div>
+                  </div>
+                  <div className={styles.sliderContainer} ref={sliderRef}>
+                    <div className={styles.sliderTrack}>
+                      {currentData.map((card) => (
+                        <div
+                          key={card.id}
+                          className={`${styles.card} ${selectedId === card.id ? styles.selected : ""}`}
+                          onClick={() => handleCardSelection(card.id)}>
+                          <div className={styles.cardIcon}>{card.icon}</div>
+                          <div className={styles.checkmarkContainer}>
+                            {selectedId === card.id && (
+                              <CheckmarkIcon className={styles.checkmarkIcon} />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </>
-          ) : (
-            <div>
-              <div className={styles.sectionT}>
-                <div className={styles.sectionTitle}>
-                  Личность и стиль общения
+              </>
+            ) : (
+              <div>
+                <div className={styles.sectionT}>
+                  <div className={styles.sectionTitle}>
+                    Личность и стиль общения
+                  </div>
+                  <div className={styles.questionText}>
+                    Что цепляет в людях?
+                  </div>
                 </div>
-                <div className={styles.questionText}>Что цепляет в людях?</div>
-              </div>
 
-              <div className={styles.chipSection}>
-                <div className={styles.availableChips}>
-                  <div
-                    onDrop={handleDrop}
-                    onDragOver={handleDragOver}
-                    className={styles.dropZone}>
-                    {selectedChips.length === 0 ? (
-                      <div className={styles.dropZonePlaceholder}>
-                        Перетащи сюда 2 качества
-                      </div>
-                    ) : (
-                      <div className={styles.selectedChipsContainer}>
-                        {selectedChips.map((chip) => (
+                <div className={styles.chipSection}>
+                  <div className={styles.availableChips}>
+                    <div
+                      onDrop={handleDrop}
+                      onDragOver={handleDragOver}
+                      className={styles.dropZone}>
+                      {selectedChips.length === 0 ? (
+                        <div className={styles.dropZonePlaceholder}>
+                          Перетащи сюда 2 качества
+                        </div>
+                      ) : (
+                        <div className={styles.selectedChipsContainer}>
+                          {selectedChips.map((chip) => (
+                            <div
+                              key={chip.id}
+                              className={styles.selectedChip}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, chip)}>
+                              <span>{chip.icon}</span> {chip.label}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    <div className={styles.chipList}>
+                      {chipData
+                        .filter(
+                          (chip) => !selectedChips.some((c) => c.id === chip.id)
+                        )
+                        .map((chip) => (
                           <div
                             key={chip.id}
-                            className={styles.selectedChip}
+                            className={styles.chip}
                             draggable
                             onDragStart={(e) => handleDragStart(e, chip)}>
                             <span>{chip.icon}</span> {chip.label}
                           </div>
                         ))}
-                      </div>
-                    )}
-                  </div>
-                  <div className={styles.chipList}>
-                    {chipData
-                      .filter(
-                        (chip) => !selectedChips.some((c) => c.id === chip.id)
-                      )
-                      .map((chip) => (
-                        <div
-                          key={chip.id}
-                          className={styles.chip}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, chip)}>
-                          <span>{chip.icon}</span> {chip.label}
-                        </div>
-                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {errorMessage && (
-            <div className={`${styles.validationMessage} ${styles.error}`}>
-              {errorMessage}
-            </div>
-          )}
+            {errorMessage && (
+              <div className={`${styles.validationMessage} ${styles.error}`}>
+                {errorMessage}
+              </div>
+            )}
 
-          {successMessage && (
-            <div className={`${styles.validationMessage} ${styles.success}`}>
-              {successMessage}
-            </div>
-          )}
+            {successMessage && (
+              <div className={`${styles.validationMessage} ${styles.success}`}>
+                {successMessage}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <div className={styles.nextFooter}>
@@ -263,6 +267,6 @@ export const ChoiceStep = ({ onNext }: OnboardingStepProps) => {
           {currentStep === 3 ? "Далее" : "Продолжить"}
         </Button>
       </div>
-    </div>
+    </>
   )
 }
