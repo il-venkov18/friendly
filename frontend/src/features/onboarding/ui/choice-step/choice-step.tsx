@@ -4,9 +4,9 @@ import { useEffect, useRef, useState } from "react"
 
 import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import { Button } from "@/shared/ui/button/button"
-import arrowLeftSvg from "../icons/arrow-left.svg"
 
 import { OnboardingStepProps } from "../../lib/models/types"
+import arrowLeftSvg from "../icons/arrow-left.svg"
 import { ProgressBar } from "../progress-bar/ProgressBar"
 
 const vibeData = [
@@ -64,10 +64,14 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
   }, [currentStep])
 
   useEffect(() => {
-    if (currentStep === 3 && selectedChips.length === 2) {
-      setSuccessMessage(
-        `Круто! Ты выбираешь "${selectedChips[0].label}" и "${selectedChips[1].label}". Мы учли это при мэтчинге`
-      )
+    if (currentStep === 3) {
+      if (selectedChips.length === 2) {
+        setSuccessMessage(
+          `Круто! Ты выбираешь "${selectedChips[0].label}" и "${selectedChips[1].label}". Мы учли это при мэтчинге`
+        )
+      } else {
+        setSuccessMessage(null)
+      }
     }
   }, [selectedChips, currentStep])
 
@@ -213,10 +217,13 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                     <div
                       onDrop={handleDrop}
                       onDragOver={handleDragOver}
-                      className={styles.dropZone}>
+                      className={styles.dropZone}
+                      style={{
+                        height: selectedChips.length === 0 ? "184px" : "123px",
+                      }}>
                       {selectedChips.length === 0 ? (
                         <div className={styles.dropZonePlaceholder}>
-                          Перетащи сюда 2 качества
+                          Перетащи сюда только 2 качества
                         </div>
                       ) : (
                         <div className={styles.selectedChipsContainer}>
@@ -232,6 +239,19 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                         </div>
                       )}
                     </div>
+                    {errorMessage && (
+                      <div
+                        className={`${styles.validationMessage} ${styles.error}`}>
+                        {errorMessage}
+                      </div>
+                    )}
+
+                    {successMessage && (
+                      <div
+                        className={`${styles.validationMessage} ${styles.success}`}>
+                        {successMessage}
+                      </div>
+                    )}
                     <div className={styles.chipList}>
                       {chipData
                         .filter(
@@ -249,18 +269,6 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-
-            {errorMessage && (
-              <div className={`${styles.validationMessage} ${styles.error}`}>
-                {errorMessage}
-              </div>
-            )}
-
-            {successMessage && (
-              <div className={`${styles.validationMessage} ${styles.success}`}>
-                {successMessage}
               </div>
             )}
           </div>

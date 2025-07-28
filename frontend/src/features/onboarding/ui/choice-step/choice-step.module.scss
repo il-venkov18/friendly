@@ -6,7 +6,7 @@
   margin: 0 auto;
   padding: 20px;
   box-sizing: border-box;
-  min-height: 100vh; // Занимает всю высоту экрана
+  min-height: 85vh; // Занимает всю высоту экрана
   position: relative;
 }
 
@@ -129,14 +129,21 @@
   font-size: 15px;
   font-weight: 500;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 50px;
   padding: 8px 0;
   animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .success {
@@ -181,30 +188,42 @@
   background-color: rgba(25, 25, 25, 1);
   border-radius: 12px;
   padding: 16px;
-  margin-bottom: 26px;
-  min-height: 100px;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  transition: height 0.3s ease;
+  min-height: 184px;
+
+  &:not(:empty) {
+    justify-content: flex-start;
+    min-height: 123px;
+  }
+}
+
+.selectedChipsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  align-items: flex-start;
+  justify-content: flex-start;
 }
 
 .dropZonePlaceholder {
   color: #a0a0a0;
   font-family: "SF Pro Text", sans-serif !important;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 14px;
   text-align: center;
   pointer-events: none;
-}
-
-.selectedChipsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
+  position: absolute;
   width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .selectedChip {
@@ -217,9 +236,10 @@
   font-size: 15px;
   color: white;
   padding: 8px 12px;
+  gap: 6px;
   cursor: grab;
   white-space: nowrap;
-  
+
   &:active {
     cursor: grabbing;
   }
@@ -229,7 +249,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  justify-content: center;
+  justify-content: flex-start; // Изменено с center на flex-start
 }
 
 .chip {
@@ -246,7 +266,7 @@
   cursor: grab;
   user-select: none;
   white-space: nowrap;
-  
+
   &:active {
     cursor: grabbing;
   }
