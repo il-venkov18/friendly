@@ -45,6 +45,7 @@ const chipData = [
 export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1)
   const [selectedVibeId, setSelectedVibeId] = useState<number | null>(null)
+  const [removingChip, setRemovingChip] = useState<number | null>(null)
   const [selectedCommunicationId, setSelectedCommunicationId] = useState<
     number | null
   >(null)
@@ -111,6 +112,19 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
       setSelectedChips([...selectedChips, chip])
     }
     setErrorMessage(null)
+  }
+
+  const handleChipClick = (chip: {
+    id: number
+    icon: string
+    label: string
+  }) => {
+    setRemovingChip(chip.id)
+    setTimeout(() => {
+      setSelectedChips(selectedChips.filter((c) => c.id !== chip.id))
+      setRemovingChip(null)
+      setErrorMessage(null)
+    }, 300) // Длительность анимации
   }
 
   const handleNext = () => {
@@ -230,15 +244,19 @@ export const ChoiceStep = ({ onNext, onBack }: OnboardingStepProps) => {
                           {selectedChips.map((chip) => (
                             <div
                               key={chip.id}
-                              className={styles.selectedChip}
+                              className={`${styles.selectedChip} ${
+                                removingChip === chip.id ? styles.removing : ""
+                              }`}
                               draggable
-                              onDragStart={(e) => handleDragStart(e, chip)}>
+                              onDragStart={(e) => handleDragStart(e, chip)}
+                              onClick={() => handleChipClick(chip)}>
                               <span>{chip.icon}</span> {chip.label}
                             </div>
                           ))}
                         </div>
                       )}
                     </div>
+
                     {errorMessage && (
                       <div
                         className={`${styles.validationMessage} ${styles.error}`}>
