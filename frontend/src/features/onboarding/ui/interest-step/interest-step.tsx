@@ -1,9 +1,10 @@
 import styles from "./interest-step.module.scss"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import { OnboardingStepProps } from "@/features/onboarding/lib/models/types"
 
+import { CheckmarkIcon } from "@/shared/assets/icons/CheckmarkIcon"
 import gamesPlaceholder from "@/shared/assets/images/games-placeholder.jpg"
 import lifestylePlaceholder from "@/shared/assets/images/lifestyle-placeholder.jpg"
 import moviesPlaceholder from "@/shared/assets/images/movies-placeholder.jpg"
@@ -98,33 +99,53 @@ const INTEREST_CLUSTERS = [
 const MIN_SELECTED_PER_CLUSTER = 3
 const MAX_SELECTED_PER_CLUSTER = 6
 
+const useTimedError = (duration = 2000) => {
+  const [error, setError] = useState(false);
+  
+  const triggerError = () => {
+    setError(true);
+    const timer = setTimeout(() => setError(false), duration);
+    return () => clearTimeout(timer);
+  };
+
+  return [error, triggerError] as const;
+};
+
 export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
-  const [currentClusterIndex, setCurrentClusterIndex] = useState(0)
+  const [currentClusterIndex, setCurrentClusterIndex] = useState(0);
   const [selectedInterests, setSelectedInterests] = useState<{
     [key: string]: number[]
-  }>({})
-  const [isNextDisabled, setIsNextDisabled] = useState(true)
-  const [showValidationError, setShowValidationError] = useState(false)
+  }>({});
+  const [showValidationError, setShowValidationError] = useState(false);
+  const [countError, triggerCountError] = useTimedError();
 
-  const currentCluster = INTEREST_CLUSTERS[currentClusterIndex]
-  const isLastCluster = currentClusterIndex === INTEREST_CLUSTERS.length - 1
-  const currentClusterId = currentCluster.id.toString()
-  const currentSelectedCount = selectedInterests[currentClusterId]?.length || 0
+  const currentCluster = INTEREST_CLUSTERS[currentClusterIndex];
+  const isLastCluster = currentClusterIndex === INTEREST_CLUSTERS.length - 1;
+  const currentClusterId = currentCluster.id.toString();
+  const currentSelectedCount = selectedInterests[currentClusterId]?.length || 0;
+  const formSectionRef = useRef<HTMLDivElement>(null);
+
+  const topRef = useRef<HTMLDivElement>(null);
+
+  const scrollToTop = () => {
+    topRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
 
   useEffect(() => {
     const isValidSelection =
       currentSelectedCount >= MIN_SELECTED_PER_CLUSTER &&
-      currentSelectedCount <= MAX_SELECTED_PER_CLUSTER
-    setIsNextDisabled(!isValidSelection)
+      currentSelectedCount <= MAX_SELECTED_PER_CLUSTER;
     if (isValidSelection) {
-      setShowValidationError(false)
+      setShowValidationError(false);
     }
-  }, [selectedInterests, currentCluster])
+  }, [selectedInterests, currentCluster]);
 
   const handleToggle = (interestIndex: number) => {
-    const isSelected =
-      selectedInterests[currentClusterId]?.includes(interestIndex)
-    const currentClusterSelected = selectedInterests[currentClusterId] || []
+    const isSelected = selectedInterests[currentClusterId]?.includes(interestIndex);
+    const currentClusterSelected = selectedInterests[currentClusterId] || [];
 
     if (isSelected) {
       setSelectedInterests((prev) => ({
@@ -132,47 +153,65 @@ export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
         [currentClusterId]: currentClusterSelected.filter(
           (i) => i !== interestIndex
         ),
-      }))
+      }));
     } else if (currentClusterSelected.length < MAX_SELECTED_PER_CLUSTER) {
       setSelectedInterests((prev) => ({
         ...prev,
         [currentClusterId]: [...currentClusterSelected, interestIndex],
-      }))
+      }));
     }
-  }
+  };
 
   const handleNext = () => {
+    console.log('Current selected count:', currentSelectedCount); // Добавим лог для отладки
+    
     if (currentSelectedCount < MIN_SELECTED_PER_CLUSTER) {
-      setShowValidationError(true)
-      return
+      scrollToTop();
+      console.log('Validation failed'); // Лог для отладки
+      setShowValidationError(true);
+      triggerCountError();
+      return;
     }
+
+    scrollToTop();
+    console.log('Validation passed'); // Лог для отладки
+    setShowValidationError(false);
+
+    if (formSectionRef.current) {
+        formSectionRef.current.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
 
     if (isLastCluster) {
       const allSelectedInterests = INTEREST_CLUSTERS.flatMap((cluster) => {
-        const selected = selectedInterests[cluster.id.toString()] || []
+        const selected = selectedInterests[cluster.id.toString()] || [];
         return selected.map((idx) => ({
           cluster: cluster.name,
           interest: cluster.interests[idx].label,
           img: cluster.interests[idx].img,
-        }))
-      })
+        }));
+      });
 
-      localStorage.setItem(
-        "userInterests",
-        JSON.stringify(allSelectedInterests)
-      )
-      onNext()
+      localStorage.setItem("userInterests", JSON.stringify(allSelectedInterests));
+      onNext();
     } else {
-      setCurrentClusterIndex((prev) => prev + 1)
-      setShowValidationError(false)
+      setCurrentClusterIndex((prev) => prev + 1);
+      setShowValidationError(false);
     }
-  }
+
+    
+  };
+
+  useEffect(() => {
+    console.log('Selected count updated:', currentSelectedCount);
+  }, [currentSelectedCount]);
 
   const isInterestDisabled = (interestIndex: number) => {
-    const isSelected =
-      selectedInterests[currentClusterId]?.includes(interestIndex)
-    return !isSelected && currentSelectedCount >= MAX_SELECTED_PER_CLUSTER
-  }
+    const isSelected = selectedInterests[currentClusterId]?.includes(interestIndex);
+    return !isSelected && currentSelectedCount >= MAX_SELECTED_PER_CLUSTER;
+  };
 
   const renderProgressDots = () => {
     return (
@@ -186,22 +225,29 @@ export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
           />
         ))}
       </div>
-    )
-  }
+    );
+  };
 
   const renderSelectedChips = () => {
     return (
-      <div className={styles.selectedChips}>
+      <div 
+        className={styles.selectedChips}
+        style={{ 
+          color: countError ? 'rgba(229, 57, 53, 1)' : 'rgba(153, 236, 255, 1)',
+          animation: countError ? `${styles.pulse} 1s ease-in-out` : 'none'
+        }}
+      >
         <span>
           Выбрано: {currentSelectedCount} из {MAX_SELECTED_PER_CLUSTER}
         </span>
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
-      <div className={styles.onboardingForm}>
+    <div ref={topRef} />
+      <div className={styles.onboardingForm} ref={formSectionRef}>
         <div className={styles.formHeader}>
           <button className={styles.formHeaderBack} onClick={onBack}>
             <img src={arrowLeftSvg} alt="back" />
@@ -216,14 +262,21 @@ export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
               – {currentCluster.name.toLowerCase()}
             </span>
           </div>
-          <div className={styles.dots}>
-            {renderProgressDots()}
-            {renderSelectedChips()}
+          <div className={styles.progressIndicators}>
+            <div className={styles.leftIndicator}>{renderProgressDots()}</div>
+            <div className={styles.rightIndicator}>{renderSelectedChips()}</div>
           </div>
 
           <div className={styles.sectionSubtitle}>
             выбирай осознанно, твой выбор влияет на точность рекомендаций
           </div>
+
+          {showValidationError && (
+            <div className={styles.validationError}>
+              
+              Выберите минимум 3 интереса в этой категории
+            </div>
+          )}
 
           <div className={styles.interestGrid}>
             {currentCluster.interests.map((interest, idx) => (
@@ -235,51 +288,34 @@ export const InterestStep = ({ onNext, onBack }: OnboardingStepProps) => {
                   ${isInterestDisabled(idx) ? styles.disabled : ""}
                 `}
                 onClick={() => !isInterestDisabled(idx) && handleToggle(idx)}
-                style={{ backgroundImage: `url(${interest.img})` }}>
+                style={{ backgroundImage: `url(${interest.img})` }}
+              >
                 <div className={styles.imageOverlay} />
                 <div className={styles.interestCardHeader}>
                   <span className={styles.interestLabel}>{interest.label}</span>
-                  {selectedInterests[currentClusterId]?.includes(idx) && (
-                    <span className={styles.checkmark} />
-                  )}
+                  <div
+                    className={`
+                      ${styles.checkmarkContainer} 
+                      ${selectedInterests[currentClusterId]?.includes(idx) ? styles.selected : ""}
+                    `}
+                  >
+                    {selectedInterests[currentClusterId]?.includes(idx) && (
+                      <CheckmarkIcon />
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {showValidationError && (
-            <div className={styles.validationError}>
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 16 16"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M8 16C3.5816 16 0 12.4184 0 8C0 3.5816 3.5816 0 8 0C12.4184 0 16 3.5816 16 8C16 12.4184 12.4184 16 8 16ZM8 1.6C4.4656 1.6 1.6 4.4656 1.6 8C1.6 11.5344 4.4656 14.4 8 14.4C11.5344 14.4 14.4 11.5344 14.4 8C14.4 4.4656 11.5344 1.6 8 1.6Z"
-                  fill="#FF4D4F"
-                />
-                <path
-                  d="M8 4V8.8"
-                  stroke="#FF4D4F"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M8 11.2C8.44183 11.2 8.8 10.8418 8.8 10.4C8.8 9.95817 8.44183 9.6 8 9.6C7.55817 9.6 7.2 9.95817 7.2 10.4C7.2 10.8418 7.55817 11.2 8 11.2Z"
-                  fill="#FF4D4F"
-                />
-              </svg>
-              Выберите минимум 3 интереса в этой категории
-            </div>
-          )}
+          
         </div>
       </div>
       <div className={styles.nextFooter}>
-        <Button onClick={handleNext} disabled={isNextDisabled}>
+        <Button onClick={handleNext}>
           {isLastCluster ? "Далее" : "Продолжить"}
         </Button>
       </div>
     </>
-  )
-}
+  );
+};
