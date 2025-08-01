@@ -4,9 +4,9 @@ import json
 import urllib.parse
 
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.core.db import async_session
 from app.core.environment_variables import BOT_TOKEN
 from app.models.user import User
 
@@ -32,29 +32,31 @@ def parse_telegram_init_data(auth_data: str) -> dict:
         raise ValueError(f'Invalid initData: {exc}')
 
 
-async def get_or_create_user(tg_data: dict) -> User:
+async def get_or_create_user(tg_data: dict, session: AsyncSession) -> User:
     """Получение пользователя из БД или создание нового."""
     user_info = json.loads(tg_data.get('user'))
     tg_id = int(user_info['id'])
     auth_date = int(user_info.get('auth_date') or tg_data.get('auth_date'))
 
-    async with async_session() as session:
-        try:
-            result = await session.execute(select(User).where(User.tg_id == tg_id))
-            user = result.scalars().first()
+    try:
+        result = await session.execute(select(User).where(User.tg_id == tg_id))
+        user = result.scalars().first()
 
-            if not user:
-                user = User(
-                    tg_id=tg_id,
-                    first_name=user_info.get('first_name', 'NoName'),
-                    last_name=user_info.get('last_name'),
-                    username=user_info.get('username'),
-                    photo_url=user_info.get('photo_url'),
-                    auth_date=auth_date,
-                )
-                session.add(user)
-                await session.commit()
+        if not user:
+            user = User(
+                tg_id=tg_id,
+                first_name=user_info.get('first_name', 'Unknown'),
+                username=user_info.get('username'),
+                photo_url=user_info.get('photo_url'),
+                auth_date=auth_date,
+                sex=None,
+                birth_date=None,
+                city_id=None
+            )
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
 
-            return user
-        except SQLAlchemyError as db_err:
-            raise RuntimeError(f'Database error: {db_err}')
+        return user
+    except SQLAlchemyError as e:
+        raise RuntimeError(f'Database error: {e}')

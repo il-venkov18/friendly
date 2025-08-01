@@ -2,17 +2,13 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app.api.v1 import api_router as api_v1_router
+from app.core.environment_variables import ALLOWED_ORIGINS
 
 app = FastAPI()
 
-allow_origins = (
-    'http://localhost:8000',
-    'http://localhost:5050',
-)
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allow_origins,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],

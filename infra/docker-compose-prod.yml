@@ -1,0 +1,89 @@
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./certs:/etc/nginx/certs
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    restart: always
+    env_file:
+      - ./.env
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - DEFAULT_EMAIL=il.venkov@mail.ru
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./certs:/etc/nginx/certs:rw
+      - ./vhost.d:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+    depends_on:
+      - nginx-proxy
+
+  backend:
+    image: friendly_backend:latest
+    build: ../backend
+    container_name: backend
+    expose:
+      - "8000"
+    env_file:
+      - ./.env
+    environment:
+      - VIRTUAL_HOST=vps1753016826.tech0.ru
+      - VIRTUAL_PATH=/api/
+      - VIRTUAL_PORT=8000
+      - LETSENCRYPT_HOST=vps1753016826.tech0.ru
+      - LETSENCRYPT_EMAIL=il.venkov@mail.ru
+    restart: always
+
+  frontend:
+    image: friendly_frontend:latest
+    build: ../frontend
+    container_name: frontend
+    expose:
+      - "5173"
+    env_file:
+      - ./.env
+    environment:
+      - VIRTUAL_HOST=vps1753016826.tech0.ru
+      - VIRTUAL_PATH=/
+      - VIRTUAL_PORT=5173
+      - LETSENCRYPT_HOST=vps1753016826.tech0.ru
+      - LETSENCRYPT_EMAIL=il.venkov@mail.ru
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    expose:
+      - "80"
+    env_file:
+      - ./.env
+    environment:
+      - VIRTUAL_HOST=vps1753016826.tech0.ru
+      - VIRTUAL_PATH=/pgadmin/
+      - VIRTUAL_PORT=80
+      - LETSENCRYPT_HOST=vps1753016826.tech0.ru
+      - LETSENCRYPT_EMAIL=il.venkov@mail.ru
+    restart: always
+
+  db:
+    image: postgres:17.0-alpine
+    container_name: postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    restart: always
+
+volumes:
+  postgres_data:

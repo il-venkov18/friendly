@@ -7,9 +7,10 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.core.db import DATABASE_URL, Base
+from app.models.interests_association_table import interests_association_table
 from app.models.likes_association_table import likes_association_table
 from app.models.refresh_token import RefreshToken
-from app.models.user import User
+from app.models.user import City, Interest, User
 
 config = context.config
 
